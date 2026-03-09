@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  transpilePackages: ["@copilotkit/react-core", "@copilotkit/react-ui"],
 };
 
 export default nextConfig;

@@ -1,0 +1,989 @@
+---
+description: Design System with screens, nodes, and interaction flows.
+alwaysApply: false
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insight Canvas — Design Spec</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eeeef5;
+    --bg2: #f0f0f8;
+    --surface: #ffffff;
+    --surface2: #f7f7fc;
+    --surface3: #f0f0f8;
+    --border: #e2e2ee;
+    --border-bright: #d4d4e8;
+    --text: #0f0f1a;
+    --text-muted: #6b6b8a;
+    --text-dim: #a0a0bc;
+
+    --chart: #3b82f6;
+    --chart-bg: #eff6ff;
+    --chart-border: #bfdbfe;
+
+    --insight: #059669;
+    --insight-bg: #ecfdf5;
+    --insight-border: #a7f3d0;
+
+    --hypothesis: #d97706;
+    --hypothesis-bg: #fffbeb;
+    --hypothesis-border: #fde68a;
+
+    --experiment: #dc2626;
+    --experiment-bg: #fef2f2;
+    --experiment-border: #fecaca;
+
+    --action: #7c3aed;
+    --action-bg: #f5f3ff;
+    --action-border: #ddd6fe;
+
+    --question: #db2777;
+    --question-bg: #fdf2f8;
+    --question-border: #fbcfe8;
+
+    --accent: #6366f1;
+    --accent-light: #eef2ff;
+    --accent-border: #c7d2fe;
+
+    --grad-text: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+
+}
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+background: var(--bg);
+color: var(--text);
+font-family: 'Inter', sans-serif;
+font-weight: 400;
+line-height: 1.6;
+padding: 56px 48px;
+max-width: 1360px;
+margin: 0 auto;
+position: relative;
+}
+
+body::before {
+content: '';
+position: fixed;
+inset: 0;
+background-image: radial-gradient(circle, #9999cc18 1px, transparent 1px);
+background-size: 24px 24px;
+pointer-events: none;
+z-index: 0;
+}
+
+body > \* { position: relative; z-index: 1; }
+
+.doc-header {
+display: flex;
+flex-direction: column;
+gap: 16px;
+margin-bottom: 72px;
+padding-bottom: 48px;
+border-bottom: 1px solid var(--border-bright);
+}
+.doc-eyebrow {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+background: var(--surface);
+border: 1px solid var(--border-bright);
+border-radius: 100px;
+padding: 5px 14px;
+width: fit-content;
+box-shadow: 0 1px 3px #00000008;
+}
+.eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--insight); }
+.eyebrow-label { font-size: 12px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.01em; }
+.doc-title {
+font-size: 52px;
+font-weight: 800;
+line-height: 1.05;
+letter-spacing: -0.04em;
+color: var(--text);
+}
+.doc-title span {
+background: var(--grad-text);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+.doc-subtitle { color: var(--text-muted); font-size: 15px; max-width: 540px; line-height: 1.7; }
+.doc-meta {
+display: flex;
+border: 1px solid var(--border-bright);
+border-radius: 8px;
+overflow: hidden;
+width: fit-content;
+background: var(--surface);
+box-shadow: 0 1px 3px #00000008;
+}
+.doc-meta span {
+font-family: 'JetBrains Mono', monospace;
+font-size: 10px;
+color: var(--text-dim);
+padding: 6px 14px;
+border-right: 1px solid var(--border);
+letter-spacing: 0.05em;
+}
+.doc-meta span:last-child { border-right: none; }
+
+.section { margin-bottom: 88px; }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+.section-num {
+font-family: 'JetBrains Mono', monospace;
+font-size: 10px;
+color: var(--text-dim);
+background: var(--surface);
+border: 1px solid var(--border-bright);
+border-radius: 4px;
+padding: 2px 7px;
+letter-spacing: 0.06em;
+}
+.section-title { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; color: var(--text); }
+.section-rule { flex: 1; height: 1px; background: var(--border-bright); }
+
+.screen-frame {
+border: 1px solid var(--border-bright);
+border-radius: 16px;
+overflow: hidden;
+background: var(--surface);
+margin-bottom: 28px;
+box-shadow: 0 4px 24px #00000010, 0 1px 4px #00000008;
+}
+.screen-chrome {
+background: var(--surface2);
+border-bottom: 1px solid var(--border);
+padding: 10px 16px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.chrome-dot { width: 10px; height: 10px; border-radius: 50%; }
+.chrome-dot.r { background: #ff5f57; }
+.chrome-dot.y { background: #febc2e; }
+.chrome-dot.g { background: #28c840; }
+.chrome-url {
+margin-left: 8px;
+flex: 1;
+background: var(--surface);
+border: 1px solid var(--border);
+border-radius: 5px;
+padding: 3px 10px;
+font-family: 'JetBrains Mono', monospace;
+font-size: 10px;
+color: var(--text-dim);
+}
+.screen-name { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.06em; }
+
+.app-shell { display: flex; height: 620px; }
+
+.sidebar {
+width: 210px;
+background: var(--surface2);
+border-right: 1px solid var(--border);
+display: flex;
+flex-direction: column;
+flex-shrink: 0;
+}
+.sidebar-logo { padding: 16px 14px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 8px; letter-spacing: -0.02em; color: var(--text); }
+.logo-icon { width: 22px; height: 22px; background: linear-gradient(135deg, #6366f1, #06b6d4); border-radius: 6px; flex-shrink: 0; }
+.sidebar-section { padding: 14px 14px 4px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+.sidebar-item { margin: 1px 8px; padding: 7px 10px; border-radius: 7px; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.sidebar-item.active { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-border); font-weight: 500; }
+.sidebar-item .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--insight); flex-shrink: 0; }
+.sidebar-item .dot.y { background: var(--hypothesis); }
+.sidebar-item .dot.p { background: var(--action); }
+.sidebar-bottom { margin-top: auto; padding: 12px; border-top: 1px solid var(--border); }
+.btn-new { width: 100%; padding: 7px; background: var(--text); color: white; border: none; border-radius: 7px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+.canvas-area {
+flex: 1;
+position: relative;
+overflow: hidden;
+background:
+radial-gradient(ellipse at 20% 30%, #6366f10c 0%, transparent 50%),
+radial-gradient(ellipse at 80% 70%, #06b6d40a 0%, transparent 50%),
+repeating-linear-gradient(0deg, transparent, transparent 31px, #6b6b8a08 31px, #6b6b8a08 32px),
+repeating-linear-gradient(90deg, transparent, transparent 31px, #6b6b8a08 31px, #6b6b8a08 32px);
+background-color: #f4f4fb;
+}
+.canvas-toolbar {
+position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+background: var(--surface); border: 1px solid var(--border-bright); border-radius: 8px;
+padding: 4px; display: flex; gap: 2px; z-index: 10; box-shadow: 0 2px 8px #00000010;
+}
+.tb-btn { padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 500; color: var(--text-muted); border: none; background: transparent; cursor: pointer; }
+.tb-btn.active { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.tb-btn.accent { color: var(--accent); font-weight: 600; }
+.canvas-zoom {
+position: absolute; bottom: 14px; right: 14px;
+background: var(--surface); border: 1px solid var(--border-bright); border-radius: 7px;
+display: flex; overflow: hidden; z-index: 10; box-shadow: 0 2px 6px #00000008;
+}
+.zoom-btn { padding: 5px 9px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); border: none; background: transparent; cursor: pointer; border-right: 1px solid var(--border); }
+.zoom-btn:last-child { border-right: none; }
+.zoom-pct { padding: 5px 9px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); }
+.canvas-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+.node {
+position: absolute; border-radius: 10px; padding: 12px 14px;
+border: 1px solid; width: 192px; background: white;
+box-shadow: 0 2px 8px #00000010;
+}
+.node-type { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+.node-type::before { content: ''; display: block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.node-title { font-size: 12px; font-weight: 600; line-height: 1.35; margin-bottom: 4px; letter-spacing: -0.01em; color: var(--text); }
+.node-body { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+.node-footer { margin-top: 8px; padding-top: 7px; border-top: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); }
+.node.chart { border-color: var(--chart-border); }
+.node.insight { border-color: var(--insight-border); }
+.node.hypo { border-color: var(--hypothesis-border); }
+.node.exp { border-color: var(--experiment-border); }
+.node.chart .node-type { color: var(--chart); }
+.node.insight .node-type { color: var(--insight); }
+.node.hypo .node-type { color: var(--hypothesis); }
+.node.exp .node-type { color: var(--experiment); }
+
+.chart-bars { display: flex; align-items: flex-end; gap: 3px; height: 28px; margin-top: 6px; }
+.bar { flex: 1; background: var(--chart); border-radius: 2px 2px 0 0; opacity: 0.55; }
+
+.chat-panel { width: 268px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+.chat-header { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; color: var(--text); }
+.chat-status { display: flex; align-items: center; gap: 5px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--insight); }
+.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--insight); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+.chat-messages { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+.msg { max-width: 85%; padding: 8px 11px; border-radius: 10px; font-size: 11px; line-height: 1.5; }
+.msg.user { align-self: flex-end; background: var(--accent); color: white; border-radius: 10px 10px 2px 10px; }
+.msg.agent { align-self: flex-start; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: 10px 10px 10px 2px; }
+.msg-action { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--insight); margin-top: 5px; padding: 3px 7px; background: var(--insight-bg); border-radius: 4px; border: 1px solid var(--insight-border); }
+.chat-input { padding: 10px; border-top: 1px solid var(--border); }
+.input-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 11px; color: var(--text-dim); display: flex; justify-content: space-between; align-items: center; }
+.send-btn { width: 22px; height: 22px; background: var(--accent); border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: white; font-weight: 700; }
+
+.annotations { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+.annotation { display: flex; gap: 10px; padding: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 1px 3px #00000006; }
+.ann-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); background: var(--accent-light); border: 1px solid var(--accent-border); border-radius: 5px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.ann-content h4 { font-size: 12px; font-weight: 600; margin-bottom: 3px; letter-spacing: -0.01em; color: var(--text); }
+.ann-content p { font-size: 11px; color: var(--text-muted); line-height: 1.55; }
+
+.node-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.node-card { background: var(--surface); border-radius: 12px; padding: 18px; border: 1px solid var(--border); box-shadow: 0 2px 8px #00000008; position: relative; overflow: hidden; }
+.node-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.node-card.chart::after { background: var(--chart); }
+.node-card.insight::after { background: var(--insight); }
+.node-card.hypo::after { background: var(--hypothesis); }
+.node-card.exp::after { background: var(--experiment); }
+.node-card.action::after { background: var(--action); }
+.node-card.question::after{ background: var(--question); }
+.nc-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.nc-label.chart { color: var(--chart); }
+.nc-label.insight { color: var(--insight); }
+.nc-label.hypo { color: var(--hypothesis); }
+.nc-label.exp { color: var(--experiment); }
+.nc-label.action { color: var(--action); }
+.nc-label.question{ color: var(--question); }
+.nc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.nc-dot.chart { background: var(--chart); }
+.nc-dot.insight { background: var(--insight); }
+.nc-dot.hypo { background: var(--hypothesis); }
+.nc-dot.exp { background: var(--experiment); }
+.nc-dot.action { background: var(--action); }
+.nc-dot.question{ background: var(--question); }
+.nc-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.02em; color: var(--text); }
+.nc-desc { font-size: 11px; color: var(--text-muted); line-height: 1.55; margin-bottom: 10px; }
+.nc-example { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); line-height: 1.4; font-style: italic; background: var(--surface2); padding: 6px 8px; border-radius: 5px; border: 1px solid var(--border); }
+
+.palette-strip { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 1px 4px #00000008; }
+.palette-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+.swatch-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.swatch { display: flex; flex-direction: column; gap: 5px; align-items: center; }
+.swatch-color { width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.06); }
+.swatch-name { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--text-dim); text-align: center; line-height: 1.4; }
+
+.flow-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; margin-bottom: 12px; box-shadow: 0 2px 8px #00000008; }
+.flow-title { font-size: 14px; font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; letter-spacing: -0.02em; color: var(--text); }
+.flow-badge { font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 2px 8px; border-radius: 100px; letter-spacing: 0.06em; font-weight: 500; }
+.flow-badge.f1 { background: var(--insight-bg); color: var(--insight); border: 1px solid var(--insight-border); }
+.flow-badge.f2 { background: var(--hypothesis-bg); color: var(--hypothesis); border: 1px solid var(--hypothesis-border); }
+.flow-badge.f3 { background: var(--chart-bg); color: var(--chart); border: 1px solid var(--chart-border); }
+.flow-badge.f4 { background: var(--action-bg); color: var(--action); border: 1px solid var(--action-border); }
+.flow-steps { display: flex; align-items: stretch; overflow-x: auto; }
+.flow-step { min-width: 130px; flex: 1; display: flex; flex-direction: column; align-items: center; }
+.step-box { width: 100%; padding: 11px 10px; border-radius: 8px; border: 1px solid; text-align: center; }
+.step-actor { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.step-actor.user { color: var(--accent); }
+.step-actor.agent { color: var(--insight); }
+.step-actor.canvas { color: var(--chart); }
+.step-actor.output { color: var(--action); }
+.step-action { font-size: 11px; font-weight: 600; line-height: 1.3; color: var(--text); margin-bottom: 3px; letter-spacing: -0.01em; }
+.step-detail { font-size: 10px; color: var(--text-muted); line-height: 1.4; }
+.step-box.user-box { background: var(--accent-light); border-color: var(--accent-border); }
+.step-box.agent-box { background: var(--insight-bg); border-color: var(--insight-border); }
+.step-box.result-box { background: var(--chart-bg); border-color: var(--chart-border); }
+.step-box.system-box { background: var(--action-bg); border-color: var(--action-border); }
+.step-arrow { display: flex; align-items: center; padding: 0 5px; flex-shrink: 0; min-width: 22px; }
+.arrow-line { flex: 1; height: 1px; background: var(--border-bright); position: relative; }
+.arrow-line::after { content: '▶'; position: absolute; right: -5px; top: 50%; transform: translateY(-50%); font-size: 7px; color: var(--text-dim); }
+.flow-notes { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+.flow-note { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-muted); padding: 3px 9px; background: var(--surface2); border-radius: 4px; border: 1px solid var(--border); }
+.flow-note strong { color: var(--text); }
+
+.drawer-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.15); z-index: 20; display: flex; justify-content: flex-end; }
+.drawer { width: 310px; background: var(--surface); border-left: 1px solid var(--border); height: 100%; display: flex; flex-direction: column; overflow: hidden; box-shadow: -4px 0 24px #00000014; }
+.drawer-header { padding: 18px 18px 14px; border-bottom: 1px solid var(--border); }
+.drawer-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; letter-spacing: -0.02em; color: var(--text); }
+.drawer-sub { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+.drawer-body { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow: auto; }
+.upload-zone { border: 1.5px dashed var(--border-bright); border-radius: 10px; padding: 22px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; background: var(--surface2); }
+.upload-icon { font-size: 22px; margin-bottom: 2px; }
+.upload-title { font-size: 12px; font-weight: 600; color: var(--text); }
+.upload-sub { font-size: 10px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+.upload-btn { margin-top: 6px; padding: 5px 14px; background: var(--text); color: white; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.drawer-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+.dataset-item { padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.dataset-item.selected { border-color: var(--accent-border); background: var(--accent-light); }
+.dataset-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.dataset-icon.green { background: var(--insight-bg); border: 1px solid var(--insight-border); }
+.dataset-icon.blue { background: var(--chart-bg); border: 1px solid var(--chart-border); }
+.dataset-info { flex: 1; }
+.dataset-name { font-size: 12px; font-weight: 500; margin-bottom: 2px; color: var(--text); }
+.dataset-meta { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); }
+.check { width: 15px; height: 15px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 8px; color: white; font-weight: 800; }
+
+.detail-panel { width: 292px; background: var(--surface); border-left: 1px solid var(--border); height: 100%; display: flex; flex-direction: column; }
+.detail-header { padding: 14px 14px 10px; border-bottom: 1px solid var(--border); }
+.detail-node-type { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+.detail-node-type.insight { color: var(--insight); }
+.detail-title { font-size: 13px; font-weight: 700; line-height: 1.35; letter-spacing: -0.02em; color: var(--text); }
+.detail-body { flex: 1; padding: 14px; overflow: auto; display: flex; flex-direction: column; gap: 12px; }
+.detail-section-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; }
+.detail-text { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+.evidence-item { padding: 6px 9px; background: var(--insight-bg); border-radius: 5px; border-left: 2px solid var(--insight); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-muted); margin-bottom: 3px; }
+.editable-field { background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 9px 10px; font-size: 11px; color: var(--text); line-height: 1.5; position: relative; }
+.field-edit-icon { position: absolute; top: 7px; right: 8px; font-size: 10px; color: var(--text-dim); }
+.connected-nodes { display: flex; flex-direction: column; gap: 3px; }
+.connected-node { padding: 5px 9px; border-radius: 5px; font-size: 10px; display: flex; align-items: center; gap: 5px; font-family: 'JetBrains Mono', monospace; }
+.connected-node.chart { background: var(--chart-bg); color: var(--chart); border: 1px solid var(--chart-border); }
+.connected-node.hypo { background: var(--hypothesis-bg); color: var(--hypothesis); border: 1px solid var(--hypothesis-border); }
+.detail-footer { padding: 10px 14px; border-top: 1px solid var(--border); display: flex; gap: 6px; }
+.detail-btn { flex: 1; padding: 7px; border-radius: 7px; font-size: 11px; font-weight: 600; text-align: center; cursor: pointer; }
+.detail-btn.primary { background: var(--text); color: white; }
+.detail-btn.secondary { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); font-weight: 500; }
+
+.history-content { flex: 1; padding: 18px; overflow: auto; background: var(--bg); }
+.history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.session-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; cursor: pointer; box-shadow: 0 1px 4px #00000008; }
+.session-date { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); margin-bottom: 5px; }
+.session-name { font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+.session-nodes { display: flex; gap: 4px; flex-wrap: wrap; }
+.session-node-badge { padding: 2px 6px; border-radius: 100px; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.05em; font-weight: 500; }
+.session-node-badge.chart { background: var(--chart-bg); color: var(--chart); border: 1px solid var(--chart-border); }
+.session-node-badge.insight { background: var(--insight-bg); color: var(--insight); border: 1px solid var(--insight-border); }
+.session-node-badge.hypo { background: var(--hypothesis-bg); color: var(--hypothesis); border: 1px solid var(--hypothesis-border); }
+.session-node-badge.exp { background: var(--experiment-bg); color: var(--experiment); border: 1px solid var(--experiment-border); }
+.session-footer { margin-top: 8px; padding-top: 7px; border-top: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); display: flex; justify-content: space-between; }
+.memory-banner { background: linear-gradient(135deg, var(--accent-light), #ecfdf5); border: 1px solid var(--accent-border); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; display: flex; gap: 10px; align-items: flex-start; }
+.memory-icon { font-size: 15px; flex-shrink: 0; }
+.memory-text { font-size: 11px; color: var(--text-muted); line-height: 1.55; }
+.memory-text strong { color: var(--accent); font-weight: 600; }
+
+.trace-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px #00000008; }
+.trace-header { padding: 8px 12px; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; display: flex; justify-content: space-between; background: var(--surface2); }
+.trace-toggle { color: var(--accent); cursor: pointer; font-weight: 600; }
+.trace-item { padding: 7px 12px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-start; }
+.trace-item:last-child { border-bottom: none; }
+.trace-time { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); flex-shrink: 0; padding-top: 1px; }
+.trace-content { font-size: 10px; color: var(--text-muted); line-height: 1.5; font-family: 'JetBrains Mono', monospace; }
+.trace-tag { display: inline; font-size: 8px; padding: 1px 5px; border-radius: 3px; margin-right: 5px; letter-spacing: 0.05em; font-weight: 600; }
+.trace-tag.tool { background: var(--chart-bg); color: var(--chart); border: 1px solid var(--chart-border); }
+.trace-tag.node { background: var(--insight-bg); color: var(--insight); border: 1px solid var(--insight-border); }
+.trace-tag.think { background: var(--hypothesis-bg); color: var(--hypothesis); border: 1px solid var(--hypothesis-border); }
+
+.script-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.script-beat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px #00000008; }
+.beat-time { padding: 7px 14px; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--accent); background: var(--accent-light); font-weight: 600; letter-spacing: 0.04em; }
+.beat-body { padding: 14px; }
+.beat-title { font-size: 12px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+.beat-steps { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.beat-steps li { font-size: 11px; color: var(--text-muted); padding-left: 14px; position: relative; line-height: 1.4; }
+.beat-steps li::before { content: '→'; position: absolute; left: 0; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+.beat-highlight { margin-top: 10px; padding: 8px 10px; background: var(--surface2); border-radius: 6px; font-size: 10px; color: var(--text-muted); border-left: 2px solid var(--accent-border); font-style: italic; line-height: 1.5; }
+
+.mt-24 { margin-top: 24px; }
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="doc-eyebrow">
+    <span class="eyebrow-dot"></span>
+    <span class="eyebrow-label">Design Spec · v1.0 · CopilotKit + React Flow</span>
+  </div>
+  <h1 class="doc-title">Insight Canvas<br><span>Design System</span></h1>
+  <p class="doc-subtitle">Screens, nodes, and interaction flows for the collaborative AI reasoning demo app. Built on CopilotKit A2-UI and React Flow.</p>
+  <div class="doc-meta">
+    <span>4 SCREENS</span>
+    <span>6 NODE TYPES</span>
+    <span>4 FLOWS</span>
+    <span>3-MIN SCRIPT</span>
+  </div>
+</div>
+
+<!-- 01 — NODE TYPES -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Node Types</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="node-grid">
+    <div class="node-card chart">
+      <div class="nc-label chart"><span class="nc-dot chart"></span>Chart</div>
+      <div class="nc-title">Chart</div>
+      <div class="nc-desc">Visualization generated by the AI agent via MCP App. Can be line, bar, or scatter chart.</div>
+      <div class="nc-example">"Churn rate evolution by week of life"</div>
+    </div>
+    <div class="node-card insight">
+      <div class="nc-label insight"><span class="nc-dot insight"></span>Insight</div>
+      <div class="nc-title">Insight</div>
+      <div class="nc-desc">Data-driven observation derived from the chart or dataset. Concrete claim with supporting evidence.</div>
+      <div class="nc-example">"Churn spikes 40% for users with less than 7 active days"</div>
+    </div>
+    <div class="node-card hypo">
+      <div class="nc-label hypo"><span class="nc-dot hypo"></span>Hypothesis</div>
+      <div class="nc-title">Hypothesis</div>
+      <div class="nc-desc">Possible explanation for an insight. Can be edited by the user or generated by the agent.</div>
+      <div class="nc-example">"Onboarding doesn't show product value before day 7"</div>
+    </div>
+    <div class="node-card exp">
+      <div class="nc-label exp"><span class="nc-dot exp"></span>Experiment</div>
+      <div class="nc-title">Experiment</div>
+      <div class="nc-desc">Test plan to validate the hypothesis. Includes success metrics and cutoff criteria.</div>
+      <div class="nc-example">"A/B test: interactive tutorial days 1–3. Goal: –15% churn in 30 days"</div>
+    </div>
+    <div class="node-card action">
+      <div class="nc-label action"><span class="nc-dot action"></span>Action Item</div>
+      <div class="nc-title">Action Item</div>
+      <div class="nc-desc">Concrete operational task derived from the analysis. Has an owner and estimated date.</div>
+      <div class="nc-example">"Redesign onboarding screen — product team, sprint 24"</div>
+    </div>
+    <div class="node-card question">
+      <div class="nc-label question"><span class="nc-dot question"></span>Question</div>
+      <div class="nc-title">Question</div>
+      <div class="nc-desc">Open investigation point without an answer yet. Generates new branches on the canvas.</div>
+      <div class="nc-example">"Is there a churn difference between mobile and desktop in week 1?"</div>
+    </div>
+  </div>
+
+  <div class="palette-strip">
+    <span class="palette-label">Color palette</span>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-color" style="background:#3b82f6;"></div><div class="swatch-name">Chart<br>#3b82f6</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#059669;"></div><div class="swatch-name">Insight<br>#059669</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#d97706;"></div><div class="swatch-name">Hypothesis<br>#d97706</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#dc2626;"></div><div class="swatch-name">Experiment<br>#dc2626</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#7c3aed;"></div><div class="swatch-name">Action<br>#7c3aed</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#db2777;"></div><div class="swatch-name">Question<br>#db2777</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 — MAIN CANVAS -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Primary Screen — Canvas</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="screen-frame">
+    <div class="screen-chrome">
+      <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+      <div class="chrome-url">insight-canvas.app / session / churn-analysis-q4</div>
+      <div class="screen-name">SCREEN 01 · MAIN CANVAS</div>
+    </div>
+    <div class="app-shell">
+      <div class="sidebar">
+        <div class="sidebar-logo"><div class="logo-icon"></div>Insight Canvas</div>
+        <div class="sidebar-section">Sessions</div>
+        <div class="sidebar-item active"><span class="dot"></span>Churn Analysis Q4</div>
+        <div class="sidebar-item"><span class="dot y"></span>Retention Deep Dive</div>
+        <div class="sidebar-item"><span class="dot p"></span>Segmentation v2</div>
+        <div class="sidebar-bottom"><div class="btn-new">+ New session</div></div>
+      </div>
+
+      <div class="canvas-area">
+        <div class="canvas-toolbar">
+          <button class="tb-btn active">Select</button>
+          <button class="tb-btn">Move</button>
+          <button class="tb-btn">Connect</button>
+          <button class="tb-btn accent">Reasoning trace ↗</button>
+        </div>
+        <svg class="canvas-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L6,3 z" fill="#6b6b8a55"/>
+            </marker>
+          </defs>
+          <line x1="290" y1="172" x2="372" y2="232" stroke="#6b6b8a28" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+          <line x1="492" y1="258" x2="556" y2="296" stroke="#6b6b8a28" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+          <line x1="688" y1="322" x2="742" y2="360" stroke="#6b6b8a28" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+        </svg>
+        <div class="node chart" style="left:96px;top:92px;">
+          <div class="node-type">Chart</div>
+          <div class="node-title">Churn by week of life</div>
+          <div class="chart-bars">
+            <div class="bar" style="height:38%;"></div><div class="bar" style="height:52%;"></div>
+            <div class="bar" style="height:88%;"></div><div class="bar" style="height:100%;"></div>
+            <div class="bar" style="height:68%;"></div><div class="bar" style="height:48%;"></div>
+            <div class="bar" style="height:32%;"></div>
+          </div>
+          <div class="node-footer">MCP App · users_2024.csv</div>
+        </div>
+        <div class="node insight" style="left:338px;top:180px;">
+          <div class="node-type">Insight</div>
+          <div class="node-title">Churn spike in week 3</div>
+          <div class="node-body">40% of churned users leave before day 21. Consistent across Q4 cohorts.</div>
+          <div class="node-footer">High confidence · 3 sources</div>
+        </div>
+        <div class="node hypo" style="left:520px;top:276px;">
+          <div class="node-type">Hypothesis</div>
+          <div class="node-title">Onboarding doesn't show value</div>
+          <div class="node-body">Users don't reach the key feature before day 7.</div>
+          <div class="node-footer">Edited by user · 14:32</div>
+        </div>
+        <div class="node exp" style="left:706px;top:342px;">
+          <div class="node-type">Experiment</div>
+          <div class="node-title">A/B: Interactive tutorial</div>
+          <div class="node-body">Goal: –15% churn in 30d. Segment: new users.</div>
+          <div class="node-footer">Generated by agent</div>
+        </div>
+        <div class="canvas-zoom">
+          <button class="zoom-btn">−</button>
+          <div class="zoom-pct">85%</div>
+          <button class="zoom-btn">+</button>
+          <button class="zoom-btn" style="font-size:9px;padding:5px 7px;">⊡</button>
+        </div>
+      </div>
+
+      <div class="chat-panel">
+        <div class="chat-header">Agent <div class="chat-status"><div class="status-dot"></div>active</div></div>
+        <div class="chat-messages">
+          <div class="msg user">Identify churn risk patterns</div>
+          <div class="msg agent">Analyzed the dataset. Found a churn concentration between days 14–21.<div class="msg-action">→ Generated: Chart + Insight + Hypothesis</div></div>
+          <div class="msg user">I edited the hypothesis — seems like it's the onboarding</div>
+          <div class="msg agent">Makes sense. Generated an experiment to validate with A/B test.<div class="msg-action">→ Added: Experiment node</div></div>
+        </div>
+        <div class="chat-input"><div class="input-box"><span>Type a prompt...</span><div class="send-btn">↑</div></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="annotations">
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-content"><h4>Sessions sidebar</h4><p>List of previous analyses. Active session is highlighted. "New session" button at the bottom.</p></div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-content"><h4>Grid canvas</h4><p>Subtle lavender dot grid (matching CopilotKit aesthetic). Nodes are draggable and reconnectable. Free zoom with scroll.</p></div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-content"><h4>Floating toolbar</h4><p>Canvas tools (select, move, connect). "Reasoning trace" button opens the traceability panel.</p></div></div>
+    <div class="annotation"><div class="ann-num">4</div><div class="ann-content"><h4>Chat side panel</h4><p>The agent shows what actions it took on the canvas ("→ Generated: Chart + Insight"). Input is always visible.</p></div></div>
+  </div>
+</div>
+
+<!-- 03 — DATA SOURCES DRAWER -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Panel — Data Sources Drawer</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="screen-frame">
+    <div class="screen-chrome">
+      <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+      <div class="chrome-url">insight-canvas.app / session / new</div>
+      <div class="screen-name">SCREEN 02 · DATA DRAWER</div>
+    </div>
+    <div class="app-shell" style="position:relative;">
+      <div class="sidebar">
+        <div class="sidebar-logo"><div class="logo-icon"></div>Insight Canvas</div>
+        <div class="sidebar-section">Sessions</div>
+        <div class="sidebar-item active"><span class="dot"></span>New session</div>
+      </div>
+      <div class="canvas-area" style="filter:blur(1px);opacity:0.5;">
+        <div class="canvas-toolbar"><button class="tb-btn active">Select</button></div>
+      </div>
+      <div class="drawer-overlay">
+        <div class="drawer">
+          <div class="drawer-header">
+            <div class="drawer-title">Data Sources</div>
+            <div class="drawer-sub">Upload a file or choose a sample dataset to get started</div>
+          </div>
+          <div class="drawer-body">
+            <div class="upload-zone">
+              <div class="upload-icon">📂</div>
+              <div class="upload-title">Drop your file here</div>
+              <div class="upload-sub">CSV · XLSX · JSON · Max 50 MB</div>
+              <div class="upload-btn">Browse file</div>
+            </div>
+            <div class="drawer-label">Sample datasets</div>
+            <div class="dataset-item selected">
+              <div class="dataset-icon green">📊</div>
+              <div class="dataset-info"><div class="dataset-name">SaaS Churn Dataset</div><div class="dataset-meta">4.2K rows · 18 cols · users_2024.csv</div></div>
+              <div class="check">✓</div>
+            </div>
+            <div class="dataset-item">
+              <div class="dataset-icon blue">📈</div>
+              <div class="dataset-info"><div class="dataset-name">E-commerce Retention</div><div class="dataset-meta">12K rows · 24 cols · retail_cohorts.csv</div></div>
+            </div>
+            <div class="dataset-item">
+              <div class="dataset-icon green">🏢</div>
+              <div class="dataset-info"><div class="dataset-name">B2B Pipeline Analysis</div><div class="dataset-meta">890 rows · 31 cols · pipeline_q4.csv</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-content"><h4>Sliding drawer</h4><p>Slides in from the right. The canvas background stays visible but blurred, maintaining context.</p></div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-content"><h4>Upload zone</h4><p>Drag & drop for CSV/XLSX/JSON. For the demo, pre-built datasets are used.</p></div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-content"><h4>Sample datasets</h4><p>At least 2–3 pre-built datasets. Selected one shows a checkmark. One click activates it and closes the drawer.</p></div></div>
+    <div class="annotation"><div class="ann-num">4</div><div class="ann-content"><h4>Dataset metadata</h4><p>Row count, column count, and filename. Gives context before starting the analysis.</p></div></div>
+  </div>
+</div>
+
+<!-- 04 — NODE DETAIL PANEL -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Panel — Node Detail</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="screen-frame">
+    <div class="screen-chrome">
+      <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+      <div class="chrome-url">insight-canvas.app / session / churn-analysis-q4</div>
+      <div class="screen-name">SCREEN 03 · NODE DETAIL</div>
+    </div>
+    <div class="app-shell">
+      <div class="sidebar">
+        <div class="sidebar-logo"><div class="logo-icon"></div>Insight Canvas</div>
+        <div class="sidebar-item active"><span class="dot"></span>Churn Analysis Q4</div>
+      </div>
+      <div class="canvas-area">
+        <div class="node insight" style="left:72px;top:126px;box-shadow:0 0 0 2px var(--insight),0 4px 20px #05966920;">
+          <div class="node-type">Insight</div>
+          <div class="node-title">Churn spike in week 3</div>
+          <div class="node-body">40% of churned users leave before day 21.</div>
+          <div class="node-footer">Selected</div>
+        </div>
+        <div class="node chart" style="left:272px;top:70px;opacity:0.35;">
+          <div class="node-type">Chart</div>
+          <div class="node-title">Churn by week</div>
+          <div class="node-footer">MCP App</div>
+        </div>
+        <div class="node hypo" style="left:184px;top:284px;opacity:0.35;">
+          <div class="node-type">Hypothesis</div>
+          <div class="node-title">Onboarding doesn't show value</div>
+          <div class="node-footer">Edited</div>
+        </div>
+      </div>
+      <div class="detail-panel">
+        <div class="detail-header">
+          <div class="detail-node-type insight"><span style="width:7px;height:7px;background:var(--insight);border-radius:50%;display:inline-block;"></span>Insight</div>
+          <div class="detail-title">Churn spike in week 3</div>
+        </div>
+        <div class="detail-body">
+          <div>
+            <div class="detail-section-title">Explanation</div>
+            <div class="detail-text">40% of users who abandon the product do so between days 14 and 21. This pattern is consistent across all Q4 cohorts.</div>
+          </div>
+          <div>
+            <div class="detail-section-title">Supporting Evidence</div>
+            <div class="evidence-item">Oct cohort: 38% churn days 14–21</div>
+            <div class="evidence-item">Nov cohort: 43% churn days 14–21</div>
+            <div class="evidence-item">Dec cohort: 41% churn days 14–21</div>
+          </div>
+          <div>
+            <div class="detail-section-title">Notes (editable)</div>
+            <div class="editable-field">Check correlation with the reports feature — users who activate it before day 14 seem not to churn.<span class="field-edit-icon">✎</span></div>
+          </div>
+          <div>
+            <div class="detail-section-title">Connected Nodes</div>
+            <div class="connected-nodes">
+              <div class="connected-node chart">← Chart: Churn by week of life</div>
+              <div class="connected-node hypo">→ Hypothesis: Onboarding doesn't show value</div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-footer">
+          <div class="detail-btn secondary">Ask agent</div>
+          <div class="detail-btn primary">Edit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotations">
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-content"><h4>Selected node ring</h4><p>The active node gets a 2px ring in its color. Other nodes fade slightly to give visual focus.</p></div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-content"><h4>Supporting evidence</h4><p>Concrete data points backing the insight. Always generated by the agent, referenced to the dataset.</p></div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-content"><h4>Free editable field</h4><p>Users can add notes to any node. Editing a hypothesis triggers the agent's response.</p></div></div>
+    <div class="annotation"><div class="ann-num">4</div><div class="ann-content"><h4>Connected nodes</h4><p>Shows upstream (←) and downstream (→) nodes in the reasoning chain.</p></div></div>
+  </div>
+</div>
+
+<!-- 05 — SESSION HISTORY -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Screen — Session History</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="screen-frame">
+    <div class="screen-chrome">
+      <div class="chrome-dot r"></div><div class="chrome-dot y"></div><div class="chrome-dot g"></div>
+      <div class="chrome-url">insight-canvas.app / sessions</div>
+      <div class="screen-name">SCREEN 04 · SESSION HISTORY</div>
+    </div>
+    <div class="app-shell">
+      <div class="sidebar">
+        <div class="sidebar-logo"><div class="logo-icon"></div>Insight Canvas</div>
+        <div class="sidebar-item" style="color:var(--text);font-weight:600;">All Sessions</div>
+        <div class="sidebar-item"><span class="dot"></span>Churn Q4</div>
+        <div class="sidebar-item"><span class="dot y"></span>Retention</div>
+        <div class="sidebar-bottom"><div class="btn-new">+ New session</div></div>
+      </div>
+      <div class="history-content">
+        <div class="memory-banner">
+          <div class="memory-icon">🧠</div>
+          <div class="memory-text"><strong>Agent memory is active.</strong> In previous sessions we identified that churn concentrates in week 3 and that onboarding may be the key driver. Want to pick up from there?</div>
+        </div>
+        <div class="history-grid">
+          <div class="session-card" style="border-color:var(--accent-border);">
+            <div class="session-date">Today · 14:32</div>
+            <div class="session-name">Churn Analysis Q4</div>
+            <div class="session-nodes">
+              <span class="session-node-badge chart">CHART ×2</span>
+              <span class="session-node-badge insight">INSIGHT ×3</span>
+              <span class="session-node-badge hypo">HYPO ×2</span>
+              <span class="session-node-badge exp">EXP ×1</span>
+            </div>
+            <div class="session-footer"><span>users_2024.csv</span><span>8 nodes</span></div>
+          </div>
+          <div class="session-card">
+            <div class="session-date">Yesterday · 11:15</div>
+            <div class="session-name">Retention Deep Dive</div>
+            <div class="session-nodes">
+              <span class="session-node-badge chart">CHART ×3</span>
+              <span class="session-node-badge insight">INSIGHT ×4</span>
+              <span class="session-node-badge hypo">HYPO ×1</span>
+            </div>
+            <div class="session-footer"><span>retail_cohorts.csv</span><span>8 nodes</span></div>
+          </div>
+          <div class="session-card">
+            <div class="session-date">Jan 3 · 16:47</div>
+            <div class="session-name">Segmentation v2</div>
+            <div class="session-nodes">
+              <span class="session-node-badge chart">CHART ×1</span>
+              <span class="session-node-badge insight">INSIGHT ×2</span>
+              <span class="session-node-badge exp">EXP ×2</span>
+            </div>
+            <div class="session-footer"><span>pipeline_q4.csv</span><span>5 nodes</span></div>
+          </div>
+          <div class="session-card" style="border-style:dashed;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;min-height:110px;">
+            <div style="font-size:22px;color:var(--text-dim);">+</div>
+            <div style="font-size:12px;color:var(--text-muted);font-weight:500;">New session</div>
+          </div>
+        </div>
+
+        <div class="mt-24">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">REASONING TRACE PANEL — accessible via "Reasoning trace ↗" in the canvas toolbar</div>
+          <div class="trace-panel">
+            <div class="trace-header">Reasoning Trace · Churn Analysis Q4 <span class="trace-toggle">Hide</span></div>
+            <div class="trace-item"><div class="trace-time">14:31</div><div class="trace-content"><span class="trace-tag think">ANALYSIS</span>Processed users_2024.csv — 4,218 users, 18 columns, Oct–Dec 2024.</div></div>
+            <div class="trace-item"><div class="trace-time">14:31</div><div class="trace-content"><span class="trace-tag tool">TOOL</span>mcp_chart_generator → churn_rate_by_week_of_life.png</div></div>
+            <div class="trace-item"><div class="trace-time">14:32</div><div class="trace-content"><span class="trace-tag node">NODE</span>Added Chart node: "Churn by week of life"</div></div>
+            <div class="trace-item"><div class="trace-time">14:32</div><div class="trace-content"><span class="trace-tag think">ANALYSIS</span>Identified statistical concentration on days 14–21. Confidence 92% (consistent across 3 cohorts).</div></div>
+            <div class="trace-item"><div class="trace-time">14:32</div><div class="trace-content"><span class="trace-tag node">NODE</span>Added Insight + Hypothesis nodes. Connected chain: Chart → Insight → Hypothesis.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="annotations">
+    <div class="annotation"><div class="ann-num">1</div><div class="ann-content"><h4>Memory banner</h4><p>When the agent remembers prior analyses, this banner shows a summary and proposes continuing.</p></div></div>
+    <div class="annotation"><div class="ann-num">2</div><div class="ann-content"><h4>Session cards</h4><p>Show date, name, node type badges, and the dataset used. Click opens the full session canvas.</p></div></div>
+    <div class="annotation"><div class="ann-num">3</div><div class="ann-content"><h4>Reasoning Trace</h4><p>Chronological log of agent actions: tools called, intermediate analyses, nodes created. Toggle to show/hide.</p></div></div>
+    <div class="annotation"><div class="ann-num">4</div><div class="ann-content"><h4>Trace tags</h4><p>Each trace line has a tag: TOOL (tool call), NODE (canvas action), ANALYSIS (internal reasoning).</p></div></div>
+  </div>
+</div>
+
+<!-- 06 — INTERACTION FLOWS -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Interaction Flows</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="flow-diagram">
+    <div class="flow-title">Flow 1 — Generate Insights from scratch <span class="flow-badge f1">PRIMARY FLOW</span></div>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="step-box user-box"><div class="step-actor user">User</div><div class="step-action">Opens app</div><div class="step-detail">Empty canvas. Sidebar shows past sessions.</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box user-box"><div class="step-actor user">User</div><div class="step-action">Selects dataset</div><div class="step-detail">Opens drawer, picks "SaaS Churn Dataset"</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box user-box"><div class="step-actor user">User</div><div class="step-action">Types a prompt</div><div class="step-detail">"Identify churn risk patterns"</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box agent-box"><div class="step-actor agent">Agent</div><div class="step-action">Analyzes via MCP</div><div class="step-detail">Calls mcp_chart_generator and mcp_stats</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box result-box"><div class="step-actor canvas">Canvas</div><div class="step-action">3 connected nodes appear</div><div class="step-detail">Chart → Insight → Hypothesis, animated sequentially</div></div></div>
+    </div>
+    <div class="flow-notes">
+      <div class="flow-note"><strong>Initial state:</strong> empty canvas, agent on standby</div>
+      <div class="flow-note"><strong>Final state:</strong> Chart→Insight→Hypothesis chain visible</div>
+      <div class="flow-note"><strong>Animation:</strong> nodes appear one by one with fade-in</div>
+    </div>
+  </div>
+
+  <div class="flow-diagram">
+    <div class="flow-title">Flow 2 — Co-creation: user edits, agent responds <span class="flow-badge f2">CO-CREATION</span></div>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="step-box user-box"><div class="step-actor user">User</div><div class="step-action">Clicks Hypothesis node</div><div class="step-detail">Side detail panel opens</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box user-box"><div class="step-actor user">User</div><div class="step-action">Edits hypothesis text</div><div class="step-detail">Adds: "specifically on day 3 of onboarding"</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box agent-box"><div class="step-actor agent">Agent</div><div class="step-action">Detects change</div><div class="step-detail">Checks coherence with existing insight</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box result-box"><div class="step-actor canvas">Canvas</div><div class="step-action">Generates Experiment node</div><div class="step-detail">+ supporting chart, both connect to the edited hypothesis</div></div></div>
+    </div>
+    <div class="flow-notes">
+      <div class="flow-note"><strong>Trigger:</strong> agent reacts when a node is saved after editing</div>
+      <div class="flow-note"><strong>Final state:</strong> chain extends → Hypothesis → Experiment + support chart</div>
+    </div>
+  </div>
+
+  <div class="flow-diagram">
+    <div class="flow-title">Flow 3 — Full reasoning chain <span class="flow-badge f3">FULL CHAIN</span></div>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="step-box result-box"><div class="step-actor canvas">Canvas</div><div class="step-action">Chart</div><div class="step-detail">Data visualization</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box agent-box"><div class="step-actor agent">Agent</div><div class="step-action">Insight</div><div class="step-detail">Data-driven observation</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box user-box"><div class="step-actor user">User + Agent</div><div class="step-action">Hypothesis</div><div class="step-detail">Edited by user, refined by agent</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box agent-box"><div class="step-actor agent">Agent</div><div class="step-action">Experiment</div><div class="step-detail">Test plan with metrics</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box system-box"><div class="step-actor output">Output</div><div class="step-action">Action Item</div><div class="step-detail">Exportable operational task</div></div></div>
+    </div>
+    <div class="flow-notes">
+      <div class="flow-note"><strong>Visual output:</strong> horizontal chain, readable on projection screens</div>
+      <div class="flow-note"><strong>User can:</strong> reorder, add parallel branches, zoom in/out</div>
+    </div>
+  </div>
+
+  <div class="flow-diagram">
+    <div class="flow-title">Flow 4 — Return and cross-session memory <span class="flow-badge f4">PERSISTENCE</span></div>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="step-box user-box"><div class="step-actor user">User</div><div class="step-action">Returns to the app</div><div class="step-detail">Days after previous session</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box agent-box"><div class="step-actor agent">Agent</div><div class="step-action">Shows memory banner</div><div class="step-detail">"Previously we identified churn in week 3..."</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box user-box"><div class="step-actor user">User</div><div class="step-action">Opens previous session</div><div class="step-detail">Canvas loads with all prior nodes intact</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box agent-box"><div class="step-actor agent">Agent</div><div class="step-action">Highlights chain + proposes next step</div><div class="step-detail">"Want to analyze mobile vs desktop?"</div></div></div>
+      <div class="step-arrow"><div class="arrow-line"></div></div>
+      <div class="flow-step"><div class="step-box result-box"><div class="step-actor canvas">Canvas</div><div class="step-action">Canvas expands</div><div class="step-detail">New branch added to existing analysis</div></div></div>
+    </div>
+    <div class="flow-notes">
+      <div class="flow-note"><strong>Thread persistence:</strong> each session saved as a complete thread</div>
+      <div class="flow-note"><strong>Cross-session memory:</strong> agent recalls insights, not just messages</div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 — DEMO SCRIPT -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">3-Minute Demo Script</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="script-grid">
+    <div class="script-beat">
+      <div class="beat-time">0:00 – 0:30 · Setup</div>
+      <div class="beat-body">
+        <div class="beat-title">Empty canvas + dataset load</div>
+        <ul class="beat-steps">
+          <li>Show empty canvas with grid</li>
+          <li>Open data sources drawer</li>
+          <li>Select "SaaS Churn Dataset"</li>
+          <li>Drawer closes, active dataset appears in toolbar</li>
+        </ul>
+        <div class="beat-highlight">"We have a dataset of 4,000 SaaS users. Let's understand why they're churning."</div>
+      </div>
+    </div>
+    <div class="script-beat">
+      <div class="beat-time">0:30 – 1:30 · Generative Canvas</div>
+      <div class="beat-body">
+        <div class="beat-title">Agent generates the reasoning chain</div>
+        <ul class="beat-steps">
+          <li>Type prompt: "Identify churn risk patterns"</li>
+          <li>Chart node appears with real visualization</li>
+          <li>Insight node appears connected to chart</li>
+          <li>Hypothesis node appears</li>
+          <li>Open Reasoning Trace to show transparency</li>
+        </ul>
+        <div class="beat-highlight">"The agent doesn't just respond — it builds a visual reasoning map in real time."</div>
+      </div>
+    </div>
+    <div class="script-beat">
+      <div class="beat-time">1:30 – 2:15 · Co-Creation</div>
+      <div class="beat-body">
+        <div class="beat-title">User edits, agent responds</div>
+        <ul class="beat-steps">
+          <li>Click on the Hypothesis node</li>
+          <li>Edit text: "specifically on day 3 of onboarding"</li>
+          <li>Save → agent detects the change</li>
+          <li>Experiment node appears with concrete plan</li>
+          <li>Canvas expands automatically</li>
+        </ul>
+        <div class="beat-highlight">"I edit a hypothesis, the agent proposes how to test it. This is collaboration, not automation."</div>
+      </div>
+    </div>
+    <div class="script-beat">
+      <div class="beat-time">2:15 – 3:00 · Memory</div>
+      <div class="beat-body">
+        <div class="beat-title">Cross-session persistence</div>
+        <ul class="beat-steps">
+          <li>Navigate to the session history screen</li>
+          <li>Show agent memory banner</li>
+          <li>Open previous session → full canvas loads</li>
+          <li>Agent proposes next investigation</li>
+          <li>New branch is added to the canvas</li>
+        </ul>
+        <div class="beat-highlight">"This is structured, stateful collaboration between humans and agents."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

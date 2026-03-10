@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { DuckDBStatus } from "@/lib/duckdb/types";
 import { useDuckDB } from "@/lib/duckdb/use-duckdb";

@@ -35,7 +35,8 @@ const RootLayout = ({
       >
         <CopilotKit
           runtimeUrl="/api/copilotkit"
-          enableInspector={process.env.NODE_ENV === "development"}>
+          enableInspector={process.env.NODE_ENV === "development"}
+        >
           <DuckDBProvider>{children}</DuckDBProvider>
         </CopilotKit>
       </body>

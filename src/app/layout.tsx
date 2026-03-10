@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { CopilotKit } from "@copilotkit/react-core";
+import { DuckDBProvider } from "@/lib/duckdb/duckdb-provider";
 import "@copilotkit/react-ui/styles.css";
 import "./globals.css";
 
@@ -32,7 +33,11 @@ const RootLayout = ({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
-        <CopilotKit runtimeUrl="/api/copilotkit">{children}</CopilotKit>
+        <CopilotKit
+          runtimeUrl="/api/copilotkit"
+          enableInspector={process.env.NODE_ENV === "development"}>
+          <DuckDBProvider>{children}</DuckDBProvider>
+        </CopilotKit>
       </body>
     </html>
   );

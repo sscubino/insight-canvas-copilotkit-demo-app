@@ -8,9 +8,21 @@
   --surface-3: #f0f0f8;
   --border: #e2e2ee;
   --border-bright: #d4d4e8;
-  --text: #0f0f1a;
-  --text-muted: #6b6b8a;
-  --text-dim: #a0a0bc;
+  --foreground: #0f0f1a;
+  --muted: #6b6b8a;
+  --dim: #a0a0bc;
+
+  --success: #059669;
+  --success-bg: #ecfdf5;
+  --success-border: #a7f3d0;
+
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --warning-border: #fde68a;
+
+  --destructive: #dc2626;
+  --destructive-bg: #fef2f2;
+  --destructive-border: #fecaca;
 
   --chart: #3b82f6;
   --chart-bg: #eff6ff;
@@ -45,16 +57,28 @@
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
 
-  --color-bg: var(--background);
-  --color-bg-2: var(--background-2);
+  --color-background: var(--background);
+  --color-background-2: var(--background-2);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);
   --color-border: var(--border);
   --color-border-bright: var(--border-bright);
-  --color-text: var(--text);
-  --color-text-muted: var(--text-muted);
-  --color-text-dim: var(--text-dim);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-dim: var(--dim);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-success-border: var(--success-border);
+
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-border: var(--warning-border);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-bg: var(--destructive-bg);
+  --color-destructive-border: var(--destructive-border);
 
   --color-chart: var(--chart);
   --color-chart-bg: var(--chart-bg);
@@ -87,6 +111,6 @@
 
 body {
   background: var(--background);
-  color: var(--text);
+  color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
 }

@@ -114,3 +114,40 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
 }
+
+/* ReactFlow overrides */
+.react-flow__edge-path {
+  stroke: var(--dim) !important;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.react-flow__handle {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.react-flow__node:hover .react-flow__handle,
+.react-flow__handle-connecting,
+.react-flow__handle-valid {
+  opacity: 1;
+}
+
+/* CopilotChat panel overrides — strip CopilotKit's default container chrome */
+.copilotKitChat {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  height: 100% !important;
+}
+
+/* Pulse keyframe for the agent status dot */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { CopilotKit } from "@copilotkit/react-core";
 import { DuckDBProvider } from "@/lib/duckdb/duckdb-provider";
+import { SessionsSidebar } from "@/components/layout/sessions-sidebar";
 import "@copilotkit/react-ui/styles.css";
 import "./globals.css";
 
@@ -31,13 +32,18 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} flex h-screen w-full overflow-hidden font-sans antialiased`}
       >
         <CopilotKit
           runtimeUrl="/api/copilotkit"
-          enableInspector={process.env.NODE_ENV === "development"}
+          enableInspector={false}
         >
-          <DuckDBProvider>{children}</DuckDBProvider>
+          <DuckDBProvider>
+            <SessionsSidebar />
+            <div className="flex flex-col flex-1">
+              {children}
+            </div>
+          </DuckDBProvider>
         </CopilotKit>
       </body>
     </html>

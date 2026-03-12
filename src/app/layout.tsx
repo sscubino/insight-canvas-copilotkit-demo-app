@@ -34,15 +34,10 @@ const RootLayout = ({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} flex h-screen w-full overflow-hidden font-sans antialiased`}
       >
-        <CopilotKit
-          runtimeUrl="/api/copilotkit"
-          enableInspector={false}
-        >
+        <SessionsSidebar />
+        <CopilotKit runtimeUrl="/api/copilotkit" enableInspector={false}>
           <DuckDBProvider>
-            <SessionsSidebar />
-            <div className="flex flex-col flex-1">
-              {children}
-            </div>
+            <div className="flex flex-col flex-1">{children}</div>
           </DuckDBProvider>
         </CopilotKit>
       </body>

@@ -35,9 +35,7 @@ const SidebarHeader = () => {
         className="size-6 shrink-0 rounded-md bg-linear-to-br from-accent to-cyan-500"
         aria-hidden="true"
       />
-      <span className="text-lg font-bold text-foreground">
-        Insight Canvas
-      </span>
+      <span className="text-lg font-bold text-foreground">Insight Canvas</span>
     </header>
   );
 };
@@ -54,10 +52,11 @@ const SessionsNav = () => {
           <li key={id}>
             <button
               type="button"
-              className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs transition-colors ${active
-                ? "border border-accent-border bg-accent-light font-medium text-accent"
-                : "text-muted hover:bg-surface-3"
-                }`}
+              className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs transition-colors ${
+                active
+                  ? "border border-accent-border bg-accent-light font-medium text-accent"
+                  : "text-muted hover:bg-surface-3"
+              }`}
               aria-current={active ? "true" : undefined}
             >
               <StatusDot className={dotClass} />
@@ -70,12 +69,12 @@ const SessionsNav = () => {
   );
 };
 
-const SidebarFooter = ({ children }: { children: React.ReactNode | React.ReactNode[] }) => {
-  return (
-    <div className="border-t border-border p-3">
-      {children}
-    </div>
-  );
+const SidebarFooter = ({
+  children,
+}: {
+  children: React.ReactNode | React.ReactNode[];
+}) => {
+  return <div className="border-t border-border p-3">{children}</div>;
 };
 
 const NewSessionButton = () => {

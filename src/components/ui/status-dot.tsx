@@ -7,7 +7,11 @@ type StatusDotProps = {
 
 const StatusDot = ({ className, pulse = false }: StatusDotProps) => (
   <span
-    className={cn("inline-block size-1.5 shrink-0 rounded-full", className, pulse ? "animate-[pulse_2s_infinite]" : "")}
+    className={cn(
+      "inline-block size-1.5 shrink-0 rounded-full",
+      pulse ? "animate-[pulse_2s_infinite]" : "",
+      className
+    )}
     aria-hidden="true"
   />
 );

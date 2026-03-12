@@ -39,7 +39,7 @@ const InsightCanvasInner = () => {
 
   const handleConnect: OnConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
+    [setEdges]
   );
 
   return (

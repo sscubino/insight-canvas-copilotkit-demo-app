@@ -1,6 +1,6 @@
 import type { NodeProps } from "@xyflow/react";
 import type { ChartCanvasNode } from "@/types/canvas";
-import { BaseNode } from "./base-node";
+import { BaseNode, BaseNodeText } from "@/components/canvas/nodes/base-node";
 
 const PLACEHOLDER_BARS = [38, 52, 88, 100, 68, 48, 32];
 
@@ -21,9 +21,7 @@ const ChartNode = ({ data }: NodeProps<ChartCanvasNode>) => {
         ))}
       </div>
       {data.description && (
-        <p className="mt-2 text-sm leading-snug text-muted">
-          {data.description}
-        </p>
+        <BaseNodeText className="mt-2">{data.description}</BaseNodeText>
       )}
     </BaseNode>
   );

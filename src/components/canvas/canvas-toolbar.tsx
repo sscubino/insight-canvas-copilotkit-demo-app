@@ -23,10 +23,11 @@ const CanvasToolbar = () => {
           key={id}
           type="button"
           onClick={() => setActiveTool(id)}
-          className={`rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors ${activeTool === id
-            ? "border border-border bg-surface-2 text-foreground"
-            : "text-muted hover:text-foreground border border-transparent"
-            }`}
+          className={`rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors ${
+            activeTool === id
+              ? "border border-border bg-surface-2 text-foreground"
+              : "text-muted hover:text-foreground border border-transparent"
+          }`}
           aria-pressed={activeTool === id}
         >
           {label}

@@ -1,0 +1,301 @@
+user_id,signup_date,plan_type,acquisition_channel,onboarding_completed,weekly_activity,churned
+USR-001,2024-04-02,Free,Social,true,3,true
+USR-002,2024-06-12,Free,Referral,false,4,true
+USR-003,2024-08-22,Business,Social,true,20,false
+USR-004,2024-12-03,Business,Social,true,23,false
+USR-005,2024-12-10,Pro,Organic,false,6,true
+USR-006,2024-01-09,Starter,Referral,false,5,true
+USR-007,2024-08-01,Pro,Social,true,21,false
+USR-008,2024-02-05,Free,Paid Search,true,6,false
+USR-009,2024-10-20,Free,Organic,true,0,true
+USR-010,2024-05-01,Business,Content Marketing,true,25,false
+USR-011,2024-05-02,Free,Organic,false,0,true
+USR-012,2024-10-21,Starter,Social,true,7,false
+USR-013,2024-02-12,Free,Social,false,1,true
+USR-014,2024-03-23,Pro,Referral,false,8,false
+USR-015,2024-05-26,Free,Organic,false,3,false
+USR-016,2024-06-04,Pro,Paid Search,true,13,false
+USR-017,2024-12-23,Pro,Organic,true,15,false
+USR-018,2024-11-02,Business,Organic,true,23,false
+USR-019,2024-05-27,Free,Social,true,4,true
+USR-020,2024-08-04,Pro,Social,true,15,false
+USR-021,2024-06-01,Business,Organic,false,12,false
+USR-022,2024-12-03,Free,Organic,false,2,false
+USR-023,2024-12-23,Pro,Referral,true,17,false
+USR-024,2024-01-19,Free,Paid Search,false,5,true
+USR-025,2024-07-29,Free,Social,false,1,true
+USR-026,2024-09-20,Starter,Organic,false,5,false
+USR-027,2024-09-26,Starter,Content Marketing,false,4,false
+USR-028,2024-01-20,Starter,Social,true,12,true
+USR-029,2024-12-09,Starter,Paid Search,true,10,true
+USR-030,2024-05-28,Starter,Organic,true,7,true
+USR-031,2024-04-13,Starter,Paid Search,false,5,false
+USR-032,2024-05-11,Pro,Organic,false,9,false
+USR-033,2024-08-27,Pro,Social,true,14,false
+USR-034,2024-02-07,Free,Paid Search,false,3,true
+USR-035,2024-04-16,Pro,Paid Search,true,19,false
+USR-036,2024-10-02,Pro,Organic,false,10,false
+USR-037,2024-11-17,Free,Social,false,3,true
+USR-038,2024-06-08,Free,Referral,true,3,false
+USR-039,2024-09-01,Starter,Organic,true,10,false
+USR-040,2024-02-22,Free,Referral,false,4,true
+USR-041,2024-03-22,Pro,Referral,false,9,true
+USR-042,2024-09-05,Business,Social,true,25,false
+USR-043,2024-10-03,Starter,Referral,true,10,false
+USR-044,2024-03-28,Free,Paid Search,true,7,false
+USR-045,2024-03-23,Free,Organic,false,5,true
+USR-046,2024-06-07,Free,Organic,false,0,true
+USR-047,2024-08-04,Free,Social,true,2,false
+USR-048,2024-10-05,Free,Referral,true,3,true
+USR-049,2024-12-02,Pro,Paid Search,true,19,false
+USR-050,2024-11-22,Free,Social,true,6,true
+USR-051,2024-04-04,Business,Social,true,25,false
+USR-052,2024-03-28,Pro,Organic,true,21,false
+USR-053,2024-06-10,Starter,Social,true,6,false
+USR-054,2024-08-29,Enterprise,Organic,true,25,false
+USR-055,2024-04-09,Business,Content Marketing,true,24,false
+USR-056,2024-05-06,Free,Referral,false,0,true
+USR-057,2024-09-15,Business,Social,true,22,false
+USR-058,2024-02-16,Free,Paid Search,false,0,true
+USR-059,2024-01-15,Free,Referral,true,4,true
+USR-060,2024-10-29,Free,Paid Search,false,0,true
+USR-061,2024-02-27,Starter,Organic,true,8,false
+USR-062,2024-05-31,Pro,Content Marketing,true,19,false
+USR-063,2024-05-22,Business,Social,true,23,false
+USR-064,2024-12-22,Free,Organic,false,4,false
+USR-065,2024-07-21,Pro,Organic,false,5,false
+USR-066,2024-11-19,Pro,Social,true,18,false
+USR-067,2024-02-24,Free,Social,true,7,true
+USR-068,2024-08-24,Pro,Organic,true,17,false
+USR-069,2024-11-08,Free,Paid Search,false,0,true
+USR-070,2024-03-18,Business,Paid Search,true,21,false
+USR-071,2024-10-14,Free,Social,true,1,true
+USR-072,2024-11-17,Starter,Paid Search,false,3,false
+USR-073,2024-02-17,Starter,Paid Search,true,13,true
+USR-074,2024-12-29,Free,Social,true,1,false
+USR-075,2024-02-16,Business,Social,true,22,false
+USR-076,2024-01-20,Free,Referral,true,2,true
+USR-077,2024-07-22,Starter,Paid Search,true,13,true
+USR-078,2024-12-22,Pro,Referral,true,15,false
+USR-079,2024-02-16,Starter,Social,false,3,true
+USR-080,2024-08-11,Starter,Content Marketing,false,2,true
+USR-081,2024-06-24,Business,Referral,true,23,false
+USR-082,2024-10-10,Pro,Referral,true,16,false
+USR-083,2024-09-12,Free,Paid Search,true,7,true
+USR-084,2024-05-05,Free,Paid Search,false,5,true
+USR-085,2024-07-06,Free,Social,true,4,true
+USR-086,2024-03-22,Starter,Content Marketing,true,11,false
+USR-087,2024-08-10,Starter,Social,true,12,false
+USR-088,2024-03-29,Starter,Content Marketing,true,11,true
+USR-089,2024-09-22,Free,Social,false,0,true
+USR-090,2024-03-27,Business,Organic,true,24,false
+USR-091,2024-06-13,Free,Content Marketing,true,3,false
+USR-092,2024-11-28,Enterprise,Paid Search,true,25,false
+USR-093,2024-11-20,Enterprise,Paid Search,true,25,false
+USR-094,2024-04-03,Pro,Organic,true,19,false
+USR-095,2024-08-22,Pro,Paid Search,false,6,false
+USR-096,2024-07-18,Free,Content Marketing,false,0,true
+USR-097,2024-10-02,Pro,Paid Search,true,16,false
+USR-098,2024-04-06,Free,Content Marketing,true,2,true
+USR-099,2024-07-12,Starter,Referral,true,8,true
+USR-100,2024-06-16,Starter,Paid Search,false,3,true
+USR-101,2024-06-12,Free,Social,true,6,true
+USR-102,2024-05-05,Starter,Paid Search,false,7,false
+USR-103,2024-07-12,Free,Organic,false,0,true
+USR-104,2024-03-10,Free,Organic,true,3,true
+USR-105,2024-11-18,Starter,Paid Search,false,7,false
+USR-106,2024-10-22,Starter,Referral,false,7,false
+USR-107,2024-04-30,Starter,Paid Search,true,9,false
+USR-108,2024-03-01,Free,Social,true,4,false
+USR-109,2024-04-02,Starter,Social,true,8,false
+USR-110,2024-11-28,Pro,Content Marketing,true,15,false
+USR-111,2024-03-01,Free,Referral,false,3,true
+USR-112,2024-12-01,Free,Referral,true,7,true
+USR-113,2024-07-30,Starter,Social,true,6,true
+USR-114,2024-01-28,Free,Content Marketing,false,5,true
+USR-115,2024-02-29,Pro,Organic,false,8,true
+USR-116,2024-11-19,Business,Social,true,22,false
+USR-117,2024-05-02,Enterprise,Organic,true,25,false
+USR-118,2024-09-24,Free,Referral,true,5,true
+USR-119,2024-09-19,Free,Social,false,4,true
+USR-120,2024-09-30,Free,Social,true,4,true
+USR-121,2024-02-14,Business,Organic,true,25,false
+USR-122,2024-09-11,Pro,Social,true,19,false
+USR-123,2024-12-21,Starter,Organic,true,13,false
+USR-124,2024-05-04,Starter,Organic,false,7,false
+USR-125,2024-05-25,Pro,Paid Search,true,15,false
+USR-126,2024-02-10,Pro,Organic,true,18,false
+USR-127,2024-04-27,Starter,Organic,true,13,false
+USR-128,2024-02-21,Pro,Organic,true,16,false
+USR-129,2024-04-19,Free,Content Marketing,true,4,true
+USR-130,2024-12-11,Free,Organic,true,3,false
+USR-131,2024-01-01,Enterprise,Organic,true,25,false
+USR-132,2024-04-16,Free,Organic,false,0,true
+USR-133,2024-06-28,Starter,Organic,false,6,true
+USR-134,2024-01-27,Pro,Social,false,3,true
+USR-135,2024-09-29,Free,Social,true,1,true
+USR-136,2024-03-17,Pro,Social,true,17,false
+USR-137,2024-02-06,Starter,Referral,true,14,false
+USR-138,2024-11-23,Business,Social,true,22,false
+USR-139,2024-06-26,Starter,Organic,true,8,true
+USR-140,2024-09-26,Enterprise,Paid Search,true,25,false
+USR-141,2024-09-15,Free,Paid Search,false,0,true
+USR-142,2024-07-18,Starter,Paid Search,false,1,true
+USR-143,2024-02-12,Starter,Organic,true,9,false
+USR-144,2024-11-19,Business,Organic,true,25,false
+USR-145,2024-05-24,Starter,Paid Search,false,6,true
+USR-146,2024-08-18,Free,Organic,false,2,true
+USR-147,2024-05-05,Starter,Paid Search,true,11,false
+USR-148,2024-02-06,Pro,Social,true,21,false
+USR-149,2024-11-12,Starter,Organic,true,7,false
+USR-150,2024-07-22,Starter,Paid Search,true,10,false
+USR-151,2024-07-27,Business,Social,true,25,true
+USR-152,2024-02-16,Pro,Organic,true,17,false
+USR-153,2024-08-16,Free,Social,true,2,true
+USR-154,2024-06-01,Business,Organic,true,22,false
+USR-155,2024-11-10,Starter,Content Marketing,false,0,true
+USR-156,2024-05-30,Business,Organic,true,19,false
+USR-157,2024-03-16,Free,Social,false,0,true
+USR-158,2024-06-01,Free,Paid Search,false,0,true
+USR-159,2024-12-16,Starter,Referral,false,3,true
+USR-160,2024-02-02,Pro,Organic,false,10,false
+USR-161,2024-06-28,Free,Organic,true,4,true
+USR-162,2024-11-23,Starter,Social,false,7,false
+USR-163,2024-05-17,Starter,Content Marketing,true,14,true
+USR-164,2024-07-03,Starter,Referral,false,1,false
+USR-165,2024-01-24,Starter,Organic,true,10,false
+USR-166,2024-11-24,Free,Social,false,4,true
+USR-167,2024-07-14,Business,Social,true,25,false
+USR-168,2024-04-28,Starter,Organic,true,7,false
+USR-169,2024-08-21,Free,Social,false,0,true
+USR-170,2024-04-13,Starter,Organic,true,10,false
+USR-171,2024-12-23,Starter,Organic,true,14,false
+USR-172,2024-03-11,Free,Social,false,5,true
+USR-173,2024-07-25,Starter,Paid Search,false,6,false
+USR-174,2024-06-09,Free,Organic,true,1,false
+USR-175,2024-08-21,Enterprise,Social,true,25,false
+USR-176,2024-12-15,Free,Paid Search,false,3,false
+USR-177,2024-05-08,Pro,Organic,false,7,true
+USR-178,2024-07-13,Pro,Organic,true,14,false
+USR-179,2024-03-07,Starter,Paid Search,true,10,false
+USR-180,2024-06-17,Pro,Social,false,4,false
+USR-181,2024-04-24,Business,Paid Search,true,21,false
+USR-182,2024-04-27,Starter,Organic,true,11,false
+USR-183,2024-05-20,Starter,Social,true,9,false
+USR-184,2024-11-19,Starter,Referral,false,2,true
+USR-185,2024-03-24,Starter,Content Marketing,true,13,true
+USR-186,2024-07-16,Business,Referral,true,25,false
+USR-187,2024-08-12,Pro,Paid Search,true,20,false
+USR-188,2024-08-31,Free,Content Marketing,false,3,true
+USR-189,2024-01-31,Pro,Paid Search,true,18,false
+USR-190,2024-11-07,Free,Organic,false,0,true
+USR-191,2024-05-05,Starter,Organic,true,7,false
+USR-192,2024-12-16,Free,Organic,false,2,true
+USR-193,2024-11-17,Starter,Paid Search,false,3,true
+USR-194,2024-05-02,Free,Organic,false,0,false
+USR-195,2024-09-20,Starter,Social,true,9,false
+USR-196,2024-09-12,Free,Social,true,5,false
+USR-197,2024-06-30,Free,Referral,true,0,true
+USR-198,2024-07-25,Starter,Organic,false,3,true
+USR-199,2024-03-29,Pro,Social,true,16,false
+USR-200,2024-03-03,Free,Organic,false,2,true
+USR-201,2024-08-13,Free,Content Marketing,true,4,false
+USR-202,2024-03-31,Free,Paid Search,false,2,true
+USR-203,2024-06-07,Pro,Paid Search,true,20,false
+USR-204,2024-03-11,Pro,Referral,true,18,true
+USR-205,2024-09-18,Starter,Content Marketing,false,3,true
+USR-206,2024-05-26,Starter,Organic,true,9,true
+USR-207,2024-08-23,Free,Organic,false,0,true
+USR-208,2024-10-31,Free,Content Marketing,true,6,true
+USR-209,2024-02-15,Pro,Paid Search,true,18,false
+USR-210,2024-02-13,Free,Organic,false,0,true
+USR-211,2024-11-11,Starter,Paid Search,true,13,false
+USR-212,2024-09-13,Pro,Content Marketing,true,16,false
+USR-213,2024-02-18,Pro,Referral,true,20,false
+USR-214,2024-11-20,Business,Social,true,21,true
+USR-215,2024-08-19,Free,Paid Search,false,5,true
+USR-216,2024-10-15,Pro,Content Marketing,true,14,false
+USR-217,2024-03-02,Starter,Organic,false,4,true
+USR-218,2024-06-22,Free,Organic,false,0,false
+USR-219,2024-12-27,Free,Referral,false,0,true
+USR-220,2024-11-22,Starter,Paid Search,true,14,false
+USR-221,2024-01-18,Free,Paid Search,false,2,true
+USR-222,2024-05-08,Free,Referral,false,4,true
+USR-223,2024-07-04,Free,Social,true,2,false
+USR-224,2024-07-30,Business,Content Marketing,true,25,false
+USR-225,2024-04-07,Free,Paid Search,false,1,true
+USR-226,2024-09-19,Business,Paid Search,true,24,false
+USR-227,2024-05-09,Starter,Organic,true,11,false
+USR-228,2024-09-23,Free,Organic,true,3,true
+USR-229,2024-05-16,Free,Paid Search,false,5,true
+USR-230,2024-01-25,Pro,Social,true,16,false
+USR-231,2024-06-18,Free,Paid Search,true,8,true
+USR-232,2024-08-19,Pro,Social,true,17,false
+USR-233,2024-05-22,Free,Referral,true,3,true
+USR-234,2024-04-24,Starter,Paid Search,true,6,false
+USR-235,2024-09-24,Starter,Paid Search,true,11,false
+USR-236,2024-08-28,Starter,Content Marketing,true,12,false
+USR-237,2024-04-22,Free,Content Marketing,true,3,false
+USR-238,2024-06-25,Starter,Social,false,4,true
+USR-239,2024-04-15,Business,Organic,true,24,false
+USR-240,2024-06-18,Starter,Referral,false,6,false
+USR-241,2024-08-20,Business,Referral,true,20,false
+USR-242,2024-12-23,Starter,Content Marketing,true,9,true
+USR-243,2024-10-31,Pro,Social,true,14,false
+USR-244,2024-10-18,Free,Referral,true,6,false
+USR-245,2024-01-10,Pro,Social,true,15,false
+USR-246,2024-05-21,Pro,Referral,false,5,true
+USR-247,2024-01-14,Free,Organic,false,2,true
+USR-248,2024-11-05,Free,Paid Search,false,0,true
+USR-249,2024-12-05,Pro,Referral,false,2,true
+USR-250,2024-11-12,Free,Social,false,4,true
+USR-251,2024-12-27,Starter,Social,true,7,true
+USR-252,2024-02-20,Pro,Organic,true,15,false
+USR-253,2024-05-13,Free,Organic,true,8,true
+USR-254,2024-02-04,Pro,Paid Search,true,18,false
+USR-255,2024-09-24,Free,Social,true,2,true
+USR-256,2024-01-07,Pro,Organic,true,16,true
+USR-257,2024-09-12,Free,Social,true,0,true
+USR-258,2024-10-05,Free,Referral,false,0,true
+USR-259,2024-11-01,Free,Paid Search,false,0,true
+USR-260,2024-09-12,Free,Organic,true,8,true
+USR-261,2024-07-10,Free,Paid Search,true,8,false
+USR-262,2024-08-25,Starter,Paid Search,true,11,false
+USR-263,2024-01-17,Pro,Organic,true,19,false
+USR-264,2024-11-06,Starter,Organic,false,0,true
+USR-265,2024-07-28,Starter,Referral,false,6,true
+USR-266,2024-04-04,Free,Organic,false,5,true
+USR-267,2024-12-29,Pro,Social,true,21,false
+USR-268,2024-10-02,Business,Organic,true,23,false
+USR-269,2024-09-24,Free,Content Marketing,false,3,true
+USR-270,2024-12-30,Free,Organic,false,3,true
+USR-271,2024-12-24,Pro,Referral,true,16,false
+USR-272,2024-01-16,Starter,Social,true,13,false
+USR-273,2024-01-24,Enterprise,Referral,true,25,false
+USR-274,2024-12-12,Free,Organic,true,4,true
+USR-275,2024-10-12,Pro,Social,true,16,false
+USR-276,2024-12-25,Free,Paid Search,false,3,true
+USR-277,2024-12-13,Pro,Social,true,18,false
+USR-278,2024-03-06,Starter,Organic,true,10,false
+USR-279,2024-07-27,Starter,Content Marketing,true,8,false
+USR-280,2024-04-26,Business,Paid Search,true,25,false
+USR-281,2024-04-02,Free,Paid Search,false,2,true
+USR-282,2024-08-14,Pro,Organic,true,14,true
+USR-283,2024-11-12,Free,Social,true,8,false
+USR-284,2024-09-08,Starter,Social,true,6,true
+USR-285,2024-07-22,Pro,Paid Search,false,6,false
+USR-286,2024-07-08,Free,Paid Search,true,7,true
+USR-287,2024-07-22,Pro,Paid Search,true,18,false
+USR-288,2024-08-07,Free,Paid Search,true,6,true
+USR-289,2024-06-24,Free,Referral,false,4,true
+USR-290,2024-06-07,Free,Referral,false,3,true
+USR-291,2024-12-25,Free,Referral,false,0,true
+USR-292,2024-12-19,Business,Paid Search,true,19,false
+USR-293,2024-01-11,Business,Organic,true,20,false
+USR-294,2024-10-22,Free,Organic,true,1,true
+USR-295,2024-02-01,Free,Organic,false,0,true
+USR-296,2024-03-15,Free,Organic,false,0,false
+USR-297,2024-01-12,Pro,Social,true,15,false
+USR-298,2024-02-09,Starter,Content Marketing,true,8,false
+USR-299,2024-08-10,Pro,Content Marketing,true,20,false
+USR-300,2024-11-23,Free,Paid Search,false,4,true

@@ -1,9 +1,13 @@
 import type { NodeProps } from "@xyflow/react";
 import type { ActionItemCanvasNode } from "@/types/canvas";
-import { TextContentNode } from "./text-content-node";
+import { BaseNode, BaseNodeText } from "@/components/canvas/nodes/base-node";
 
 const ActionItemNode = ({ data }: NodeProps<ActionItemCanvasNode>) => {
-  return <TextContentNode data={data} />;
+  return (
+    <BaseNode data={data}>
+      <BaseNodeText>{data.content}</BaseNodeText>
+    </BaseNode>
+  );
 };
 
 export { ActionItemNode };

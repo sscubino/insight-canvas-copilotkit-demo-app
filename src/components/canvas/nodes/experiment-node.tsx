@@ -1,14 +1,14 @@
 import type { NodeProps } from "@xyflow/react";
 import type { ExperimentCanvasNode } from "@/types/canvas";
-import { BaseNode } from "./base-node";
+import { BaseNode, BaseNodeText } from "@/components/canvas/nodes/base-node";
 
 const ExperimentNode = ({ data }: NodeProps<ExperimentCanvasNode>) => {
   return (
     <BaseNode data={data}>
-      <p className="text-sm leading-snug text-muted">{data.plan}</p>
-      <p className="mt-1 text-sm font-medium leading-snug text-experiment">
+      <BaseNodeText>{data.plan}</BaseNodeText>
+      <BaseNodeText className="mt-1 font-medium text-experiment">
         {data.expectedOutcome}
-      </p>
+      </BaseNodeText>
     </BaseNode>
   );
 };

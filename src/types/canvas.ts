@@ -1,12 +1,7 @@
+import { NODE_VARIANTS } from "@/constants/nodes-config";
 import type { Node, Edge } from "@xyflow/react";
 
-export type NodeVariant =
-  | "chart"
-  | "insight"
-  | "hypothesis"
-  | "experiment"
-  | "action_item"
-  | "question";
+export type NodeVariant = (typeof NODE_VARIANTS)[number];
 
 export type NodeSource = "agent" | "user";
 

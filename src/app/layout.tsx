@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { CopilotKit } from "@copilotkit/react-core";
-import { DuckDBProvider } from "@/lib/duckdb/duckdb-provider";
+import { DuckDBProvider } from "@/contexts/duckdb-context";
 import { SessionsSidebar } from "@/components/layout/sessions-sidebar";
 import "@copilotkit/react-ui/styles.css";
 import "./globals.css";

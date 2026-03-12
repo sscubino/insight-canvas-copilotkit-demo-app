@@ -7,7 +7,8 @@ const CanvasZoomControls = () => {
 
   const handleZoomIn = () => zoomIn({ duration: 200 });
   const handleZoomOut = () => zoomOut({ duration: 200 });
-  const handleFitView = () => fitView({ padding: 0.3, duration: 300 });
+  const handleFitView = () =>
+    fitView({ padding: { x: 0.1, y: 0.3 }, duration: 300 });
 
   return (
     <div className="absolute right-3.5 bottom-3.5 z-10 flex overflow-hidden rounded-lg border border-border-bright bg-surface shadow-sm">

@@ -1,5 +1,14 @@
 import { NodeConfig, NodeVariant } from "@/types/canvas";
 
+export const NODE_VARIANTS = [
+  "chart",
+  "insight",
+  "hypothesis",
+  "experiment",
+  "action_item",
+  "question",
+] as const;
+
 export const NODE_CONFIG: Record<NodeVariant, NodeConfig> = {
   chart: {
     label: "Chart",

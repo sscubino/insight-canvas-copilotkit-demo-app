@@ -73,23 +73,37 @@ export const useCopilotCanvas = () => {
         name: "content",
         type: "string",
         description:
-          "Main text content for insight, hypothesis, action_item, or question nodes",
+          "Main text content for insight, hypothesis, action_item, or question nodes. Keep it short (~140 chars).",
       },
       {
         name: "plan",
         type: "string",
-        description: "Test plan description (only for experiment nodes)",
+        description:
+          "Test plan description (only for experiment nodes). Keep it short (~140 chars).",
       },
       {
         name: "expectedOutcome",
         type: "string",
         description:
-          "Expected outcome with success metrics (only for experiment nodes)",
+          "Expected outcome with success metrics (only for experiment nodes). Keep it short (~140 chars).",
       },
       {
         name: "description",
         type: "string",
-        description: "Chart description (only for chart nodes)",
+        description:
+          "Chart description (only for chart nodes). Keep it short (~140 chars).",
+      },
+      {
+        name: "chartSpec",
+        type: "string",
+        description:
+          "Vega-Lite v5 JSON spec as a string (only for chart nodes). Prefer using the generate_chart tool instead for better UX.",
+      },
+      {
+        name: "sourceQuery",
+        type: "string",
+        description:
+          "The SQL query used to produce chart data (only for chart nodes)",
       },
       {
         name: "sourceNodeId",
@@ -105,6 +119,8 @@ export const useCopilotCanvas = () => {
       plan,
       expectedOutcome,
       description,
+      chartSpec,
+      sourceQuery,
       sourceNodeId,
     }) => {
       const now = new Date().toISOString();
@@ -112,15 +128,26 @@ export const useCopilotCanvas = () => {
 
       let data;
       switch (variant) {
-        case "chart":
+        case "chart": {
+          let parsedSpec: Record<string, unknown> | undefined;
+          if (chartSpec) {
+            try {
+              parsedSpec = JSON.parse(chartSpec);
+            } catch {
+              parsedSpec = undefined;
+            }
+          }
           data = {
             variant: "chart" as const,
             title,
             createdAt: now,
             source,
             description,
+            chartSpec: parsedSpec,
+            sourceQuery,
           };
           break;
+        }
         case "experiment":
           data = {
             variant: "experiment" as const,

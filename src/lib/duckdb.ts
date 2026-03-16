@@ -20,7 +20,8 @@ export const runQuery = async (
   const rows = result.toArray().map((row) => {
     const obj: Record<string, unknown> = {};
     for (const col of columns) {
-      obj[col] = row[col];
+      const value = row[col];
+      obj[col] = typeof value === "bigint" ? Number(value) : value;
     }
     return obj;
   });

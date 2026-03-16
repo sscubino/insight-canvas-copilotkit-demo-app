@@ -17,6 +17,7 @@ export type ChartNodeData = BaseNodeData & {
   description?: string;
   fieldsUsed?: string[];
   sourceQuery?: string;
+  chartSpec?: Record<string, unknown>;
 };
 
 export type InsightNodeData = BaseNodeData & {

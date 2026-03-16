@@ -86,13 +86,14 @@ const BaseNodeFooter = ({
 type BaseNodeProps = {
   data: CanvasNodeData;
   children: ReactNode;
+  className?: string;
 };
 
-const BaseNode = ({ data, children }: BaseNodeProps) => {
+const BaseNode = ({ data, children, className }: BaseNodeProps) => {
   const config = NODE_CONFIG[data.variant];
 
   return (
-    <BaseNodeWrapper className={config.borderClass}>
+    <BaseNodeWrapper className={cn(config.borderClass, className)}>
       <Handle
         type="target"
         position={Position.Left}

@@ -3,46 +3,37 @@
 import {
   createContext,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
   type ReactNode,
 } from "react";
-import * as duckdb from "@duckdb/duckdb-wasm";
+import type { AsyncDuckDB, AsyncDuckDBConnection } from "@duckdb/duckdb-wasm";
 import type {
-  ColumnSchema,
-  DatasetSchema,
   DuckDBContextValue,
   DuckDBStatus,
   QueryResult,
-} from "./types";
+  DatasetSchema,
+} from "@/types/duckdb";
+import {
+  initDuckDB,
+  runQuery as runDuckDBQuery,
+  loadCSV as loadDuckDBCSV,
+} from "@/lib/duckdb";
 
-export const DuckDBContext = createContext<DuckDBContextValue | null>(null);
+const DuckDBContext = createContext<DuckDBContextValue | null>(null);
 
-type DuckDBProviderProps = {
-  children: ReactNode;
-};
-
-export const DuckDBProvider = ({ children }: DuckDBProviderProps) => {
+const DuckDBProvider = ({ children }: { children: ReactNode }) => {
   const [status, setStatus] = useState<DuckDBStatus>("idle");
   const [error, setError] = useState<string | null>(null);
 
-  const dbRef = useRef<duckdb.AsyncDuckDB | null>(null);
-  const connRef = useRef<duckdb.AsyncDuckDBConnection | null>(null);
+  const dbRef = useRef<AsyncDuckDB | null>(null);
+  const connRef = useRef<AsyncDuckDBConnection | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-
-    const initDuckDB = async () => {
-      const bundles = duckdb.getJsDelivrBundles();
-      const bundle = await duckdb.selectBundle(bundles);
-      const worker = await duckdb.createWorker(bundle.mainWorker!);
-      const logger = new duckdb.ConsoleLogger();
-      const db = new duckdb.AsyncDuckDB(logger, worker);
-      await db.instantiate(bundle.mainModule);
-      return db;
-    };
 
     const initialize = async () => {
       setStatus("initializing");
@@ -100,56 +91,17 @@ export const DuckDBProvider = ({ children }: DuckDBProviderProps) => {
   const runQuery = useCallback(async (sql: string): Promise<QueryResult> => {
     const conn = connRef.current;
     if (!conn) throw new Error("DuckDB is not initialized");
-
-    const result = await conn.query(sql);
-    const columns = result.schema.fields.map((f) => f.name);
-    const rows = result.toArray().map((row) => {
-      const obj: Record<string, unknown> = {};
-      for (const col of columns) {
-        obj[col] = row[col];
-      }
-      return obj;
-    });
-
-    return { columns, rows, rowCount: rows.length };
+    return runDuckDBQuery(conn, sql);
   }, []);
-
-  const extractSchema = useCallback(
-    async (tableName: string): Promise<DatasetSchema> => {
-      const describeResult = await runQuery(
-        `DESCRIBE SELECT * FROM ${tableName}`
-      );
-      const columns: ColumnSchema[] = describeResult.rows.map((row) => ({
-        name: row.column_name as string,
-        type: row.column_type as string,
-      }));
-
-      const countResult = await runQuery(
-        `SELECT COUNT(*) as count FROM ${tableName}`
-      );
-      const rowCount = Number(countResult.rows[0]?.count ?? 0);
-
-      return { tableName, columns, rowCount };
-    },
-    [runQuery]
-  );
 
   const loadCSV = useCallback(
     async (tableName: string, csvContent: string): Promise<DatasetSchema> => {
       const db = dbRef.current;
       const conn = connRef.current;
       if (!db || !conn) throw new Error("DuckDB is not initialized");
-
-      const fileName = `${tableName}.csv`;
-      await db.registerFileText(fileName, csvContent);
-      await conn.query(
-        `CREATE OR REPLACE TABLE ${tableName} AS SELECT * FROM read_csv_auto('${fileName}')`
-      );
-
-      const datasetSchema = await extractSchema(tableName);
-      return datasetSchema;
+      return loadDuckDBCSV(db, conn, tableName, csvContent);
     },
-    [extractSchema]
+    []
   );
 
   const contextValue = useMemo<DuckDBContextValue>(
@@ -170,3 +122,13 @@ export const DuckDBProvider = ({ children }: DuckDBProviderProps) => {
     </DuckDBContext.Provider>
   );
 };
+
+const useDuckDB = (): DuckDBContextValue => {
+  const context = useContext(DuckDBContext);
+  if (!context) {
+    throw new Error("useDuckDB must be used within a <DuckDBProvider>");
+  }
+  return context;
+};
+
+export { DuckDBProvider, useDuckDB };

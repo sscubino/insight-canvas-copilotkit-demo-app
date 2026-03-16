@@ -2,6 +2,7 @@
 
 import { CopilotChat } from "@copilotkit/react-ui";
 import { StatusDot } from "@/components/ui/status-dot";
+import { SYSTEM_PROMPT } from "@/constants/system-prompt";
 
 const ChatPanel = () => {
   return (
@@ -16,6 +17,7 @@ const ChatPanel = () => {
 
       <div className="flex min-h-0 flex-1 flex-col">
         <CopilotChat
+          instructions={SYSTEM_PROMPT}
           labels={{
             title: "Insight Canvas",
             initial:

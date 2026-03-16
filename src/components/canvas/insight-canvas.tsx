@@ -1,23 +1,19 @@
 "use client";
 
-import { useCallback } from "react";
+import { useRef } from "react";
 import {
   ReactFlow,
   ReactFlowProvider,
   Background,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-  type OnConnect,
   type DefaultEdgeOptions,
   MarkerType,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
 import { nodeTypes } from "./nodes";
-import { CanvasToolbar } from "./canvas-toolbar";
 import { CanvasZoomControls } from "./canvas-zoom-controls";
-import { SEED_NODES, SEED_EDGES } from "@/constants/seed-data";
+import { useCanvasState } from "@/contexts/canvas-state-context";
+import { useAutoFitNewNodes } from "@/hooks/use-auto-fit-new-nodes";
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
   style: {
@@ -34,26 +30,23 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
 };
 
 const InsightCanvasInner = () => {
-  const [nodes, , onNodesChange] = useNodesState(SEED_NODES);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(SEED_EDGES);
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } =
+    useCanvasState();
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleConnect: OnConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  );
+  useAutoFitNewNodes({ nodes, containerRef });
 
   return (
-    <div className="relative h-full w-full">
+    <div ref={containerRef} className="relative h-full w-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onConnect={handleConnect}
+        onConnect={onConnect}
         nodeTypes={nodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
-        fitView
-        fitViewOptions={{ padding: 0.3 }}
+        defaultViewport={{ x: 0, y: 0, zoom: 1 }}
         proOptions={{ hideAttribution: true }}
         minZoom={0.3}
         maxZoom={2}
@@ -65,8 +58,6 @@ const InsightCanvasInner = () => {
           style={{ opacity: 0.3 }}
         />
       </ReactFlow>
-
-      <CanvasToolbar />
       <CanvasZoomControls />
     </div>
   );

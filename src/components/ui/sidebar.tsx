@@ -56,7 +56,7 @@ const Sidebar = ({
       >
         <div
           className={cn(
-            "flex flex-1 flex-col",
+            "flex flex-1 flex-col h-full",
             innerMinWidth,
             collapsed && "pointer-events-none"
           )}
@@ -205,7 +205,8 @@ const SidebarNavButton = ({
       size="md"
       className={cn(
         "w-full justify-start gap-3 text-left *:truncate",
-        isActive ? "font-semibold" : "font-medium"
+        isActive ? "font-semibold" : "font-medium",
+        className
       )}
       aria-current={isActive ? "true" : undefined}
       {...props}

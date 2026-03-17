@@ -1,118 +1,93 @@
 @import "tailwindcss";
 
 :root {
-  --background: #eeeef5;
-  --background-2: #f0f0f8;
+  --background: #f0f0f4;
+  --foreground: #010507;
+  --muted: #57575b;
+  --dim: #838389;
+  --invert: #ffffff;
+
   --surface: #ffffff;
-  --surface-2: #f7f7fc;
-  --surface-3: #f0f0f8;
-  --border: #e2e2ee;
-  --border-bright: #d4d4e8;
-  --foreground: #0f0f1a;
-  --muted: #6b6b8a;
-  --dim: #a0a0bc;
+  --surface-hover: #f0f0f4;
+  --surface-50: #ffffff80;
+  --surface-invert: #010507;
 
-  --success: #059669;
-  --success-bg: #ecfdf5;
-  --success-border: #a7f3d0;
+  --border: #dbdbe5;
+  --border-card: #ffffff;
+  --border-action: #bec2ff;
 
-  --warning: #d97706;
-  --warning-bg: #fffbeb;
-  --warning-border: #fde68a;
+  --action: #010507;
+  --action-disabled: #01050726;
 
-  --destructive: #dc2626;
-  --destructive-bg: #fef2f2;
-  --destructive-border: #fecaca;
+  --site-background: #dedee9;
 
-  --chart: #3b82f6;
-  --chart-bg: #eff6ff;
-  --chart-border: #bfdbfe;
+  --mint: #189370;
+  --mint-light: #85ecce;
+  --yellow: #996b0f;
+  --yellow-light: #fff388;
+  --red: #c90f0f;
+  --red-light: #fab0b3;
+  --blue: #3b82f6;
+  --blue-light: #bec2ff;
+  --lilac: #5844ee;
+  --lilac-light: #bec2ff;
+  --orange: #a55c09;
+  --orange-light: #ffac4d;
 
-  --insight: #059669;
-  --insight-bg: #ecfdf5;
-  --insight-border: #a7f3d0;
+  --grey: #e2e2ea;
+  --grey-5: #0105070d;
+  --grey-30: #0105074d;
 
-  --hypothesis: #d97706;
-  --hypothesis-bg: #fffbeb;
-  --hypothesis-border: #fde68a;
-
-  --experiment: #dc2626;
-  --experiment-bg: #fef2f2;
-  --experiment-border: #fecaca;
-
-  --action: #7c3aed;
-  --action-bg: #f5f3ff;
-  --action-border: #ddd6fe;
-
-  --question: #db2777;
-  --question-bg: #fdf2f8;
-  --question-border: #fbcfe8;
-
-  --accent: #6366f1;
-  --accent-light: #eef2ff;
-  --accent-border: #c7d2fe;
+  --shadow-md: 0 20px 20px -5px #01050714;
 }
 
 @theme inline {
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-jetbrains-mono);
+  --font-sans: var(--font-jakarta);
+  --font-mono: var(--font-spline-mono);
 
   --color-background: var(--background);
-  --color-background-2: var(--background-2);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-surface-3: var(--surface-3);
-  --color-border: var(--border);
-  --color-border-bright: var(--border-bright);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-dim: var(--dim);
+  --color-invert: var(--invert);
 
-  --color-success: var(--success);
-  --color-success-bg: var(--success-bg);
-  --color-success-border: var(--success-border);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-50: var(--surface-50);
+  --color-surface-invert: var(--surface-invert);
 
-  --color-warning: var(--warning);
-  --color-warning-bg: var(--warning-bg);
-  --color-warning-border: var(--warning-border);
-
-  --color-destructive: var(--destructive);
-  --color-destructive-bg: var(--destructive-bg);
-  --color-destructive-border: var(--destructive-border);
-
-  --color-chart: var(--chart);
-  --color-chart-bg: var(--chart-bg);
-  --color-chart-border: var(--chart-border);
-
-  --color-insight: var(--insight);
-  --color-insight-bg: var(--insight-bg);
-  --color-insight-border: var(--insight-border);
-
-  --color-hypothesis: var(--hypothesis);
-  --color-hypothesis-bg: var(--hypothesis-bg);
-  --color-hypothesis-border: var(--hypothesis-border);
-
-  --color-experiment: var(--experiment);
-  --color-experiment-bg: var(--experiment-bg);
-  --color-experiment-border: var(--experiment-border);
+  --color-border: var(--border);
+  --color-border-card: var(--border-card);
+  --color-border-action: var(--border-action);
 
   --color-action: var(--action);
-  --color-action-bg: var(--action-bg);
-  --color-action-border: var(--action-border);
+  --color-action-disabled: var(--action-disabled);
 
-  --color-question: var(--question);
-  --color-question-bg: var(--question-bg);
-  --color-question-border: var(--question-border);
+  --color-site-background: var(--site-background);
 
-  --color-accent: var(--accent);
-  --color-accent-light: var(--accent-light);
-  --color-accent-border: var(--accent-border);
+  --color-mint: var(--mint);
+  --color-mint-light: var(--mint-light);
+  --color-yellow: var(--yellow);
+  --color-yellow-light: var(--yellow-light);
+  --color-red: var(--red);
+  --color-red-light: var(--red-light);
+  --color-blue: var(--blue);
+  --color-blue-light: var(--blue-light);
+  --color-lilac: var(--lilac);
+  --color-lilac-light: var(--lilac-light);
+  --color-orange: var(--orange);
+  --color-orange-light: var(--orange-light);
+
+  --color-grey: var(--grey);
+  --color-grey-5: var(--grey-5);
+  --color-grey-30: var(--grey-30);
+
+  --shadow-md: var(--shadow-md);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), sans-serif;
 }
 
 /* ReactFlow overrides */
@@ -133,21 +108,31 @@ body {
   opacity: 1;
 }
 
-/* CopilotChat panel overrides — strip CopilotKit's default container chrome */
+/* CopilotChat panel overrides */
 .copilotKitChat {
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
   height: 100% !important;
+  background: transparent !important;
 }
 
-/* Pulse keyframe for the agent status dot */
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
+.copilotKitMessages {
+  background: transparent !important;
+}
+
+.copilotKitInputContainer {
+  background: transparent !important;
+}
+
+.poweredBy {
+  background: transparent !important;
+}
+
+.copilotKitMessage.copilotKitAssistantMessage:not(:last-child) {
+  margin-bottom: 1.75rem;
+}
+
+.copilotKitMessage.copilotKitUserMessage {
+  margin-top: 0 !important;
 }

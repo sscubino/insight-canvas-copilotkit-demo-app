@@ -17,9 +17,9 @@ const formatSchemaForAgent = (schema: DatasetSchema | null): string => {
 };
 
 const QueryRunningIndicator = ({ sql }: { sql?: string }) => (
-  <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-xs text-text-muted">
+  <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-hover px-3 py-2 font-mono text-xs text-muted">
     <div
-      className="h-3 w-3 shrink-0 animate-spin rounded-full border-2 border-chart border-t-transparent"
+      className="h-3 w-3 shrink-0 animate-spin rounded-full border-2 border-dim border-t-transparent"
       role="status"
       aria-label="Query running"
     />
@@ -34,20 +34,20 @@ const QueryResultTable = ({ result }: { result: QueryResult }) => {
 
   return (
     <div className="overflow-hidden rounded-lg border border-border text-xs">
-      <div className="bg-surface-2 px-3 py-1.5 font-mono text-[10px] text-text-dim">
+      <div className="bg-surface-hover px-3 py-1.5 font-mono text-[10px] text-dim">
         {result.rowCount} row{result.rowCount !== 1 ? "s" : ""} &middot;{" "}
         {result.columns.length} col
         {result.columns.length !== 1 ? "s" : ""}
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full" aria-label="Query results">
+        <table className="w-full bg-surface-50" aria-label="Query results">
           <thead>
-            <tr className="border-b border-border bg-surface-2">
+            <tr className="border-b border-border bg-surface-hover">
               {result.columns.map((col) => (
                 <th
                   key={col}
                   scope="col"
-                  className="whitespace-nowrap px-2 py-1 text-left font-mono text-[10px] font-medium text-text-muted"
+                  className="whitespace-nowrap px-2 py-1 text-left font-mono text-[10px] font-medium text-muted"
                 >
                   {col}
                 </th>
@@ -63,7 +63,7 @@ const QueryResultTable = ({ result }: { result: QueryResult }) => {
                 {result.columns.map((col) => (
                   <td
                     key={`${rowIdx}-${col}`}
-                    className="whitespace-nowrap px-2 py-1 font-mono text-text-muted"
+                    className="whitespace-nowrap px-2 py-1 font-mono text-muted"
                   >
                     {String(row[col] ?? "")}
                   </td>
@@ -74,7 +74,7 @@ const QueryResultTable = ({ result }: { result: QueryResult }) => {
         </table>
       </div>
       {result.rowCount > 8 && (
-        <div className="bg-surface-2 px-3 py-1 text-center font-mono text-[9px] text-text-dim">
+        <div className="bg-surface-hover px-3 py-1 text-center font-mono text-[9px] text-dim">
           Showing 8 of {result.rowCount} rows
         </div>
       )}
@@ -83,9 +83,9 @@ const QueryResultTable = ({ result }: { result: QueryResult }) => {
 };
 
 const ChartGeneratingIndicator = ({ title }: { title?: string }) => (
-  <div className="flex items-center gap-2 rounded-lg border border-chart-border bg-chart-bg px-3 py-2 text-xs text-chart">
+  <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-hover px-3 py-2 text-xs text-muted">
     <div
-      className="h-3 w-3 shrink-0 animate-spin rounded-full border-2 border-chart border-t-transparent"
+      className="h-3 w-3 shrink-0 animate-spin rounded-full border-2 border-dim border-t-transparent"
       role="status"
       aria-label="Generating chart"
     />
@@ -94,8 +94,8 @@ const ChartGeneratingIndicator = ({ title }: { title?: string }) => (
 );
 
 const ChartCreatedIndicator = ({ title }: { title?: string }) => (
-  <div className="flex items-center gap-2 rounded-lg border border-chart-border bg-chart-bg px-3 py-2 text-xs text-chart">
-    <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-chart text-[10px] font-bold text-white">
+  <div className="flex items-center gap-2 rounded-lg border border-mint-light bg-mint-light/10 px-3 py-2 text-xs text-mint">
+    <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-mint text-[10px] font-bold text-invert">
       ✓
     </span>
     <span>Chart{title ? ` "${title}"` : ""} added to canvas</span>
@@ -115,7 +115,7 @@ export const useCopilotDataTools = (schema: DatasetSchema | null) => {
   useCopilotAction({
     name: "run_sql_query",
     description:
-      "Execute a SQL query against the loaded dataset using DuckDB. Use the dataset schema to write valid queries. Returns columns and rows as JSON. Always query data before making claims about it.",
+      "Execute a SQL query against the loaded dataset using DuckDB. Be sure to use DuckDB valid syntax only. Use the dataset schema to write valid queries. Returns columns and rows as JSON. Always query data before making claims about it.",
     parameters: [
       {
         name: "sql",
@@ -139,7 +139,7 @@ export const useCopilotDataTools = (schema: DatasetSchema | null) => {
         queryResult = typeof result === "string" ? JSON.parse(result) : result;
       } catch {
         return (
-          <div className="rounded-lg border border-border bg-surface-2 px-3 py-2 text-xs text-text-muted">
+          <div className="rounded-lg border border-border bg-surface-hover px-3 py-2 text-xs text-muted">
             Query completed
           </div>
         );

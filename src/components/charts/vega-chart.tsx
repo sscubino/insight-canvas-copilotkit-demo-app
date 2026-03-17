@@ -34,7 +34,6 @@ const withDefaultChartLayout = (spec: Record<string, unknown>) => {
       ...config,
       bar: {
         ...barConfig,
-        discreteBandSize: barConfig?.discreteBandSize ?? 28,
       },
       scale: {
         ...scaleConfig,
@@ -50,6 +49,37 @@ const withDefaultChartLayout = (spec: Record<string, unknown>) => {
       },
     },
   };
+};
+
+const hasRightLegend = (spec: Record<string, unknown>): boolean => {
+  const encoding = asObject(spec.encoding);
+  if (!encoding) return false;
+
+  const legendChannels = ["color", "size", "shape", "opacity"] as const;
+  return legendChannels.some((ch) => {
+    const channel = asObject(encoding[ch]);
+    if (!channel) return false;
+    const legend = channel.legend;
+    if (legend === null) return false;
+    if (typeof legend === "object" && legend !== null) {
+      const orient = (legend as Record<string, unknown>).orient;
+      return !orient || orient === "right";
+    }
+    return true;
+  });
+};
+
+const isBarChartWithoutLegend = (
+  spec: Record<string, unknown> | undefined
+): boolean => {
+  if (!spec) return false;
+  const mark = spec.mark;
+  const isBar =
+    mark === "bar" ||
+    (typeof mark === "object" &&
+      mark !== null &&
+      (mark as Record<string, unknown>).type === "bar");
+  return isBar && !hasRightLegend(spec);
 };
 
 const VegaChart = memo(({ spec, className }: VegaChartProps) => {
@@ -77,7 +107,7 @@ const VegaChart = memo(({ spec, className }: VegaChartProps) => {
 
         await vegaEmbed(
           container,
-          normalizedSpec as Parameters<typeof vegaEmbed>[1],
+          normalizedSpec as unknown as Parameters<typeof vegaEmbed>[1],
           {
             actions: false,
             renderer: "svg",
@@ -103,7 +133,7 @@ const VegaChart = memo(({ spec, className }: VegaChartProps) => {
     return (
       <p
         className={cn(
-          "rounded-md border border-experiment-border bg-experiment-bg p-2 text-xs text-experiment",
+          "rounded-md border border-red-light bg-red-light/10 p-2 text-xs text-red",
           className
         )}
       >
@@ -116,7 +146,8 @@ const VegaChart = memo(({ spec, className }: VegaChartProps) => {
     <div
       ref={containerRef}
       className={cn(
-        "w-full overflow-hidden [&_.vega-embed]:p-0! pr-6",
+        "w-full overflow-hidden [&_.vega-embed]:p-0! min-w-max",
+        isBarChartWithoutLegend(spec) && "pr-6",
         className
       )}
       role="img"

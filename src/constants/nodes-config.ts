@@ -1,4 +1,10 @@
 import { NodeConfig, NodeVariant } from "@/types/canvas";
+import { ChartBarIcon } from "@/icons/chart-bar";
+import { CheckCircleIcon } from "@/icons/check-circle";
+import { EyeIcon } from "@/icons/eye";
+import { EyeglassesIcon } from "@/icons/eyeglasses";
+import { FlaskIcon } from "@/icons/flask";
+import { QuestionIcon } from "@/icons/question";
 
 export const NODE_VARIANTS = [
   "chart",
@@ -12,44 +18,38 @@ export const NODE_VARIANTS = [
 export const NODE_CONFIG: Record<NodeVariant, NodeConfig> = {
   chart: {
     label: "Chart",
-    colorClass: "text-chart",
-    bgClass: "bg-chart-bg",
-    borderClass: "border-chart-border",
-    dotColor: "bg-chart",
+    eyebrowClass: "text-lilac",
+    wrapperClass: "border-lilac-light",
+    icon: ChartBarIcon,
   },
   insight: {
     label: "Insight",
-    colorClass: "text-insight",
-    bgClass: "bg-insight-bg",
-    borderClass: "border-insight-border",
-    dotColor: "bg-insight",
+    eyebrowClass: "text-mint",
+    wrapperClass: "border-mint-light",
+    icon: EyeIcon,
   },
   hypothesis: {
     label: "Hypothesis",
-    colorClass: "text-hypothesis",
-    bgClass: "bg-hypothesis-bg",
-    borderClass: "border-hypothesis-border",
-    dotColor: "bg-hypothesis",
+    eyebrowClass: "text-yellow",
+    wrapperClass: "border-yellow-light",
+    icon: EyeglassesIcon,
   },
   experiment: {
     label: "Experiment",
-    colorClass: "text-experiment",
-    bgClass: "bg-experiment-bg",
-    borderClass: "border-experiment-border",
-    dotColor: "bg-experiment",
+    eyebrowClass: "text-red",
+    wrapperClass: "border-red-light",
+    icon: FlaskIcon,
   },
   action_item: {
     label: "Action Item",
-    colorClass: "text-action",
-    bgClass: "bg-action-bg",
-    borderClass: "border-action-border",
-    dotColor: "bg-action",
+    eyebrowClass: "text-blue",
+    wrapperClass: "border-blue-light",
+    icon: CheckCircleIcon,
   },
   question: {
     label: "Question",
-    colorClass: "text-question",
-    bgClass: "bg-question-bg",
-    borderClass: "border-question-border",
-    dotColor: "bg-question",
+    eyebrowClass: "text-orange",
+    wrapperClass: "border-orange-light",
+    icon: QuestionIcon,
   },
 };

@@ -12,7 +12,7 @@ const ButtonGroup = ({ children, className, ...props }: ButtonGroupProps) => (
     className={cn(
       "flex overflow-hidden rounded-lg border border-border bg-surface shadow-sm",
       "*:rounded-none [&>*:not(:last-child)]:border-r [&>*:not(:last-child)]:border-border",
-      className,
+      className
     )}
     {...props}
   >

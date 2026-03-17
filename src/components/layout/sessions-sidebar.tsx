@@ -31,7 +31,7 @@ const MOCK_SESSIONS: SessionItem[] = [
 
 const SidebarHeader = () => {
   return (
-    <header className="flex items-center justify-between border-b border-border-card px-3.5 py-4">
+    <header className="flex items-center justify-between border-b border-border-card px-5 py-2.5">
       <div className="flex items-center gap-2">
         <span role="img" aria-label="kite" tabIndex={0} className="text-xl">
           🪁
@@ -40,28 +40,6 @@ const SidebarHeader = () => {
           Insight Canvas
         </span>
       </div>
-      <button
-        type="button"
-        className="flex size-6 items-center justify-center rounded text-dim transition-colors hover:text-foreground"
-        aria-label="Collapse sidebar"
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <path
-            d="M10 12L6 8L10 4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
     </header>
   );
 };

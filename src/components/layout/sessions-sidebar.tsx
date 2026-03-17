@@ -1,7 +1,15 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { StatusDot } from "@/components/ui/status-dot";
 import { PlusIcon } from "@/icons/plus";
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  useSidebar,
+} from "@/components/ui/sidebar";
 
 type SessionItem = {
   id: string;
@@ -29,79 +37,76 @@ const MOCK_SESSIONS: SessionItem[] = [
   },
 ];
 
-const SidebarHeader = () => {
-  return (
-    <header className="flex items-center justify-between border-b border-border-card px-5 py-2.5">
-      <div className="flex items-center gap-2">
-        <span role="img" aria-label="kite" tabIndex={0} className="text-xl">
+const SessionsSidebar = () => (
+  <Sidebar
+    side="left"
+    expandedWidth="w-[260px]"
+    innerMinWidth="min-w-[258px]"
+    aria-label="Sessions sidebar"
+  >
+    <SidebarHeader>
+      <div className="flex items-center gap-2.5">
+        <span role="img" aria-label="kite" className="text-xl leading-none">
           🪁
         </span>
-        <span className="text-lg font-medium text-foreground">
+        <span className="whitespace-nowrap text-lg font-medium text-foreground">
           Insight Canvas
         </span>
       </div>
-    </header>
-  );
-};
+    </SidebarHeader>
 
-const SessionsNav = () => {
+    <SidebarContent className="px-3 pb-3">
+      <nav aria-label="Sessions">
+        <h2 className="px-3 pt-5 pb-3 text-xs font-medium uppercase text-dim">
+          Sessions
+        </h2>
+        <ul className="flex flex-col">
+          {MOCK_SESSIONS.map(({ id, name, dotClass, active }) => (
+            <li key={id}>
+              <button
+                type="button"
+                className={cn(
+                  "flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm transition-colors",
+                  active
+                    ? "bg-surface font-semibold text-foreground"
+                    : "font-medium text-muted hover:bg-surface-hover"
+                )}
+                aria-current={active ? "true" : undefined}
+                aria-label={name}
+                tabIndex={0}
+              >
+                <StatusDot className={cn(dotClass, "size-2")} />
+                <span className="truncate">{name}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </SidebarContent>
+
+    <SessionsSidebarFooter />
+  </Sidebar>
+);
+
+const SessionsSidebarFooter = () => {
+  const { collapsed } = useSidebar();
+
   return (
-    <nav className="flex flex-1 flex-col" aria-label="Sessions">
-      <h2 className="px-3.5 pt-3.5 pb-1 font-mono text-xs uppercase tracking-widest text-dim">
-        Sessions
-      </h2>
-
-      <ul className="flex flex-col gap-0.5 px-2">
-        {MOCK_SESSIONS.map(({ id, name, dotClass, active }) => (
-          <li key={id}>
-            <button
-              type="button"
-              className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs transition-colors ${
-                active
-                  ? "border border-border-action bg-lilac-light/10 font-medium text-foreground"
-                  : "text-muted hover:bg-surface-hover"
-              }`}
-              aria-current={active ? "true" : undefined}
-            >
-              <StatusDot className={dotClass} />
-              {name}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-};
-
-const SidebarFooter = ({
-  children,
-}: {
-  children: React.ReactNode | React.ReactNode[];
-}) => {
-  return <div className="border-t border-border-card p-3">{children}</div>;
-};
-
-const NewSessionButton = () => {
-  return (
-    <button
-      type="button"
-      className="flex w-full items-center justify-center gap-1.5 rounded-md bg-action px-3 py-3 font-mono text-sm font-medium uppercase tracking-wider text-invert transition-opacity hover:opacity-90"
-      aria-label="Create new session"
-    >
-      New session <PlusIcon width={20} height={20} aria-hidden="true" />
-    </button>
-  );
-};
-
-const SessionsSidebar = () => {
-  return (
-    <aside className="flex w-[260px] shrink-0 flex-col border border-border-card bg-surface-50 rounded-lg">
-      <SidebarHeader />
-      <SessionsNav />
-      <SidebarFooter>
-        <NewSessionButton />
-      </SidebarFooter>
-    </aside>
+    <SidebarFooter hideWhenCollapsed={false}>
+      <button
+        type="button"
+        className={cn(
+          "flex w-full items-center justify-center gap-2 rounded-lg bg-action text-invert p-3",
+          "font-mono text-sm font-medium uppercase tracking-wider transition-opacity hover:opacity-90",
+          "truncate"
+        )}
+        aria-label="Create new session"
+        tabIndex={0}
+      >
+        {!collapsed && "New session"}
+        <PlusIcon width={20} height={20} aria-hidden="true" />
+      </button>
+    </SidebarFooter>
   );
 };
 

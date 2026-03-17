@@ -6,18 +6,18 @@ import {
   Sidebar,
   SidebarHeader,
   SidebarContent,
+  SidebarTitle,
 } from "@/components/ui/sidebar";
 
 const ChatPanel = () => (
   <Sidebar
     side="right"
     expandedWidth="w-md"
-    innerMinWidth="min-w-[446px]"
-    className="shadow-[-9px_0px_17px_-6px_rgba(1,5,7,0.06)]"
+    innerMinWidth="min-w-md"
     aria-label="Chat panel"
   >
     <SidebarHeader>
-      <span className="text-lg font-medium text-foreground">Agent</span>
+      <SidebarTitle>Insight Copilot</SidebarTitle>
     </SidebarHeader>
 
     <SidebarContent>

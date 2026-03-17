@@ -2,8 +2,9 @@
 
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { CaretLeftIcon } from "@/icons/caret-left";
-import { CaretRightIcon } from "@/icons/caret-right";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { CaretLeftIcon } from "@/components/icons/caret-left";
+import { CaretRightIcon } from "@/components/icons/caret-right";
 
 type SidebarSide = "left" | "right";
 
@@ -47,7 +48,7 @@ const Sidebar = ({
     <SidebarContext.Provider value={{ collapsed, toggle, side }}>
       <aside
         className={cn(
-          "relative flex shrink-0 flex-col overflow-hidden rounded-lg border border-border-card bg-surface-50 transition-[width] duration-300 ease-in-out",
+          "relative flex shrink-0 flex-col card-container transition-[width] duration-300 ease-in-out",
           collapsed ? COLLAPSED_WIDTH : expandedWidth,
           className
         )}
@@ -70,15 +71,14 @@ const Sidebar = ({
               collapsed ? "pointer-events-auto opacity-100" : "opacity-0"
             )}
           >
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={toggle}
-              className="flex size-8 items-center justify-center rounded-lg p-2 text-foreground transition-colors hover:bg-surface-hover"
               aria-label="Expand sidebar"
-              tabIndex={0}
             >
               <ExpandIcon width={16} height={16} />
-            </button>
+            </Button>
           </div>
         </div>
       </aside>
@@ -104,16 +104,34 @@ const SidebarHeader = ({ children, className }: SidebarHeaderProps) => {
       )}
     >
       {children}
-      <button
-        type="button"
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={toggle}
-        className="flex size-8 shrink-0 items-center justify-center rounded-lg p-2 text-foreground transition-colors hover:bg-surface-hover"
+        className="shrink-0"
         aria-label="Collapse sidebar"
-        tabIndex={0}
       >
         <CollapseIcon width={16} height={16} />
-      </button>
+      </Button>
     </header>
+  );
+};
+
+type SidebarTitleProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+const SidebarTitle = ({ children, className }: SidebarTitleProps) => {
+  return (
+    <span
+      className={cn(
+        "text-lg font-medium text-foreground whitespace-nowrap",
+        className
+      )}
+    >
+      {children}
+    </span>
   );
 };
 
@@ -135,6 +153,63 @@ const SidebarContent = ({ children, className }: SidebarContentProps) => {
     >
       {children}
     </div>
+  );
+};
+
+type SidebarNavSectionProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+const SidebarNavSection = ({ children, className }: SidebarNavSectionProps) => {
+  return (
+    <div className={cn("px-3 pb-3 border-b border-border-card", className)}>
+      {children}
+    </div>
+  );
+};
+
+type SidebarNavSectionTitleProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+const SidebarNavSectionTitle = ({
+  children,
+  className,
+}: SidebarNavSectionTitleProps) => {
+  return (
+    <h2
+      className={cn(
+        "px-3 pt-5 pb-3 text-xs font-medium uppercase text-dim",
+        className
+      )}
+    >
+      {children}
+    </h2>
+  );
+};
+
+type SidebarNavButtonProps = ButtonProps & {
+  isActive?: boolean;
+};
+
+const SidebarNavButton = ({
+  isActive = false,
+  className,
+  ...props
+}: SidebarNavButtonProps) => {
+  return (
+    <Button
+      variant={isActive ? "secondary" : "ghost"}
+      size="md"
+      className={cn(
+        "w-full justify-start gap-3 text-left *:truncate",
+        isActive ? "font-semibold" : "font-medium"
+      )}
+      aria-current={isActive ? "true" : undefined}
+      {...props}
+    />
   );
 };
 
@@ -168,4 +243,14 @@ const SidebarFooter = ({
   );
 };
 
-export { Sidebar, SidebarHeader, SidebarContent, SidebarFooter, useSidebar };
+export {
+  Sidebar,
+  SidebarHeader,
+  SidebarTitle,
+  SidebarContent,
+  SidebarNavSection,
+  SidebarNavSectionTitle,
+  SidebarNavButton,
+  SidebarFooter,
+  useSidebar,
+};

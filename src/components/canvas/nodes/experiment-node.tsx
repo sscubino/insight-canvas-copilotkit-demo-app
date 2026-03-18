@@ -4,7 +4,7 @@ import {
   BaseNode,
   BaseNodeSubtitle,
   BaseNodeText,
-} from "@/components/canvas/nodes/base-node";
+} from "@/components/canvas/nodes/common/base-node";
 
 const ExperimentNode = ({ data }: NodeProps<ExperimentCanvasNode>) => {
   return (

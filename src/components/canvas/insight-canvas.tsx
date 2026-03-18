@@ -10,7 +10,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
-import { nodeTypes } from "./nodes";
+import { NODE_TYPES } from "@/constants/nodes-config";
 import { CanvasZoomControls } from "./canvas-zoom-controls";
 import { useCanvasState } from "@/contexts/canvas-state-context";
 import { useAutoFitNewNodes } from "@/hooks/use-auto-fit-new-nodes";
@@ -38,7 +38,7 @@ const InsightCanvasInner = () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        nodeTypes={nodeTypes}
+        nodeTypes={NODE_TYPES}
         defaultEdgeOptions={defaultEdgeOptions}
         defaultViewport={{ x: 0, y: 0, zoom: 1 }}
         proOptions={{ hideAttribution: true }}

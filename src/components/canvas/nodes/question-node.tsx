@@ -1,6 +1,9 @@
 import type { NodeProps } from "@xyflow/react";
 import type { QuestionCanvasNode } from "@/types/canvas";
-import { BaseNode, BaseNodeText } from "@/components/canvas/nodes/base-node";
+import {
+  BaseNode,
+  BaseNodeText,
+} from "@/components/canvas/nodes/common/base-node";
 
 const QuestionNode = ({ data }: NodeProps<QuestionCanvasNode>) => {
   return (

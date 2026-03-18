@@ -1,10 +1,17 @@
-import { NodeConfig, NodeVariant } from "@/types/canvas";
+import { ChartNode } from "@/components/canvas/nodes/chart-node";
+import { InsightNode } from "@/components/canvas/nodes/insight-node";
+import { HypothesisNode } from "@/components/canvas/nodes/hypothesis-node";
+import { ExperimentNode } from "@/components/canvas/nodes/experiment-node";
+import { ActionItemNode } from "@/components/canvas/nodes/action-item-node";
+import { QuestionNode } from "@/components/canvas/nodes/question-node";
 import { ChartBarIcon } from "@/components/icons/chart-bar";
 import { CheckCircleIcon } from "@/components/icons/check-circle";
 import { EyeIcon } from "@/components/icons/eye";
 import { EyeglassesIcon } from "@/components/icons/eyeglasses";
 import { FlaskIcon } from "@/components/icons/flask";
 import { QuestionIcon } from "@/components/icons/question";
+import type { NodeConfig, NodeVariant } from "@/types/canvas";
+import type { NodeTypes } from "@xyflow/react";
 
 export const NODE_VARIANTS = [
   "chart",
@@ -52,4 +59,13 @@ export const NODE_CONFIG: Record<NodeVariant, NodeConfig> = {
     wrapperClass: "border-orange-light",
     icon: QuestionIcon,
   },
+};
+
+export const NODE_TYPES: NodeTypes = {
+  chart: ChartNode,
+  insight: InsightNode,
+  hypothesis: HypothesisNode,
+  experiment: ExperimentNode,
+  action_item: ActionItemNode,
+  question: QuestionNode,
 };

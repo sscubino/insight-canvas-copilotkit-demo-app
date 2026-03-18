@@ -18,6 +18,9 @@
   --action: #010507;
   --action-disabled: #01050726;
 
+  --accent: #189370;
+  --accent-foreground: #85ecce;
+
   --destructive: #c90f0f;
   --destructive-foreground: #f0f0f4;
 
@@ -63,6 +66,9 @@
 
   --color-action: var(--action);
   --color-action-disabled: var(--action-disabled);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
 
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);

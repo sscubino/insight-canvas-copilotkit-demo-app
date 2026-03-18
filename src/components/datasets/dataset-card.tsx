@@ -33,7 +33,7 @@ const DatasetCardWrapper = ({
     className={cn(
       "group flex cursor-pointer items-center gap-3 overflow-hidden rounded-lg border py-3 pl-3 pr-4 transition-colors",
       isSelected
-        ? "border-mint bg-mint-light/30"
+        ? "border-accent bg-accent-foreground/10"
         : "border-border bg-surface-50 hover:bg-surface-hover"
     )}
   >

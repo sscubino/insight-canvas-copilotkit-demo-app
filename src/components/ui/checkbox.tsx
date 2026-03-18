@@ -32,7 +32,7 @@ const Checkbox = ({
       onKeyDown={handleKeyDown}
       className={cn(
         "flex size-6 shrink-0 items-center justify-center rounded transition-colors cursor-pointer",
-        checked ? "bg-mint" : "border border-border bg-surface-50",
+        checked ? "bg-accent" : "border border-border bg-surface-50",
         className
       )}
       {...props}

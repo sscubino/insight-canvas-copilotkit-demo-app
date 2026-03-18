@@ -115,7 +115,7 @@ const FileDropZone = ({ onFileSelect, className }: FileDropZoneProps) => {
       <div
         className={cn(
           "flex h-[212px] flex-col items-center justify-center gap-3 rounded-lg px-4 py-5 transition-colors",
-          isDragging ? "bg-mint-light/20" : "bg-white/40"
+          isDragging ? "bg-accent-foreground/10" : "bg-surface-50"
         )}
       >
         <FileIcon

@@ -11,13 +11,13 @@ type ActionStatusProps = {
 
 const variantStyles: Record<ActionStatusVariant, string> = {
   loading: "border-border bg-surface-hover text-muted font-mono",
-  success: "border-mint-light bg-mint-light/10 text-mint",
+  success: "border-accent-foreground bg-accent-foreground/10 text-accent",
   neutral: "border-border bg-surface-hover text-muted",
 };
 
 const SuccessBadge = () => (
   <span
-    className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-mint text-[10px] font-bold text-invert"
+    className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground"
     aria-hidden="true"
   >
     ✓

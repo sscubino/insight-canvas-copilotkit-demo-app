@@ -13,9 +13,7 @@ import {
 import type { DatasetSchema, QueryResult } from "@/types/duckdb";
 import type { NodeSource } from "@/types/canvas";
 
-const formatSchemaForAgent = (schema: DatasetSchema | null): string => {
-  if (!schema) return "No dataset loaded yet.";
-
+const formatSchemaForAgent = (schema: DatasetSchema): string => {
   const columnsDesc = schema.columns
     .map((col) => `  - ${col.name} (${col.type})`)
     .join("\n");
@@ -23,20 +21,25 @@ const formatSchemaForAgent = (schema: DatasetSchema | null): string => {
   return `Table "${schema.tableName}" (${schema.rowCount} rows):\n${columnsDesc}`;
 };
 
-export const useCopilotDataTools = (schema: DatasetSchema | null) => {
+const formatSchemasForAgent = (schemas: DatasetSchema[]): string => {
+  if (schemas.length === 0) return "No datasets loaded yet.";
+  return schemas.map(formatSchemaForAgent).join("\n\n");
+};
+
+export const useCopilotDataTools = (schemas: DatasetSchema[]) => {
   const { runQuery } = useDuckDB();
   const { addNode } = useCanvasState();
 
   useCopilotReadable({
     description:
-      "The dataset schema currently loaded in DuckDB. Use this to write correct SQL queries with valid table and column names.",
-    value: formatSchemaForAgent(schema),
+      "The dataset schemas currently loaded in DuckDB. Use these to write correct SQL queries with valid table and column names. You can join across tables if multiple are available.",
+    value: formatSchemasForAgent(schemas),
   });
 
   useCopilotAction({
     name: "run_sql_query",
     description:
-      "Execute a SQL query against the loaded dataset using DuckDB. Be sure to use DuckDB valid syntax only. Use the dataset schema to write valid queries. Returns columns and rows as JSON. Always query data before making claims about it.",
+      "Execute a SQL query against the loaded datasets using DuckDB. Be sure to use DuckDB valid syntax only. Use the dataset schemas to write valid queries with correct table and column names. Returns columns and rows as JSON. Always query data before making claims about it.",
     parameters: [
       {
         name: "sql",

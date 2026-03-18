@@ -1,0 +1,251 @@
+customer_id,first_purchase_date,last_purchase_date,total_orders,total_spent,product_category,region,loyalty_tier,days_since_last_purchase,is_retained
+CUST-001,2023-05-09,2023-06-04,18,1124.66,Books,North America,Silver,365,false
+CUST-002,2024-03-22,2024-04-08,2,448.81,Electronics,Europe,Bronze,289,false
+CUST-003,2024-03-19,2024-07-10,29,2664.01,Clothing,Latin America,Gold,214,false
+CUST-004,2023-12-29,2024-05-20,10,992.44,Electronics,Latin America,Bronze,264,false
+CUST-005,2023-04-24,2024-04-26,23,2728.65,Sports,North America,Silver,289,true
+CUST-006,2024-02-06,2024-03-18,36,1340.50,Home & Garden,Europe,Platinum,323,false
+CUST-007,2023-03-27,2023-05-13,43,1048.70,Clothing,North America,Platinum,365,false
+CUST-008,2024-02-08,2024-06-30,30,2871.51,Home & Garden,Europe,Gold,210,true
+CUST-009,2023-10-15,2024-10-09,44,2926.71,Books,Europe,Platinum,117,true
+CUST-010,2023-07-01,2024-10-17,25,1236.66,Books,Europe,Gold,119,false
+CUST-011,2023-12-13,2025-01-10,4,1053.84,Sports,Asia Pacific,Bronze,6,false
+CUST-012,2023-03-23,2023-10-26,37,3947.36,Sports,Latin America,Platinum,365,true
+CUST-013,2024-04-28,2024-07-11,17,654.14,Home & Garden,Latin America,Silver,211,false
+CUST-014,2024-02-27,2024-08-31,15,4488.05,Electronics,North America,Silver,141,false
+CUST-015,2023-05-07,2023-10-11,41,745.11,Electronics,Latin America,Platinum,365,true
+CUST-016,2024-02-09,2024-12-11,30,2395.14,Electronics,North America,Gold,52,false
+CUST-017,2023-10-15,2024-11-12,42,1550.58,Sports,North America,Platinum,73,true
+CUST-018,2023-10-11,2024-06-24,12,2299.33,Home & Garden,Europe,Silver,208,false
+CUST-019,2023-06-20,2024-07-07,11,2441.02,Electronics,Asia Pacific,Bronze,216,false
+CUST-020,2024-05-29,2024-06-03,8,4183.07,Home & Garden,Europe,Bronze,254,false
+CUST-021,2023-03-15,2023-11-17,37,4262.86,Electronics,Europe,Platinum,365,false
+CUST-022,2023-05-26,2024-09-24,36,768.11,Sports,Europe,Platinum,129,false
+CUST-023,2023-08-08,2024-06-23,26,4478.32,Books,Latin America,Gold,226,true
+CUST-024,2023-05-18,2024-01-27,15,316.19,Clothing,Europe,Silver,354,false
+CUST-025,2023-01-22,2023-04-05,41,293.16,Home & Garden,North America,Platinum,365,false
+CUST-026,2024-06-24,2024-08-24,18,3020.33,Books,Latin America,Silver,150,false
+CUST-027,2023-09-20,2024-10-26,31,3639.51,Sports,Asia Pacific,Gold,87,true
+CUST-028,2024-03-23,2024-10-20,30,3891.35,Electronics,North America,Gold,88,true
+CUST-029,2024-03-02,2024-08-23,7,1141.49,Clothing,Latin America,Bronze,151,false
+CUST-030,2023-07-21,2024-05-02,30,1146.63,Books,North America,Gold,287,true
+CUST-031,2023-03-07,2025-01-03,35,3767.04,Clothing,Europe,Gold,14,false
+CUST-032,2024-03-06,2024-11-10,31,985.44,Clothing,Latin America,Gold,78,false
+CUST-033,2023-01-17,2024-02-21,17,4171.54,Sports,Latin America,Silver,354,false
+CUST-034,2023-06-22,2024-01-03,19,1003.12,Books,North America,Silver,365,false
+CUST-035,2023-12-02,2024-01-01,4,2641.27,Books,Europe,Bronze,365,false
+CUST-036,2023-03-14,2024-08-16,6,3835.50,Clothing,Latin America,Bronze,154,false
+CUST-037,2023-05-17,2024-12-21,16,2617.76,Sports,Asia Pacific,Silver,26,true
+CUST-038,2023-10-09,2024-01-22,43,3231.37,Clothing,Asia Pacific,Platinum,365,true
+CUST-039,2024-04-27,2024-10-06,5,71.63,Electronics,North America,Bronze,120,false
+CUST-040,2023-08-21,2024-05-19,9,4201.67,Clothing,Asia Pacific,Bronze,269,true
+CUST-041,2023-11-02,2024-01-22,29,3756.84,Books,North America,Gold,365,true
+CUST-042,2023-11-17,2024-10-22,7,4227.02,Electronics,Europe,Bronze,89,true
+CUST-043,2023-10-20,2024-03-13,39,971.51,Home & Garden,Latin America,Platinum,318,true
+CUST-044,2023-09-29,2025-01-05,4,442.57,Electronics,North America,Bronze,23,false
+CUST-045,2023-12-22,2024-02-27,41,4409.70,Books,Latin America,Platinum,328,false
+CUST-046,2023-01-24,2023-05-19,5,4254.38,Books,North America,Bronze,365,false
+CUST-047,2024-01-28,2024-11-22,36,691.97,Home & Garden,North America,Platinum,58,true
+CUST-048,2024-01-16,2024-05-03,44,1145.39,Books,Latin America,Platinum,260,true
+CUST-049,2023-06-22,2024-02-20,11,4393.64,Sports,North America,Bronze,355,false
+CUST-050,2023-07-17,2024-06-22,27,3615.99,Clothing,Asia Pacific,Gold,234,false
+CUST-051,2023-06-27,2023-10-16,25,3928.58,Clothing,Latin America,Gold,365,false
+CUST-052,2024-01-08,2024-06-13,15,1026.46,Home & Garden,Asia Pacific,Silver,237,true
+CUST-053,2023-03-27,2024-01-07,23,2897.42,Books,Asia Pacific,Silver,365,false
+CUST-054,2023-02-12,2023-06-11,17,828.19,Electronics,North America,Silver,365,false
+CUST-055,2024-04-03,2024-09-27,21,1980.68,Books,Europe,Silver,126,true
+CUST-056,2023-10-02,2023-10-25,28,37.55,Clothing,Asia Pacific,Gold,365,false
+CUST-057,2024-03-31,2024-05-06,43,4145.84,Electronics,Asia Pacific,Platinum,273,true
+CUST-058,2024-06-17,2024-09-05,43,1855.51,Books,Europe,Platinum,144,true
+CUST-059,2023-07-30,2024-10-03,43,4233.43,Clothing,Asia Pacific,Platinum,125,true
+CUST-060,2024-03-05,2024-12-11,1,1388.31,Books,Asia Pacific,Bronze,41,true
+CUST-061,2024-05-05,2024-08-27,29,3050.05,Clothing,North America,Gold,157,true
+CUST-062,2023-11-01,2024-07-22,43,2859.24,Clothing,Asia Pacific,Platinum,187,true
+CUST-063,2023-09-02,2024-10-19,13,688.66,Sports,North America,Silver,89,true
+CUST-064,2024-04-25,2024-11-24,41,2603.24,Sports,Latin America,Platinum,74,true
+CUST-065,2023-09-21,2023-12-06,42,3103.67,Electronics,Latin America,Platinum,365,false
+CUST-066,2023-08-27,2023-11-26,45,2345.27,Electronics,Latin America,Platinum,365,false
+CUST-067,2023-05-31,2024-09-18,43,2404.15,Sports,Latin America,Platinum,136,true
+CUST-068,2024-04-15,2024-07-06,31,2041.81,Home & Garden,Latin America,Gold,217,true
+CUST-069,2023-09-16,2024-02-04,29,376.34,Home & Garden,Asia Pacific,Gold,355,true
+CUST-070,2023-04-07,2023-08-27,10,1063.73,Clothing,North America,Bronze,365,false
+CUST-071,2024-03-14,2024-10-09,22,2455.47,Sports,Latin America,Silver,111,true
+CUST-072,2023-02-04,2024-09-16,25,2162.09,Sports,Latin America,Gold,151,true
+CUST-073,2023-08-28,2024-05-04,15,1250.01,Home & Garden,Latin America,Silver,271,true
+CUST-074,2023-07-03,2024-10-24,9,4413.83,Sports,North America,Bronze,100,true
+CUST-075,2023-04-10,2024-06-22,9,3904.82,Sports,Asia Pacific,Bronze,212,true
+CUST-076,2023-08-19,2024-11-27,21,1538.62,Sports,Asia Pacific,Silver,77,true
+CUST-077,2023-04-08,2024-08-02,2,3378.14,Home & Garden,Europe,Bronze,167,false
+CUST-078,2023-03-26,2023-05-07,2,4274.76,Books,Europe,Bronze,365,false
+CUST-079,2023-09-16,2023-11-20,31,3022.48,Sports,Asia Pacific,Gold,365,false
+CUST-080,2024-01-27,2024-04-22,39,2744.39,Clothing,Asia Pacific,Platinum,291,false
+CUST-081,2023-05-05,2024-12-18,2,4182.12,Sports,Latin America,Bronze,46,false
+CUST-082,2023-08-06,2023-10-23,38,3117.04,Home & Garden,North America,Platinum,365,true
+CUST-083,2023-02-26,2024-02-17,35,1944.84,Home & Garden,North America,Gold,344,true
+CUST-084,2024-03-20,2024-11-26,7,1967.84,Sports,Europe,Bronze,61,false
+CUST-085,2024-04-04,2024-07-04,34,4345.67,Books,Latin America,Gold,203,false
+CUST-086,2024-05-05,2024-08-25,38,1229.72,Electronics,Asia Pacific,Platinum,170,true
+CUST-087,2024-04-20,2024-08-23,30,2577.22,Electronics,Latin America,Gold,166,true
+CUST-088,2023-12-13,2024-03-16,32,978.17,Home & Garden,Asia Pacific,Gold,330,true
+CUST-089,2023-01-25,2024-07-08,13,412.68,Books,Europe,Silver,214,false
+CUST-090,2024-05-16,2024-10-29,32,2033.33,Clothing,Latin America,Gold,78,true
+CUST-091,2023-09-21,2024-02-25,43,2629.55,Home & Garden,Latin America,Platinum,340,false
+CUST-092,2023-12-19,2024-06-17,45,2058.24,Electronics,Europe,Platinum,221,true
+CUST-093,2023-12-04,2024-02-04,35,4280.42,Clothing,Latin America,Gold,365,true
+CUST-094,2023-10-25,2024-10-30,38,4395.43,Electronics,Europe,Platinum,93,true
+CUST-095,2023-11-14,2024-03-10,24,832.10,Clothing,Asia Pacific,Gold,311,false
+CUST-096,2023-03-02,2023-04-27,36,1335.84,Sports,North America,Platinum,365,true
+CUST-097,2023-01-27,2024-09-06,19,2128.20,Electronics,Asia Pacific,Silver,145,true
+CUST-098,2024-05-18,2024-06-17,5,1821.16,Electronics,Europe,Bronze,214,false
+CUST-099,2023-06-16,2025-01-13,20,410.75,Sports,Europe,Silver,9,true
+CUST-100,2024-02-08,2024-09-26,29,1359.16,Home & Garden,North America,Gold,129,false
+CUST-101,2023-04-26,2023-11-25,41,973.27,Clothing,Europe,Platinum,365,true
+CUST-102,2023-04-01,2023-09-09,1,1856.07,Home & Garden,North America,Bronze,365,false
+CUST-103,2023-09-09,2024-02-04,19,3172.35,Clothing,Asia Pacific,Silver,360,true
+CUST-104,2023-08-05,2024-10-14,8,2464.19,Home & Garden,Europe,Bronze,113,true
+CUST-105,2023-03-29,2023-05-30,11,3573.05,Books,Asia Pacific,Bronze,365,false
+CUST-106,2024-04-08,2024-06-11,30,3108.39,Home & Garden,Latin America,Gold,240,true
+CUST-107,2024-04-07,2024-05-19,39,208.17,Books,Asia Pacific,Platinum,254,false
+CUST-108,2023-02-10,2023-05-15,15,4329.74,Books,North America,Silver,365,false
+CUST-109,2023-10-17,2024-08-08,3,3441.09,Sports,Asia Pacific,Bronze,165,false
+CUST-110,2023-07-19,2024-10-08,41,3669.67,Sports,Asia Pacific,Platinum,101,true
+CUST-111,2023-12-09,2024-11-17,7,3864.07,Sports,Asia Pacific,Bronze,69,true
+CUST-112,2024-02-29,2024-12-07,3,2063.07,Electronics,Latin America,Bronze,49,true
+CUST-113,2024-06-24,2024-06-25,43,3916.07,Clothing,Asia Pacific,Platinum,218,true
+CUST-114,2024-06-08,2024-11-16,29,3427.16,Clothing,Asia Pacific,Gold,66,true
+CUST-115,2024-04-07,2024-12-12,8,159.04,Clothing,Europe,Bronze,54,false
+CUST-116,2023-11-29,2024-09-07,1,2498.56,Electronics,Latin America,Bronze,132,true
+CUST-117,2023-05-15,2023-10-20,32,4198.96,Home & Garden,Latin America,Gold,365,false
+CUST-118,2024-05-23,2024-09-21,16,2071.83,Books,Europe,Silver,120,true
+CUST-119,2023-03-27,2024-01-04,27,1549.24,Electronics,Asia Pacific,Gold,365,false
+CUST-120,2023-11-16,2024-09-12,38,4495.09,Sports,Latin America,Platinum,140,false
+CUST-121,2024-01-03,2024-06-22,36,3440.04,Home & Garden,Europe,Platinum,219,true
+CUST-122,2023-09-16,2024-07-05,25,1074.02,Home & Garden,Latin America,Gold,218,true
+CUST-123,2024-02-09,2024-08-25,43,3572.00,Sports,North America,Platinum,163,false
+CUST-124,2023-05-24,2024-10-20,38,1514.01,Sports,North America,Platinum,90,false
+CUST-125,2024-04-26,2024-05-04,10,1862.60,Electronics,Latin America,Bronze,276,false
+CUST-126,2023-10-13,2024-04-04,40,3126.39,Home & Garden,Latin America,Platinum,306,true
+CUST-127,2023-12-05,2024-10-21,32,3929.55,Clothing,Asia Pacific,Gold,87,true
+CUST-128,2023-09-04,2024-09-21,6,1969.85,Electronics,Latin America,Bronze,119,false
+CUST-129,2023-07-04,2024-05-06,2,235.57,Home & Garden,Asia Pacific,Bronze,279,true
+CUST-130,2024-03-31,2024-06-14,16,2404.31,Clothing,Europe,Silver,233,false
+CUST-131,2023-07-13,2023-10-02,40,3922.65,Sports,Europe,Platinum,365,false
+CUST-132,2023-09-09,2024-05-03,41,1165.27,Sports,Asia Pacific,Platinum,265,false
+CUST-133,2023-06-25,2023-09-09,29,4255.20,Sports,Asia Pacific,Gold,365,true
+CUST-134,2024-04-26,2024-09-28,13,4497.20,Clothing,Latin America,Silver,136,false
+CUST-135,2024-01-17,2024-11-07,19,4467.33,Sports,Asia Pacific,Silver,78,true
+CUST-136,2023-01-23,2024-08-25,44,3509.05,Sports,Asia Pacific,Platinum,144,false
+CUST-137,2023-09-07,2024-07-14,23,1008.94,Clothing,North America,Silver,191,false
+CUST-138,2023-02-24,2024-01-07,29,179.13,Electronics,Asia Pacific,Gold,365,false
+CUST-139,2023-12-15,2025-01-01,27,815.10,Home & Garden,Asia Pacific,Gold,18,false
+CUST-140,2023-07-02,2024-03-22,31,4354.21,Home & Garden,North America,Gold,308,false
+CUST-141,2024-05-08,2025-01-10,5,659.18,Sports,Asia Pacific,Bronze,35,true
+CUST-142,2023-04-17,2024-05-26,1,1212.12,Home & Garden,Latin America,Bronze,237,false
+CUST-143,2024-01-30,2024-03-26,44,1075.18,Books,Asia Pacific,Platinum,295,false
+CUST-144,2023-08-29,2024-07-26,5,2870.25,Home & Garden,Latin America,Bronze,187,false
+CUST-145,2023-05-14,2023-10-05,3,4259.79,Electronics,North America,Bronze,365,false
+CUST-146,2023-09-12,2024-12-10,35,636.41,Books,Latin America,Gold,50,true
+CUST-147,2023-06-22,2024-08-20,42,472.62,Home & Garden,North America,Platinum,163,true
+CUST-148,2024-01-29,2024-05-20,29,2017.78,Electronics,Asia Pacific,Gold,247,false
+CUST-149,2024-01-17,2024-02-18,26,1263.18,Sports,North America,Gold,362,true
+CUST-150,2023-08-20,2023-09-11,4,3546.97,Books,Europe,Bronze,365,false
+CUST-151,2023-03-26,2024-10-14,14,2651.13,Home & Garden,Europe,Silver,119,false
+CUST-152,2023-01-17,2023-10-28,10,4444.25,Clothing,North America,Bronze,365,false
+CUST-153,2023-02-10,2023-06-25,1,1631.34,Home & Garden,North America,Bronze,365,false
+CUST-154,2023-07-12,2024-04-09,4,596.60,Electronics,Latin America,Bronze,294,false
+CUST-155,2024-04-18,2024-10-21,33,2683.68,Books,North America,Gold,100,true
+CUST-156,2023-11-19,2024-07-11,42,4339.20,Sports,Latin America,Platinum,189,false
+CUST-157,2023-05-05,2024-09-19,29,358.49,Clothing,North America,Gold,120,true
+CUST-158,2023-05-24,2024-03-01,40,2859.85,Sports,Asia Pacific,Platinum,337,false
+CUST-159,2024-04-23,2025-01-07,39,1952.99,Books,Europe,Platinum,33,true
+CUST-160,2024-03-30,2024-11-17,15,1879.74,Sports,North America,Silver,85,true
+CUST-161,2023-12-01,2024-07-07,21,3003.03,Sports,North America,Silver,203,false
+CUST-162,2023-04-18,2023-07-15,6,1960.48,Clothing,North America,Bronze,365,false
+CUST-163,2023-12-18,2024-11-26,8,1866.31,Sports,North America,Bronze,77,false
+CUST-164,2023-11-05,2024-09-08,20,1601.85,Clothing,Latin America,Silver,147,true
+CUST-165,2023-09-01,2024-11-08,7,1595.00,Home & Garden,Europe,Bronze,85,true
+CUST-166,2024-03-29,2025-01-11,40,2772.67,Books,Asia Pacific,Platinum,24,true
+CUST-167,2023-02-13,2023-08-17,18,3171.06,Home & Garden,North America,Silver,365,false
+CUST-168,2023-07-19,2023-12-13,37,2968.33,Electronics,North America,Platinum,365,true
+CUST-169,2023-08-23,2024-03-03,27,2057.79,Home & Garden,North America,Gold,323,false
+CUST-170,2023-03-09,2023-08-16,11,3402.33,Home & Garden,Latin America,Bronze,365,false
+CUST-171,2024-03-24,2024-11-28,39,2005.93,Books,North America,Platinum,56,true
+CUST-172,2024-01-03,2024-08-11,8,1296.10,Books,Asia Pacific,Bronze,178,false
+CUST-173,2023-03-02,2023-10-14,26,4430.47,Home & Garden,Europe,Gold,365,true
+CUST-174,2023-06-04,2024-02-21,19,1496.70,Sports,Europe,Silver,329,false
+CUST-175,2023-05-27,2024-06-20,35,3175.41,Home & Garden,North America,Gold,225,true
+CUST-176,2024-02-25,2024-03-18,28,113.76,Home & Garden,Latin America,Gold,332,true
+CUST-177,2024-03-04,2024-10-04,19,544.82,Clothing,Latin America,Silver,103,false
+CUST-178,2024-01-20,2024-03-06,28,3804.84,Sports,North America,Gold,322,false
+CUST-179,2024-02-24,2024-08-01,22,1020.42,Books,North America,Silver,191,true
+CUST-180,2024-06-20,2024-08-09,23,1599.41,Clothing,Europe,Silver,189,false
+CUST-181,2023-04-30,2023-09-27,17,911.80,Electronics,Europe,Silver,365,true
+CUST-182,2024-06-03,2024-09-30,37,3426.65,Books,Asia Pacific,Platinum,121,true
+CUST-183,2023-12-04,2024-02-20,29,335.23,Home & Garden,North America,Gold,344,false
+CUST-184,2024-01-10,2024-09-26,5,1417.52,Home & Garden,Asia Pacific,Bronze,125,true
+CUST-185,2023-04-03,2023-07-05,40,2685.53,Books,North America,Platinum,365,false
+CUST-186,2024-04-19,2024-07-25,21,2734.37,Electronics,Latin America,Silver,190,true
+CUST-187,2023-04-30,2024-04-16,6,2285.33,Sports,Latin America,Bronze,279,true
+CUST-188,2023-06-26,2024-07-03,24,4133.18,Home & Garden,North America,Gold,208,true
+CUST-189,2023-12-23,2024-01-26,22,452.43,Home & Garden,Europe,Silver,365,false
+CUST-190,2023-12-22,2024-02-02,38,2996.34,Sports,Europe,Platinum,365,true
+CUST-191,2023-04-11,2024-02-23,36,1713.75,Clothing,North America,Platinum,352,true
+CUST-192,2024-03-23,2024-12-09,24,111.48,Clothing,Asia Pacific,Gold,46,true
+CUST-193,2024-05-26,2024-07-15,15,4499.90,Electronics,North America,Silver,188,true
+CUST-194,2023-12-25,2024-11-06,9,2699.69,Books,Europe,Bronze,74,true
+CUST-195,2024-04-07,2024-04-30,27,1658.41,Sports,Asia Pacific,Gold,283,true
+CUST-196,2024-04-18,2024-08-16,35,1099.08,Sports,Europe,Gold,182,false
+CUST-197,2024-01-26,2025-01-08,37,4430.45,Sports,Latin America,Platinum,21,true
+CUST-198,2023-06-29,2024-01-20,39,648.63,Sports,Asia Pacific,Platinum,365,true
+CUST-199,2023-04-30,2024-10-10,8,1304.22,Sports,Europe,Bronze,121,true
+CUST-200,2024-04-06,2024-05-23,15,3680.66,Electronics,Latin America,Silver,265,false
+CUST-201,2023-03-10,2024-04-19,33,1701.60,Home & Garden,Europe,Gold,283,false
+CUST-202,2023-02-12,2024-01-05,7,3781.12,Clothing,Europe,Bronze,365,false
+CUST-203,2023-02-23,2023-12-14,31,3141.44,Sports,Latin America,Gold,365,false
+CUST-204,2023-01-20,2023-04-12,2,1173.97,Books,Latin America,Bronze,365,false
+CUST-205,2023-05-08,2024-02-28,16,1376.14,Books,Latin America,Silver,323,false
+CUST-206,2023-03-20,2023-07-12,32,2697.42,Books,Europe,Gold,365,false
+CUST-207,2023-06-11,2024-04-05,28,36.98,Sports,Europe,Gold,296,true
+CUST-208,2023-04-12,2024-09-30,24,332.52,Books,North America,Gold,123,true
+CUST-209,2024-02-18,2024-10-16,3,2871.44,Electronics,Asia Pacific,Bronze,102,true
+CUST-210,2023-03-25,2024-03-13,16,3306.24,Books,Asia Pacific,Silver,328,true
+CUST-211,2023-05-31,2023-07-16,23,2470.68,Sports,Latin America,Silver,365,false
+CUST-212,2023-07-20,2023-12-06,5,3230.72,Home & Garden,Europe,Bronze,365,false
+CUST-213,2023-02-28,2023-09-21,3,1440.71,Books,Latin America,Bronze,365,false
+CUST-214,2023-10-01,2023-10-20,42,884.22,Electronics,Asia Pacific,Platinum,365,false
+CUST-215,2023-10-21,2023-12-24,24,1983.17,Sports,Asia Pacific,Gold,365,false
+CUST-216,2023-07-25,2024-12-15,45,2253.92,Home & Garden,North America,Platinum,60,true
+CUST-217,2024-03-24,2024-05-04,28,2722.96,Home & Garden,Asia Pacific,Gold,282,true
+CUST-218,2023-04-30,2023-07-21,21,2984.31,Sports,Europe,Silver,365,false
+CUST-219,2024-04-13,2024-10-10,29,219.32,Books,Latin America,Gold,124,false
+CUST-220,2023-10-23,2024-09-15,4,365.42,Books,Europe,Bronze,142,false
+CUST-221,2023-02-15,2023-07-12,39,3061.05,Electronics,Europe,Platinum,365,true
+CUST-222,2024-01-25,2024-07-29,25,4274.12,Sports,Asia Pacific,Gold,171,false
+CUST-223,2024-01-30,2024-09-14,5,2595.43,Home & Garden,Asia Pacific,Bronze,139,false
+CUST-224,2023-09-27,2023-11-25,2,3318.46,Books,North America,Bronze,365,false
+CUST-225,2023-10-10,2024-11-10,17,3177.05,Home & Garden,Latin America,Silver,72,false
+CUST-226,2023-08-07,2023-12-11,9,3842.13,Sports,North America,Bronze,365,false
+CUST-227,2023-12-08,2024-11-14,23,3201.64,Home & Garden,Europe,Silver,79,true
+CUST-228,2023-07-12,2024-07-17,33,1032.35,Clothing,Latin America,Gold,188,false
+CUST-229,2023-02-10,2024-02-15,36,2588.08,Books,Europe,Platinum,349,false
+CUST-230,2023-04-13,2023-06-20,20,1809.77,Books,Latin America,Silver,365,false
+CUST-231,2024-03-09,2024-12-29,5,590.20,Sports,Latin America,Bronze,27,false
+CUST-232,2024-06-27,2024-09-24,9,3954.48,Books,Europe,Bronze,137,false
+CUST-233,2023-05-27,2024-08-13,33,4100.88,Books,Europe,Gold,156,false
+CUST-234,2023-11-22,2024-02-15,11,1472.29,Books,Asia Pacific,Bronze,357,false
+CUST-235,2023-04-05,2023-12-18,13,2868.70,Home & Garden,North America,Silver,365,false
+CUST-236,2024-06-12,2024-11-24,11,2675.38,Books,Asia Pacific,Bronze,70,true
+CUST-237,2023-02-26,2023-03-28,6,233.20,Home & Garden,Europe,Bronze,365,false
+CUST-238,2024-03-16,2024-04-01,32,4003.81,Home & Garden,Latin America,Gold,306,true
+CUST-239,2023-09-22,2024-11-08,44,1845.23,Electronics,Europe,Platinum,82,true
+CUST-240,2024-04-09,2024-11-08,31,2106.05,Home & Garden,Asia Pacific,Gold,78,true
+CUST-241,2024-01-03,2024-07-26,9,3430.17,Home & Garden,Europe,Bronze,189,false
+CUST-242,2024-05-06,2024-06-07,18,2039.69,Home & Garden,Latin America,Silver,226,true
+CUST-243,2024-03-18,2024-07-24,11,3666.24,Home & Garden,Europe,Bronze,204,false
+CUST-244,2023-06-27,2024-11-19,33,2116.66,Electronics,North America,Gold,85,true
+CUST-245,2024-02-21,2024-11-06,30,4351.09,Electronics,North America,Gold,76,true
+CUST-246,2023-10-30,2024-07-10,39,3974.06,Home & Garden,North America,Platinum,209,false
+CUST-247,2023-05-05,2024-07-20,9,3974.58,Sports,Asia Pacific,Bronze,202,false
+CUST-248,2023-03-02,2024-04-16,4,2579.15,Home & Garden,North America,Bronze,280,false
+CUST-249,2024-02-14,2024-10-30,29,3446.88,Books,North America,Gold,85,false
+CUST-250,2023-05-26,2023-09-03,26,1698.19,Home & Garden,Europe,Gold,365,false

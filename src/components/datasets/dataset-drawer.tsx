@@ -1,0 +1,85 @@
+"use client";
+
+import { useDatasets } from "@/contexts/dataset-context";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { FileDropZone } from "@/components/datasets/file-drop-zone";
+import { DatasetCard } from "@/components/datasets/dataset-card";
+
+const DatasetDrawer = () => {
+  const { datasets, isDrawerOpen, closeDrawer, addUserFile, toggleSelection } =
+    useDatasets();
+
+  const handleFileSelect = async (file: File) => {
+    try {
+      await addUserFile(file);
+    } catch (err) {
+      console.error("Failed to add file:", err);
+    }
+  };
+
+  const sampleDatasets = datasets.filter((d) => d.source === "sample");
+  const userDatasets = datasets.filter((d) => d.source === "user");
+
+  return (
+    <Drawer isOpen={isDrawerOpen} onClose={closeDrawer}>
+      <DrawerContent>
+        <div className="flex w-full flex-col items-center gap-4">
+          <p className="text-center text-sm font-medium text-foreground">
+            Upload a file or choose a sample dataset to get started.
+          </p>
+
+          <div className="flex w-full flex-col items-center gap-2">
+            <FileDropZone onFileSelect={handleFileSelect} />
+            <p className="text-center font-sans text-xs font-medium text-dim">
+              Supported formats: CSV, JSON
+            </p>
+          </div>
+        </div>
+
+        <div className="flex w-full flex-col gap-4">
+          {userDatasets.length > 0 && (
+            <div className="flex w-full flex-col gap-2">
+              <p className="font-sans text-xs font-medium text-dim">
+                YOUR DATASETS
+              </p>
+              <div
+                className="flex flex-col gap-2"
+                role="listbox"
+                aria-label="User datasets"
+              >
+                {userDatasets.map((dataset) => (
+                  <DatasetCard
+                    key={dataset.id}
+                    dataset={dataset}
+                    onToggle={toggleSelection}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex w-full flex-col gap-2">
+            <p className="font-sans text-xs font-medium text-dim">
+              SAMPLE DATASETS
+            </p>
+            <div
+              className="flex flex-col gap-2"
+              role="listbox"
+              aria-label="Sample datasets"
+            >
+              {sampleDatasets.map((dataset) => (
+                <DatasetCard
+                  key={dataset.id}
+                  dataset={dataset}
+                  onToggle={toggleSelection}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
+export { DatasetDrawer };

@@ -116,6 +116,7 @@ body {
 
 /* CopilotChat panel overrides */
 .copilotKitChat {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
@@ -124,10 +125,12 @@ body {
 }
 
 .copilotKitMessages {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   background: transparent !important;
 }
 
 .copilotKitInputContainer {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   background: transparent !important;
 }
 
@@ -141,4 +144,27 @@ body {
 
 .copilotKitMessage.copilotKitUserMessage {
   margin-top: 0 !important;
+}
+
+/* Utility classes */
+@utility scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--surface-hover);
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--surface-hover);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--dim);
+  }
 }

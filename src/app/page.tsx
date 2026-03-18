@@ -3,31 +3,26 @@
 import { InsightCanvas } from "@/components/canvas/insight-canvas";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { CanvasStateProvider } from "@/contexts/canvas-state-context";
+import { DatasetProvider, useDatasets } from "@/contexts/dataset-context";
 import { useCopilotCanvas } from "@/hooks/use-copilot-canvas";
 import { useCopilotDataTools } from "@/hooks/use-copilot-data-tools";
-import { useLoadDataset } from "@/hooks/use-load-dataset";
-import type { DatasetSchema } from "@/types/duckdb";
 
 const CopilotCanvasSync = () => {
   useCopilotCanvas();
   return null;
 };
 
-const CopilotDataToolsSync = ({ schema }: { schema: DatasetSchema | null }) => {
-  useCopilotDataTools(schema);
+const CopilotDataToolsSync = () => {
+  const { activeSchemas } = useDatasets();
+  useCopilotDataTools(activeSchemas);
   return null;
 };
 
-const Home = () => {
-  const { schema } = useLoadDataset({
-    filePath: "/data/saas-churn.csv",
-    tableName: "saas_churn",
-  });
-
-  return (
+const Home = () => (
+  <DatasetProvider>
     <CanvasStateProvider>
       <CopilotCanvasSync />
-      <CopilotDataToolsSync schema={schema} />
+      <CopilotDataToolsSync />
       <div className="flex h-full space-x-2">
         <main className="relative flex-1 card-container">
           <InsightCanvas />
@@ -35,7 +30,7 @@ const Home = () => {
         <ChatPanel />
       </div>
     </CanvasStateProvider>
-  );
-};
+  </DatasetProvider>
+);
 
 export default Home;

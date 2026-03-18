@@ -19,4 +19,7 @@ export type DatasetInfo = {
   columnCount?: number;
 };
 
-export type DatasetMeta = Omit<DatasetInfo, "schema" | "isLoaded" | "isSelected">;
+export type DatasetMeta = Omit<
+  DatasetInfo,
+  "schema" | "isLoaded" | "isSelected"
+>;

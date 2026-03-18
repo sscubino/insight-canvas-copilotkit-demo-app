@@ -26,9 +26,7 @@ export const storeDataset = async (
   await set(fileKey(meta.id), content);
 };
 
-export const getDatasetContent = async (
-  id: string
-): Promise<string | null> => {
+export const getDatasetContent = async (id: string): Promise<string | null> => {
   const content = await get<string>(fileKey(id));
   return content ?? null;
 };

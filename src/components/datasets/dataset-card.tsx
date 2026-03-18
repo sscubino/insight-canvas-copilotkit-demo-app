@@ -1,7 +1,45 @@
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FileIcon } from "@/components/icons/file";
+import { TrashIcon } from "@/components/icons/trash";
 import { cn } from "@/lib/utils";
 import type { DatasetInfo } from "@/types/dataset";
+
+const formatMeta = (dataset: DatasetInfo): string => {
+  const parts: string[] = [];
+  if (dataset.rowCount != null) parts.push(`${dataset.rowCount} rows`);
+  if (dataset.columnCount != null) parts.push(`${dataset.columnCount} cols`);
+  parts.push(dataset.fileName);
+  return parts.join(" · ");
+};
+
+const DatasetCardWrapper = ({
+  isSelected,
+  handleClick,
+  handleKeyDown,
+  children,
+}: {
+  isSelected: boolean;
+  handleClick: () => void;
+  handleKeyDown: (e: React.KeyboardEvent) => void;
+  children: React.ReactNode;
+}) => (
+  <div
+    role="option"
+    aria-selected={isSelected}
+    tabIndex={0}
+    onClick={handleClick}
+    onKeyDown={handleKeyDown}
+    className={cn(
+      "group flex cursor-pointer items-center gap-3 overflow-hidden rounded-lg border py-3 pl-3 pr-4 transition-colors",
+      isSelected
+        ? "border-mint bg-mint-light/30"
+        : "border-border bg-surface-50 hover:bg-surface-hover"
+    )}
+  >
+    {children}
+  </div>
+);
 
 const DatasetIcon = ({ source, emoji }: { source: string; emoji?: string }) => {
   return (
@@ -40,21 +78,82 @@ const DatasetMeta = ({ dataset }: { dataset: DatasetInfo }) => (
   </p>
 );
 
+const DeleteButton = ({
+  onDelete,
+  datasetName,
+}: {
+  onDelete: (e: React.MouseEvent) => void;
+  datasetName: string;
+}) => (
+  <Button
+    variant="ghost"
+    size="sm-icon"
+    onClick={onDelete}
+    aria-label={`Delete ${datasetName}`}
+    className="text-dim opacity-0 transition-all hover:bg-destructive hover:text-destructive-foreground focus-visible:opacity-100 group-hover:opacity-100 group-focus-visible:opacity-100"
+  >
+    <TrashIcon />
+  </Button>
+);
+
+const DatasetCardInfo = ({
+  dataset,
+  isSelected,
+}: {
+  dataset: DatasetInfo;
+  isSelected: boolean;
+}) => {
+  return (
+    <div className="flex min-w-0 flex-1 flex-col gap-1">
+      <DatasetName isSelected={isSelected}>{dataset.name}</DatasetName>
+      <DatasetMeta dataset={dataset} />
+    </div>
+  );
+};
+
+const DatasetCardActions = ({
+  dataset,
+  onToggle,
+  onDelete,
+  isSelected,
+}: {
+  dataset: DatasetInfo;
+  onToggle: (id: string) => void;
+  onDelete?: (id: string) => void;
+  isSelected: boolean;
+}) => {
+  const { id, name } = dataset;
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDelete?.(id);
+  };
+
+  const handleChange = () => onToggle(id);
+
+  return (
+    <div className="flex items-center gap-2">
+      {onDelete && <DeleteButton onDelete={handleDelete} datasetName={name} />}
+      <div onClick={(e) => e.stopPropagation()}>
+        <Checkbox
+          checked={isSelected}
+          onChange={handleChange}
+          aria-label={`Select ${name}`}
+          tabIndex={-1}
+        />
+      </div>
+    </div>
+  );
+};
+
 type DatasetCardProps = {
   dataset: DatasetInfo;
   onToggle: (id: string) => void;
+  onDelete?: (id: string) => void;
 };
 
-const formatMeta = (dataset: DatasetInfo): string => {
-  const parts: string[] = [];
-  if (dataset.rowCount != null) parts.push(`${dataset.rowCount} rows`);
-  if (dataset.columnCount != null) parts.push(`${dataset.columnCount} cols`);
-  parts.push(dataset.fileName);
-  return parts.join(" · ");
-};
-
-const DatasetCard = ({ dataset, onToggle }: DatasetCardProps) => {
-  const { isSelected, name, id, source, emoji } = dataset;
+const DatasetCard = ({ dataset, onToggle, onDelete }: DatasetCardProps) => {
+  const { isSelected, id, source, emoji } = dataset;
 
   const handleClick = () => onToggle(id);
 
@@ -66,34 +165,20 @@ const DatasetCard = ({ dataset, onToggle }: DatasetCardProps) => {
   };
 
   return (
-    <div
-      role="option"
-      aria-selected={isSelected}
-      tabIndex={0}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      className={cn(
-        "flex cursor-pointer items-center gap-3 overflow-hidden rounded-lg border py-3 pl-3 pr-4 transition-colors",
-        isSelected
-          ? "border-mint bg-mint-light/30"
-          : "border-border bg-surface-50 hover:bg-surface-hover"
-      )}
+    <DatasetCardWrapper
+      isSelected={isSelected}
+      handleClick={handleClick}
+      handleKeyDown={handleKeyDown}
     >
       <DatasetIcon source={source} emoji={emoji} />
-
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <DatasetName isSelected={isSelected}>{name}</DatasetName>
-        <DatasetMeta dataset={dataset} />
-      </div>
-
-      <div onClick={(e) => e.stopPropagation()}>
-        <Checkbox
-          checked={isSelected}
-          onChange={() => onToggle(id)}
-          aria-label={`Select ${name}`}
-        />
-      </div>
-    </div>
+      <DatasetCardInfo dataset={dataset} isSelected={isSelected} />
+      <DatasetCardActions
+        dataset={dataset}
+        onToggle={onToggle}
+        onDelete={onDelete}
+        isSelected={isSelected}
+      />
+    </DatasetCardWrapper>
   );
 };
 

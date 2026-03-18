@@ -6,8 +6,14 @@ import { FileDropZone } from "@/components/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/datasets/dataset-card";
 
 const DatasetDrawer = () => {
-  const { datasets, isDrawerOpen, closeDrawer, addUserFile, toggleSelection } =
-    useDatasets();
+  const {
+    datasets,
+    isDrawerOpen,
+    closeDrawer,
+    addUserFile,
+    toggleSelection,
+    removeDataset,
+  } = useDatasets();
 
   const handleFileSelect = async (file: File) => {
     try {
@@ -52,6 +58,7 @@ const DatasetDrawer = () => {
                     key={dataset.id}
                     dataset={dataset}
                     onToggle={toggleSelection}
+                    onDelete={removeDataset}
                   />
                 ))}
               </div>

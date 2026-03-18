@@ -18,6 +18,9 @@
   --action: #010507;
   --action-disabled: #01050726;
 
+  --destructive: #c90f0f;
+  --destructive-foreground: #f0f0f4;
+
   --site-background: #dedee9;
 
   --mint: #189370;
@@ -60,6 +63,9 @@
 
   --color-action: var(--action);
   --color-action-disabled: var(--action-disabled);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
   --color-site-background: var(--site-background);
 
@@ -116,7 +122,8 @@ body {
 
 /* CopilotChat panel overrides */
 .copilotKitChat {
-  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
+  font-family:
+    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
@@ -125,12 +132,14 @@ body {
 }
 
 .copilotKitMessages {
-  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
+  font-family:
+    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   background: transparent !important;
 }
 
 .copilotKitInputContainer {
-  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
+  font-family:
+    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   background: transparent !important;
 }
 

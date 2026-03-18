@@ -5,13 +5,14 @@ type CheckboxProps = {
   onChange: (checked: boolean) => void;
   "aria-label": string;
   className?: string;
-};
+} & React.ComponentPropsWithoutRef<"button">;
 
 const Checkbox = ({
   checked,
   onChange,
   "aria-label": ariaLabel,
   className,
+  ...props
 }: CheckboxProps) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === " " || e.key === "Enter") {
@@ -31,11 +32,10 @@ const Checkbox = ({
       onKeyDown={handleKeyDown}
       className={cn(
         "flex size-6 shrink-0 items-center justify-center rounded transition-colors cursor-pointer",
-        checked
-          ? "bg-mint"
-          : "border border-border bg-surface-50",
+        checked ? "bg-mint" : "border border-border bg-surface-50",
         className
       )}
+      {...props}
     >
       {checked && (
         <svg

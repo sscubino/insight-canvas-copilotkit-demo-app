@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 type ButtonVariant = "primary" | "ghost" | "secondary";
-type ButtonSize = "icon" | "sm" | "md" | "lg";
+type ButtonSize = "sm-icon" | "icon" | "sm" | "md" | "lg";
 
 type ButtonProps = {
   variant?: ButtonVariant;
@@ -16,6 +16,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
+  "sm-icon": "size-6 p-1 rounded-sm",
   icon: "size-8 p-2",
   sm: "gap-1.5 px-2.5 py-1.5 text-xs",
   md: "gap-2 h-10 px-3 text-sm",

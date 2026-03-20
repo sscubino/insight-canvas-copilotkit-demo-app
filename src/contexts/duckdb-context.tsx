@@ -21,6 +21,7 @@ import {
   initDuckDB,
   runQuery as runDuckDBQuery,
   loadCSV as loadDuckDBCSV,
+  loadJSON as loadDuckDBJSON,
 } from "@/lib/duckdb";
 
 const DuckDBContext = createContext<DuckDBContextValue | null>(null);
@@ -104,6 +105,16 @@ const DuckDBProvider = ({ children }: { children: ReactNode }) => {
     []
   );
 
+  const loadJSON = useCallback(
+    async (tableName: string, jsonContent: string): Promise<DatasetSchema> => {
+      const db = dbRef.current;
+      const conn = connRef.current;
+      if (!db || !conn) throw new Error("DuckDB is not initialized");
+      return loadDuckDBJSON(db, conn, tableName, jsonContent);
+    },
+    []
+  );
+
   const contextValue = useMemo<DuckDBContextValue>(
     () => ({
       status,
@@ -112,8 +123,9 @@ const DuckDBProvider = ({ children }: { children: ReactNode }) => {
       error,
       runQuery,
       loadCSV,
+      loadJSON,
     }),
-    [status, error, runQuery, loadCSV]
+    [status, error, runQuery, loadCSV, loadJSON]
   );
 
   return (

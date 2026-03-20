@@ -14,10 +14,15 @@
 
   --border: #dbdbe5;
   --border-card: #ffffff;
-  --border-action: #bec2ff;
 
   --action: #010507;
   --action-disabled: #01050726;
+
+  --accent: #189370;
+  --accent-foreground: #85ecce;
+
+  --destructive: #c90f0f;
+  --destructive-foreground: #f0f0f4;
 
   --site-background: #dedee9;
 
@@ -58,10 +63,15 @@
 
   --color-border: var(--border);
   --color-border-card: var(--border-card);
-  --color-border-action: var(--border-action);
 
   --color-action: var(--action);
   --color-action-disabled: var(--action-disabled);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
   --color-site-background: var(--site-background);
 
@@ -90,6 +100,14 @@ body {
   color: var(--foreground);
 }
 
+/* Custom Styles */
+.card-container {
+  background: var(--surface-50);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
 /* ReactFlow overrides */
 .react-flow__edge-path {
   stroke: var(--dim) !important;
@@ -110,6 +128,8 @@ body {
 
 /* CopilotChat panel overrides */
 .copilotKitChat {
+  font-family:
+    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
@@ -118,10 +138,14 @@ body {
 }
 
 .copilotKitMessages {
+  font-family:
+    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   background: transparent !important;
 }
 
 .copilotKitInputContainer {
+  font-family:
+    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   background: transparent !important;
 }
 
@@ -135,4 +159,27 @@ body {
 
 .copilotKitMessage.copilotKitUserMessage {
   margin-top: 0 !important;
+}
+
+/* Utility classes */
+@utility scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--surface-hover);
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--surface-hover);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--dim);
+  }
 }

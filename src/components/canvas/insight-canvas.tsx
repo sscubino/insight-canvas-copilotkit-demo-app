@@ -6,7 +6,6 @@ import {
   ReactFlowProvider,
   Background,
   type DefaultEdgeOptions,
-  MarkerType,
   BackgroundVariant,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";

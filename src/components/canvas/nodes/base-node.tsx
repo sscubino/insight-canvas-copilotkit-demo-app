@@ -13,7 +13,7 @@ const BaseNodeWrapper = ({
 }) => (
   <div
     className={cn(
-      "w-60 rounded-lg border border-card bg-surface shadow-md",
+      "w-60 rounded-lg border border-border bg-surface shadow-md",
       className
     )}
   >

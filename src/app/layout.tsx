@@ -6,6 +6,7 @@ import { SessionsSidebar } from "@/components/layout/sessions-sidebar";
 import "@copilotkit/react-ui/styles.css";
 import "./globals.css";
 import { BackgroundShapes } from "@/components/layout/background-shapes";
+import { cn } from "@/lib/utils";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -33,13 +34,16 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body
-        className={`${jakarta.variable} ${splineMono.variable} flex h-screen w-full overflow-hidden font-sans antialiased bg-site-background p-2`}
+        className={cn(
+          `${jakarta.variable} ${splineMono.variable}`,
+          "flex h-screen overflow-hidden font-sans antialiased bg-site-background p-2"
+        )}
       >
         <BackgroundShapes />
         <SessionsSidebar />
         <CopilotKit runtimeUrl="/api/copilotkit" enableInspector={false}>
           <DuckDBProvider>
-            <div className="flex flex-col flex-1 ml-2">{children}</div>
+            <div className="flex-1 ml-2">{children}</div>
           </DuckDBProvider>
         </CopilotKit>
       </body>

@@ -65,3 +65,18 @@ export const loadCSV = async (
 
   return extractSchema(conn, tableName);
 };
+
+export const loadJSON = async (
+  db: duckdb.AsyncDuckDB,
+  conn: duckdb.AsyncDuckDBConnection,
+  tableName: string,
+  jsonContent: string
+): Promise<DatasetSchema> => {
+  const fileName = `${tableName}.json`;
+  await db.registerFileText(fileName, jsonContent);
+  await conn.query(
+    `CREATE OR REPLACE TABLE ${tableName} AS SELECT * FROM read_json_auto('${fileName}')`
+  );
+
+  return extractSchema(conn, tableName);
+};

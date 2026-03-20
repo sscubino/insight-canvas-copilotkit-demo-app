@@ -13,7 +13,7 @@ const NodeDetailDrawer = () => {
     <Drawer
       isOpen={!!selectedNode}
       onClose={deselectNode}
-      className="h-[calc(100%-60px)]"
+      className="max-h-[calc(100%-80px)]"
     >
       <DrawerContent>
         {selectedNode && (

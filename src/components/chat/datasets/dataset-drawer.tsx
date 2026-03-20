@@ -30,7 +30,7 @@ const DatasetDrawer = () => {
     <Drawer
       isOpen={isDrawerOpen}
       onClose={closeDrawer}
-      className="h-[calc(100%-60px)]"
+      className="max-h-[calc(100%-80px)]"
     >
       <DrawerContent>
         <div className="flex w-full flex-col items-center gap-4">

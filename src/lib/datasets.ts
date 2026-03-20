@@ -63,16 +63,37 @@ export const markDatasetAsLoaded = (
   };
 };
 
+const deriveDatasetDisplayName = (fileName: string): string => {
+  const withoutExt = fileName.replace(/\.[^./\\]+$/u, "");
+  const spaced = withoutExt.replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim();
+  return spaced.length > 0 ? spaced : "Untitled dataset";
+};
+
+const toSqlSafeTableSlug = (label: string): string => {
+  const slug = label
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_|_$/g, "");
+  const base = slug.length > 0 ? slug : "dataset";
+  return /^\d/.test(base) ? `t_${base}` : base;
+};
+
 export const getDatasetMetaFromUploadedFile = (
   file: File,
   format: DatasetFormat
 ): DatasetMeta => {
-  const formatedName = file.name.replace(/\.[^.]+$/, "").replace(/[_-]/g, " ");
+  const name = deriveDatasetDisplayName(file.name);
+  const uniqueSuffix = crypto.randomUUID().replace(/-/g, "").slice(0, 8);
+  const tableName = `${toSqlSafeTableSlug(name)}_${uniqueSuffix}`;
+
   return {
-    id: `user-${Date.now()}-${formatedName.toLowerCase()}`,
-    name: formatedName,
+    id: `user-dataset-${crypto.randomUUID()}`,
+    name,
     fileName: file.name,
-    tableName: formatedName.toLowerCase(),
+    tableName,
     source: "user",
     format,
   };

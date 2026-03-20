@@ -1,6 +1,7 @@
 "use client";
 
 import { StatusDot } from "@/components/ui/status-dot";
+import { PlusIcon } from "@/icons/plus";
 
 type SessionItem = {
   id: string;
@@ -13,29 +14,32 @@ const MOCK_SESSIONS: SessionItem[] = [
   {
     id: "session-1",
     name: "Churn Analysis Q4",
-    dotClass: "bg-insight",
+    dotClass: "bg-mint",
     active: true,
   },
   {
     id: "session-2",
-    name: "Retention Deep Dive",
-    dotClass: "bg-hypothesis",
+    name: "Retention Investigation",
+    dotClass: "bg-yellow",
   },
   {
     id: "session-3",
-    name: "Segmentation v2",
-    dotClass: "bg-action",
+    name: "Onboarding Friction Review",
+    dotClass: "bg-lilac",
   },
 ];
 
 const SidebarHeader = () => {
   return (
-    <header className="flex items-center gap-2 border-b border-border px-3.5 py-4">
-      <div
-        className="size-6 shrink-0 rounded-md bg-linear-to-br from-accent to-cyan-500"
-        aria-hidden="true"
-      />
-      <span className="text-lg font-bold text-foreground">Insight Canvas</span>
+    <header className="flex items-center justify-between border-b border-border-card px-5 py-2.5">
+      <div className="flex items-center gap-2">
+        <span role="img" aria-label="kite" tabIndex={0} className="text-xl">
+          🪁
+        </span>
+        <span className="text-lg font-medium text-foreground">
+          Insight Canvas
+        </span>
+      </div>
     </header>
   );
 };
@@ -54,8 +58,8 @@ const SessionsNav = () => {
               type="button"
               className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs transition-colors ${
                 active
-                  ? "border border-accent-border bg-accent-light font-medium text-accent"
-                  : "text-muted hover:bg-surface-3"
+                  ? "border border-border-action bg-lilac-light/10 font-medium text-foreground"
+                  : "text-muted hover:bg-surface-hover"
               }`}
               aria-current={active ? "true" : undefined}
             >
@@ -74,23 +78,24 @@ const SidebarFooter = ({
 }: {
   children: React.ReactNode | React.ReactNode[];
 }) => {
-  return <div className="border-t border-border p-3">{children}</div>;
+  return <div className="border-t border-border-card p-3">{children}</div>;
 };
 
 const NewSessionButton = () => {
   return (
     <button
       type="button"
-      className="flex w-full items-center justify-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+      className="flex w-full items-center justify-center gap-1.5 rounded-md bg-action px-3 py-3 font-mono text-sm font-medium uppercase tracking-wider text-invert transition-opacity hover:opacity-90"
+      aria-label="Create new session"
     >
-      + New session
+      New session <PlusIcon width={20} height={20} aria-hidden="true" />
     </button>
   );
 };
 
 const SessionsSidebar = () => {
   return (
-    <aside className="flex w-[210px] shrink-0 flex-col border-r border-border bg-surface-2">
+    <aside className="flex w-[260px] shrink-0 flex-col border border-border-card bg-surface-50 rounded-lg">
       <SidebarHeader />
       <SessionsNav />
       <SidebarFooter>

@@ -1,5 +1,6 @@
 import { NODE_VARIANTS } from "@/constants/nodes-config";
 import type { Node, Edge } from "@xyflow/react";
+import type { ComponentType, SVGProps } from "react";
 
 export type NodeVariant = (typeof NODE_VARIANTS)[number];
 
@@ -65,8 +66,7 @@ export type CanvasEdge = Edge;
 
 export type NodeConfig = {
   label: string;
-  colorClass: string;
-  bgClass: string;
-  borderClass: string;
-  dotColor: string;
+  eyebrowClass: string;
+  wrapperClass: string;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
 };

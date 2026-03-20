@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Spline_Sans_Mono } from "next/font/google";
 import { CopilotKit } from "@copilotkit/react-core";
 import { DuckDBProvider } from "@/contexts/duckdb-context";
 import { SessionsSidebar } from "@/components/layout/sessions-sidebar";
 import "@copilotkit/react-ui/styles.css";
 import "./globals.css";
+import { BackgroundShapes } from "@/components/layout/background-shapes";
 
-const inter = Inter({
-  variable: "--font-inter",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+const splineMono = Spline_Sans_Mono({
+  variable: "--font-spline-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
 });
@@ -32,12 +33,13 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} flex h-screen w-full overflow-hidden font-sans antialiased`}
+        className={`${jakarta.variable} ${splineMono.variable} flex h-screen w-full overflow-hidden font-sans antialiased bg-site-background p-2`}
       >
+        <BackgroundShapes />
         <SessionsSidebar />
         <CopilotKit runtimeUrl="/api/copilotkit" enableInspector={false}>
           <DuckDBProvider>
-            <div className="flex flex-col flex-1">{children}</div>
+            <div className="flex flex-col flex-1 ml-2">{children}</div>
           </DuckDBProvider>
         </CopilotKit>
       </body>

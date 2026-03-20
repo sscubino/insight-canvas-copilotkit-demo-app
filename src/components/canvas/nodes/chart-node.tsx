@@ -5,8 +5,11 @@ import { VegaChart } from "@/components/charts/vega-chart";
 
 const ChartNode = ({ data }: NodeProps<ChartCanvasNode>) => {
   return (
-    <BaseNode data={data}>
-      <VegaChart spec={data.chartSpec} className="mt-1.5" />
+    <BaseNode data={data} className="min-w-60">
+      <VegaChart
+        spec={data.chartSpec}
+        className="mt-1.5 flex! justify-center!"
+      />
     </BaseNode>
   );
 };

@@ -28,8 +28,8 @@ const Home = () => {
     <CanvasStateProvider>
       <CopilotCanvasSync />
       <CopilotDataToolsSync schema={schema} />
-      <div className="flex h-full">
-        <main className="relative flex-1 overflow-hidden bg-background">
+      <div className="flex h-full space-x-2">
+        <main className="relative flex-1 overflow-hidden bg-surface-50 rounded-lg border border-border-card">
           <InsightCanvas />
         </main>
         <ChatPanel />

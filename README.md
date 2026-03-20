@@ -48,7 +48,7 @@ The entire data query layer runs client-side. DuckDB WASM loads CSV datasets int
 
 Canvas nodes are synchronized between the AI agent and the React frontend via CopilotKit's shared state system. When the agent creates a node, it appears on the canvas. When the user edits a node, the agent sees the change and can respond — enabling true co-creation.
 
-### Agent Chat Panel
+### Insight Copilot Chat Panel
 
 A side panel provides a conversational interface where the agent explains its reasoning, reports what actions it took on the canvas, and accepts follow-up prompts.
 

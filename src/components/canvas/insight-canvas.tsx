@@ -7,6 +7,7 @@ import {
   Background,
   type DefaultEdgeOptions,
   MarkerType,
+  BackgroundVariant,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
@@ -20,12 +21,6 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
     stroke: "var(--dim)",
     strokeWidth: 1.5,
     strokeDasharray: "4 3",
-  },
-  markerEnd: {
-    type: MarkerType.ArrowClosed,
-    width: 12,
-    height: 12,
-    color: "var(--dim)",
   },
 };
 
@@ -52,10 +47,10 @@ const InsightCanvasInner = () => {
         maxZoom={2}
       >
         <Background
-          gap={32}
-          size={1}
-          color="var(--dim)"
-          style={{ opacity: 0.3 }}
+          gap={15}
+          size={2}
+          variant={BackgroundVariant.Dots}
+          style={{ opacity: 0.2 }}
         />
       </ReactFlow>
       <CanvasZoomControls />

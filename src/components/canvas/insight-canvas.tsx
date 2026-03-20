@@ -24,8 +24,15 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
 };
 
 const InsightCanvasInner = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } =
-    useCanvasState();
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    selectNode,
+    deselectNode,
+  } = useCanvasState();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useAutoFitNewNodes({ nodes, containerRef });
@@ -38,6 +45,8 @@ const InsightCanvasInner = () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onNodeClick={(_, node) => selectNode(node.id)}
+        onPaneClick={() => deselectNode()}
         nodeTypes={NODE_TYPES}
         defaultEdgeOptions={defaultEdgeOptions}
         defaultViewport={{ x: 0, y: 0, zoom: 1 }}

@@ -2,8 +2,8 @@
 
 import { useDatasets } from "@/contexts/dataset-context";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
-import { FileDropZone } from "@/components/datasets/file-drop-zone";
-import { DatasetCard } from "@/components/datasets/dataset-card";
+import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
+import { DatasetCard } from "@/components/chat/datasets/dataset-card";
 
 const DatasetDrawer = () => {
   const {
@@ -27,7 +27,11 @@ const DatasetDrawer = () => {
   const userDatasets = datasets.filter((d) => d.source === "user");
 
   return (
-    <Drawer isOpen={isDrawerOpen} onClose={closeDrawer}>
+    <Drawer
+      isOpen={isDrawerOpen}
+      onClose={closeDrawer}
+      className="h-[calc(100%-60px)]"
+    >
       <DrawerContent>
         <div className="flex w-full flex-col items-center gap-4">
           <p className="text-center text-sm font-medium text-foreground">

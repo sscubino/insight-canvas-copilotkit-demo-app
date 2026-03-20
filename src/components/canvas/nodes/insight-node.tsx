@@ -5,9 +5,9 @@ import {
   BaseNodeText,
 } from "@/components/canvas/nodes/common/base-node";
 
-const InsightNode = ({ data }: NodeProps<InsightCanvasNode>) => {
+const InsightNode = ({ data, id }: NodeProps<InsightCanvasNode>) => {
   return (
-    <BaseNode data={data}>
+    <BaseNode data={data} id={id}>
       <BaseNodeText>{data.content}</BaseNodeText>
     </BaseNode>
   );

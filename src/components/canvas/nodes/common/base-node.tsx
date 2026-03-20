@@ -1,22 +1,38 @@
 import type { ReactNode } from "react";
 import { Handle, Position } from "@xyflow/react";
-import type { CanvasNodeData } from "@/types/canvas";
+import type { CanvasNodeData, NodeConfig } from "@/types/canvas";
 import { NODE_CONFIG } from "@/constants/nodes-config";
 import { cn } from "@/lib/utils";
+import { useCanvasState } from "@/contexts/canvas-state-context";
+import { StatusDot } from "@/components/ui/status-dot";
+
+type BaseNodeWrapperProps = {
+  children: ReactNode;
+  selected?: boolean;
+  config: NodeConfig;
+  className?: string;
+};
 
 const BaseNodeWrapper = ({
   children,
+  selected,
+  config,
   className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) => (
+}: BaseNodeWrapperProps) => (
   <div
     className={cn(
-      "w-60 rounded-lg border border-border bg-surface shadow-md",
+      "relative w-60 rounded-lg bg-surface",
+      selected
+        ? cn("border-2", config.selectedBorderClass, config.selectedShadowClass)
+        : "border border-border shadow-md",
       className
     )}
   >
+    {selected && (
+      <StatusDot
+        className={cn("absolute right-2 top-2 z-50", config.selectedDotClass)}
+      />
+    )}
     {children}
   </div>
 );
@@ -39,7 +55,11 @@ const BaseNodeContent = ({
 }: {
   children: ReactNode;
   className?: string;
-}) => <div className={cn("px-4 my-3 space-y-3", className)}>{children}</div>;
+}) => (
+  <div className={cn("px-4 my-3 space-y-3 max-w-min min-w-60", className)}>
+    {children}
+  </div>
+);
 
 const BaseNodeFooter = ({
   children,
@@ -125,17 +145,23 @@ const BaseNodeDetails = ({
 );
 
 type BaseNodeProps = {
+  id: string;
   data: CanvasNodeData;
   children: ReactNode;
   className?: string;
 };
 
-const BaseNode = ({ data, children, className }: BaseNodeProps) => {
+const BaseNode = ({ data, children, className, id }: BaseNodeProps) => {
+  const { selectedNodeId } = useCanvasState();
   const config = NODE_CONFIG[data.variant];
   const Icon = config.icon;
 
   return (
-    <BaseNodeWrapper className={cn(config.wrapperClass, className)}>
+    <BaseNodeWrapper
+      selected={selectedNodeId === id}
+      config={config}
+      className={className}
+    >
       <Handle
         type="target"
         position={Position.Left}
@@ -143,7 +169,7 @@ const BaseNode = ({ data, children, className }: BaseNodeProps) => {
       />
 
       <BaseNodeHeader>
-        <BaseNodeEyebrow className={config.eyebrowClass}>
+        <BaseNodeEyebrow className={config.textColorClass}>
           <Icon width={16} height={16} aria-hidden="true" />
           {config.label}
         </BaseNodeEyebrow>

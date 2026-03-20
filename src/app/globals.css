@@ -27,16 +27,22 @@
   --site-background: #dedee9;
 
   --mint: #189370;
+  --mint-selected: #5ae4bb;
   --mint-light: #85ecce;
   --yellow: #996b0f;
+  --yellow-selected: #f4e02f;
   --yellow-light: #fff388;
   --red: #c90f0f;
+  --red-selected: #fab0b3;
   --red-light: #fab0b3;
   --blue: #3b82f6;
+  --blue-selected: #82aff9;
   --blue-light: #bec2ff;
   --lilac: #5844ee;
+  --lilac-selected: #9ca2fc;
   --lilac-light: #bec2ff;
   --orange: #a55c09;
+  --orange-selected: #ffac4d;
   --orange-light: #ffac4d;
 
   --grey: #e2e2ea;
@@ -76,16 +82,22 @@
   --color-site-background: var(--site-background);
 
   --color-mint: var(--mint);
+  --color-mint-selected: var(--mint-selected);
   --color-mint-light: var(--mint-light);
   --color-yellow: var(--yellow);
+  --color-yellow-selected: var(--yellow-selected);
   --color-yellow-light: var(--yellow-light);
   --color-red: var(--red);
+  --color-red-selected: var(--red-selected);
   --color-red-light: var(--red-light);
   --color-blue: var(--blue);
+  --color-blue-selected: var(--blue-selected);
   --color-blue-light: var(--blue-light);
   --color-lilac: var(--lilac);
+  --color-lilac-selected: var(--lilac-selected);
   --color-lilac-light: var(--lilac-light);
   --color-orange: var(--orange);
+  --color-orange-selected: var(--orange-selected);
   --color-orange-light: var(--orange-light);
 
   --color-grey: var(--grey);
@@ -113,6 +125,10 @@ body {
   stroke: var(--dim) !important;
   stroke-width: 1.5;
   stroke-dasharray: 4 3;
+}
+
+.react-flow__node.selected {
+  box-shadow: none !important;
 }
 
 .react-flow__handle {

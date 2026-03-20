@@ -5,9 +5,9 @@ import {
   BaseNodeText,
 } from "@/components/canvas/nodes/common/base-node";
 
-const ActionItemNode = ({ data }: NodeProps<ActionItemCanvasNode>) => {
+const ActionItemNode = ({ data, id }: NodeProps<ActionItemCanvasNode>) => {
   return (
-    <BaseNode data={data}>
+    <BaseNode id={id} data={data}>
       <BaseNodeText>{data.content}</BaseNodeText>
     </BaseNode>
   );

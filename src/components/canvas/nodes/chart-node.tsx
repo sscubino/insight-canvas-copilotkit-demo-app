@@ -3,9 +3,9 @@ import type { ChartCanvasNode } from "@/types/canvas";
 import { BaseNode } from "@/components/canvas/nodes/common/base-node";
 import { VegaChart } from "@/components/charts/vega-chart";
 
-const ChartNode = ({ data }: NodeProps<ChartCanvasNode>) => {
+const ChartNode = ({ data, id }: NodeProps<ChartCanvasNode>) => {
   return (
-    <BaseNode data={data} className="min-w-60">
+    <BaseNode data={data} id={id} className="w-auto min-w-min">
       <VegaChart
         spec={data.chartSpec}
         className="mt-1.5 flex! justify-center!"

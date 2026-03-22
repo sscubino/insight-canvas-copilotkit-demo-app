@@ -71,5 +71,6 @@ export type NodeConfig = {
   selectedBorderClass: string;
   selectedShadowClass: string;
   selectedDotClass: string;
+  pillContainerClass: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
 };

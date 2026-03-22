@@ -14,12 +14,14 @@ import type {
   ChartNodeData,
   ExperimentNodeData,
 } from "@/types/canvas";
+import { DrawerContent } from "@/components/ui/drawer";
 
 type NodeDetailContentProps = {
   node: CanvasNode;
   nodes: CanvasNode[];
   edges: CanvasEdge[];
   onNodeClick?: (id: string) => void;
+  onNodeDataChange?: (data: Partial<CanvasNodeData>) => void;
 };
 
 const getContentText = (data: CanvasNodeData): string | null => {
@@ -28,10 +30,43 @@ const getContentText = (data: CanvasNodeData): string | null => {
   return null;
 };
 
+const ContentTextSection = ({
+  data,
+  onNodeDataChange,
+}: {
+  data: CanvasNodeData;
+  onNodeDataChange?: (data: Partial<CanvasNodeData>) => void;
+}) => {
+  const config = NODE_CONFIG[data.variant];
+  const contentText = getContentText(data);
+
+  if (typeof contentText !== "string") return null;
+
+  const handleConfirmEdit = (nextValue: string) => {
+    if (data.variant === "experiment") {
+      onNodeDataChange?.({ plan: nextValue });
+      return;
+    }
+    onNodeDataChange?.({ content: nextValue });
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      <DrawerSectionLabel>{config.label}</DrawerSectionLabel>
+      <DrawerEditableField
+        value={contentText}
+        variant={data.variant}
+        onConfirmEdit={handleConfirmEdit}
+      />
+    </div>
+  );
+};
+
 const ChartSections = ({ data }: { data: ChartNodeData }) => (
   <>
     {data.chartSpec && (
       <div className="flex flex-col gap-2">
+        <DrawerSectionLabel>Chart</DrawerSectionLabel>
         <DrawerCard className="flex justify-center">
           <VegaChart
             spec={data.chartSpec}
@@ -79,30 +114,22 @@ const NodeDetailContent = ({
   nodes,
   edges,
   onNodeClick,
+  onNodeDataChange,
 }: NodeDetailContentProps) => {
   const { data } = node;
-  const config = NODE_CONFIG[data.variant];
-  const contentText = getContentText(data);
 
   return (
-    <div className="flex w-full flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <DrawerSectionLabel>{config.label}</DrawerSectionLabel>
-        {contentText && (
-          <DrawerEditableField value={contentText} variant={data.variant} />
-        )}
-      </div>
-
+    <DrawerContent className="flex w-full flex-col gap-5">
+      <ContentTextSection data={data} onNodeDataChange={onNodeDataChange} />
       {data.variant === "chart" && <ChartSections data={data} />}
       {data.variant === "experiment" && <ExperimentSections data={data} />}
-
       <DrawerConnectedNodes
         nodeId={node.id}
         nodes={nodes}
         edges={edges}
         onNodeClick={onNodeClick}
       />
-    </div>
+    </DrawerContent>
   );
 };
 

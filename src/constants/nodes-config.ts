@@ -30,6 +30,7 @@ export const NODE_CONFIG: Record<NodeVariant, NodeConfig> = {
     selectedBorderClass: "border-lilac-selected",
     selectedShadowClass: "shadow-[0px_5px_25px_0px_var(--lilac-selected)]",
     selectedDotClass: "bg-lilac-selected",
+    pillContainerClass: "bg-lilac-light/10 border-lilac-light/30",
     icon: ChartBarIcon,
   },
   insight: {
@@ -39,6 +40,7 @@ export const NODE_CONFIG: Record<NodeVariant, NodeConfig> = {
     selectedBorderClass: "border-mint-selected",
     selectedShadowClass: "shadow-[0px_5px_25px_0px_var(--mint-selected)]",
     selectedDotClass: "bg-mint-selected",
+    pillContainerClass: "bg-mint-light/15 border-mint-light/30",
     icon: EyeIcon,
   },
   hypothesis: {
@@ -48,6 +50,7 @@ export const NODE_CONFIG: Record<NodeVariant, NodeConfig> = {
     selectedBorderClass: "border-yellow-selected",
     selectedShadowClass: "shadow-[0px_5px_25px_0px_var(--yellow-selected)]",
     selectedDotClass: "bg-yellow-selected",
+    pillContainerClass: "bg-yellow-light/10 border-yellow-light/30",
     icon: EyeglassesIcon,
   },
   experiment: {
@@ -57,6 +60,7 @@ export const NODE_CONFIG: Record<NodeVariant, NodeConfig> = {
     selectedBorderClass: "border-red-selected",
     selectedShadowClass: "shadow-[0px_5px_25px_0px_var(--red-selected)]",
     selectedDotClass: "bg-red-selected",
+    pillContainerClass: "bg-red-light/10 border-red-light/30",
     icon: FlaskIcon,
   },
   action_item: {
@@ -66,6 +70,7 @@ export const NODE_CONFIG: Record<NodeVariant, NodeConfig> = {
     selectedBorderClass: "border-blue-selected",
     selectedShadowClass: "shadow-[0px_5px_25px_0px_var(--blue-selected)]",
     selectedDotClass: "bg-blue-selected",
+    pillContainerClass: "bg-blue-light/10 border-blue-light/30",
     icon: CheckCircleIcon,
   },
   question: {
@@ -75,6 +80,7 @@ export const NODE_CONFIG: Record<NodeVariant, NodeConfig> = {
     selectedBorderClass: "border-orange-selected",
     selectedShadowClass: "shadow-[0px_5px_25px_0px_var(--orange-selected)]",
     selectedDotClass: "bg-orange-selected",
+    pillContainerClass: "bg-orange-light/10 border-orange-light/30",
     icon: QuestionIcon,
   },
 };

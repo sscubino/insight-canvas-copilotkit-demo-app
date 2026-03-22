@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { cn } from "@/lib/utils";
 import { NODE_CONFIG } from "@/constants/nodes-config";
 import { PencilSimpleIcon } from "@/components/icons/pencil-simple";
@@ -43,23 +49,50 @@ const DrawerCard = ({ children, className }: DrawerCardProps) => (
 type DrawerEditableFieldProps = {
   value: string;
   variant: NodeVariant;
+  onConfirmEdit?: (value: string) => void;
 };
 
-const VARIANT_PILL_STYLES: Record<NodeVariant, string> = {
-  chart: "bg-lilac-light/10 border-lilac-light/30",
-  insight: "bg-mint-light/15 border-mint-light/30",
-  hypothesis: "bg-lilac-light/10 border-lilac-light/30",
-  experiment: "bg-red-light/10 border-red-light/30",
-  action_item: "bg-blue-light/10 border-blue-light/30",
-  question: "bg-orange-light/10 border-orange-light/30",
-};
-
-const DrawerEditableField = ({ value, variant }: DrawerEditableFieldProps) => {
+const DrawerEditableField = ({
+  value,
+  variant,
+  onConfirmEdit,
+}: DrawerEditableFieldProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [draftValue, setDraftValue] = useState(value);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleStartEdit = () => setIsEditing(true);
-  const handleCancel = () => setIsEditing(false);
-  const handleConfirm = () => setIsEditing(false);
+  const handleTextareaResize = useCallback(() => {
+    const textarea = textareaRef.current;
+
+    if (!textarea) return;
+
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }, []);
+
+  const handleStartEdit = () => {
+    setDraftValue(value);
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setDraftValue(value);
+    setIsEditing(false);
+  };
+
+  const handleConfirm = () => {
+    if (draftValue !== value) onConfirmEdit?.(draftValue);
+    setIsEditing(false);
+  };
+
+  useEffect(() => {
+    setDraftValue(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (!isEditing) return;
+    handleTextareaResize();
+  }, [draftValue, handleTextareaResize, isEditing]);
 
   return (
     <div className="flex items-start gap-2.5">
@@ -67,15 +100,19 @@ const DrawerEditableField = ({ value, variant }: DrawerEditableFieldProps) => {
         <div
           className={cn(
             "min-h-9 rounded-lg border px-2 py-1",
-            VARIANT_PILL_STYLES[variant]
+            NODE_CONFIG[variant].pillContainerClass,
+            isEditing && "bg-surface-50 border-border"
           )}
         >
           {isEditing ? (
             <textarea
-              defaultValue={value}
-              className="w-full resize-none bg-transparent text-base leading-6 text-muted outline-none"
-              rows={3}
+              ref={textareaRef}
+              value={draftValue}
+              className="w-full resize-none overflow-hidden bg-transparent text-base leading-6 text-muted outline-none flex"
+              rows={1}
               aria-label="Edit field"
+              onInput={handleTextareaResize}
+              onChange={(event) => setDraftValue(event.target.value)}
             />
           ) : (
             <p className="text-base leading-6 text-muted">{value}</p>

@@ -1,13 +1,57 @@
 "use client";
 
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { useEffect, useState } from "react";
+import { useCopilotChatInternal } from "@copilotkit/react-core";
+import { Drawer, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { useCanvasState } from "@/contexts/canvas-state-context";
 import { NodeDetailContent } from "@/components/chat/node-detail/node-detail-content";
+import { NodeDetailFooter } from "@/components/chat/node-detail/node-detail-footer";
+import type { CanvasNodeData } from "@/types/canvas";
 
 const NodeDetailDrawer = () => {
-  const { selectedNodeId, deselectNode, selectNode, nodes, edges } =
-    useCanvasState();
+  const {
+    selectedNodeId,
+    deselectNode,
+    selectNode,
+    removeNode,
+    updateNode,
+    nodes,
+    edges,
+  } = useCanvasState();
+  const { sendMessage } = useCopilotChatInternal();
+  const [hasPendingEdits, setHasPendingEdits] = useState(false);
   const selectedNode = nodes.find((n) => n.id === selectedNodeId);
+
+  useEffect(() => {
+    setHasPendingEdits(false);
+  }, [selectedNode?.id]);
+
+  const handleRemoveNode = () => {
+    if (!selectedNode) return;
+    removeNode(selectedNode.id);
+    deselectNode();
+  };
+
+  const handleNodeDataChange = (data: Partial<CanvasNodeData>) => {
+    if (!selectedNode) return;
+    updateNode(selectedNode.id, data);
+    setHasPendingEdits(true);
+  };
+
+  const handleRunEdits = () => {
+    if (!selectedNode || !hasPendingEdits) return;
+
+    void sendMessage(
+      {
+        id: `user-edit-${crypto.randomUUID()}`,
+        role: "user",
+        content: `I edited the node "${selectedNode.data.title}".`,
+      },
+      { followUp: true }
+    );
+    setHasPendingEdits(false);
+    deselectNode();
+  };
 
   return (
     <Drawer
@@ -15,16 +59,26 @@ const NodeDetailDrawer = () => {
       onClose={deselectNode}
       className="max-h-[calc(100%-80px)]"
     >
-      <DrawerContent>
-        {selectedNode && (
+      {selectedNode && (
+        <>
+          <DrawerHeader>
+            <DrawerTitle>{selectedNode?.data.title}</DrawerTitle>
+          </DrawerHeader>
           <NodeDetailContent
             node={selectedNode}
             nodes={nodes}
             edges={edges}
             onNodeClick={selectNode}
+            onNodeDataChange={handleNodeDataChange}
           />
-        )}
-      </DrawerContent>
+          <NodeDetailFooter
+            node={selectedNode}
+            hasPendingEdits={hasPendingEdits}
+            handleRemoveNode={handleRemoveNode}
+            handleRunEdits={handleRunEdits}
+          />
+        </>
+      )}
     </Drawer>
   );
 };

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-type ButtonVariant = "primary" | "ghost" | "secondary";
+type ButtonVariant = "primary" | "ghost" | "secondary" | "destructive";
 type ButtonSize = "sm-icon" | "icon" | "sm" | "md" | "lg";
 
 type ButtonProps = {
@@ -10,9 +10,13 @@ type ButtonProps = {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-action text-invert font-mono font-medium uppercase tracking-wider hover:opacity-90",
-  ghost: "text-foreground hover:bg-grey-5",
-  secondary: "bg-surface text-foreground hover:bg-surface-hover",
+    "bg-action text-invert font-mono font-medium uppercase tracking-wider hover:opacity-90 disabled:text-dim disabled:bg-action/10 disabled:opacity-100",
+  ghost:
+    "text-foreground hover:bg-grey-5 disabled:text-dim disabled:bg-transparent",
+  secondary:
+    "bg-surface text-foreground hover:bg-surface-hover disabled:text-dim disabled:bg-surface",
+  destructive:
+    "bg-destructive/10 text-destructive hover:bg-destructive/25 disabled:text-dim disabled:bg-transparent",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -33,7 +37,7 @@ const Button = ({
   <button
     type={type}
     className={cn(
-      "inline-flex items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/40 cursor-pointer",
+      "inline-flex items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/40 cursor-pointer disabled:cursor-auto",
       variantStyles[variant],
       sizeStyles[size],
       className

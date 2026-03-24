@@ -62,6 +62,7 @@ const SessionsSidebar = () => {
                   isActive={isActive}
                   aria-label={session.name}
                   onClick={() => {
+                    if (activeSessionId === session.id) return;
                     void switchSession(session.id);
                   }}
                 >

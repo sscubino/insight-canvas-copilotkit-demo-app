@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useCopilotChatInternal } from "@copilotkit/react-core";
 import { useCanvasState } from "@/contexts/canvas-state-context";
 import { useDatasets } from "@/contexts/dataset-context";
@@ -47,11 +47,17 @@ const useChatSessionSync = () => {
     createSessionFromFirstPrompt,
     saveActiveSessionSnapshot,
     setSessionName,
+    setSessionMemorySummary,
     consumeHydrationRecord,
   } = useSession();
 
-  const selectedDatasetIds = selectedDatasets.map((dataset) => dataset.id);
-  const selectedDatasetNames = selectedDatasets.map((dataset) => dataset.name);
+  const { selectedDatasetIds, selectedDatasetNames } = useMemo(() => {
+    return {
+      selectedDatasetIds: selectedDatasets.map((dataset) => dataset.id),
+      selectedDatasetNames: selectedDatasets.map((dataset) => dataset.name),
+    };
+  }, [selectedDatasets]);
+
   const prevIsLoadingRef = useRef(false);
   const previousSummaryRef = useRef<string | null>(null);
 
@@ -63,34 +69,21 @@ const useChatSessionSync = () => {
     return getMessageContentText(firstUserMessage).trim();
   }, [messages]);
 
-  const buildSnapshot = useCallback(
-    (prompt: string, memorySummaryOverride?: string): SessionSnapshotInput => {
-      const memorySummary =
-        memorySummaryOverride ||
-        previousSummaryRef.current?.trim() ||
-        buildHeuristicSessionMemorySummary({
-          prompt,
-          selectedDatasetNames,
-          nodes,
-        });
-
-      return {
-        messages: serializeForStorage(messages),
-        canvas: { nodes, edges, selectedNodeId },
-        selectedDatasetIds,
-        selectedDatasetNames,
-        memorySummary,
-      };
-    },
-    [
-      messages,
-      nodes,
-      edges,
-      selectedNodeId,
+  const buildSnapshot = useCallback((): SessionSnapshotInput => {
+    return {
+      messages: serializeForStorage(messages),
+      canvas: { nodes, edges, selectedNodeId },
       selectedDatasetIds,
       selectedDatasetNames,
-    ]
-  );
+    };
+  }, [
+    messages,
+    nodes,
+    edges,
+    selectedNodeId,
+    selectedDatasetIds,
+    selectedDatasetNames,
+  ]);
 
   useEffect(() => {
     if (!hydrationRecord) return;
@@ -120,6 +113,7 @@ const useChatSessionSync = () => {
   useEffect(() => {
     if (!isInitialized) return;
     if (activeSessionId) return;
+    if (hydrationRecord) return;
 
     previousSummaryRef.current = null;
     setMessages([]);
@@ -130,6 +124,7 @@ const useChatSessionSync = () => {
     resetVersion,
     isInitialized,
     activeSessionId,
+    hydrationRecord,
     setMessages,
     replaceCanvasState,
     setSelectedDatasetIds,
@@ -141,14 +136,12 @@ const useChatSessionSync = () => {
     if (!activeSessionId) return;
     if (hydrationRecord) return;
 
-    const firstUserPrompt = getFirstUserPrompt();
-    saveActiveSessionSnapshot(buildSnapshot(firstUserPrompt));
+    saveActiveSessionSnapshot(buildSnapshot());
   }, [
     activeSessionId,
     isInitialized,
-    messages,
-    getFirstUserPrompt,
     hydrationRecord,
+    getFirstUserPrompt,
     buildSnapshot,
     saveActiveSessionSnapshot,
   ]);
@@ -182,12 +175,10 @@ const useChatSessionSync = () => {
         const nextSummary = generatedSummary ?? fallbackSummary;
         previousSummaryRef.current = nextSummary;
 
-        saveActiveSessionSnapshot(buildSnapshot(firstUserPrompt, nextSummary));
+        setSessionMemorySummary(activeSessionId, nextSummary);
       } catch {
         previousSummaryRef.current = fallbackSummary;
-        saveActiveSessionSnapshot(
-          buildSnapshot(firstUserPrompt, fallbackSummary)
-        );
+        setSessionMemorySummary(activeSessionId, fallbackSummary);
       }
     };
 
@@ -199,7 +190,7 @@ const useChatSessionSync = () => {
     nodes,
     selectedDatasetNames,
     buildSnapshot,
-    saveActiveSessionSnapshot,
+    setSessionMemorySummary,
     getFirstUserPrompt,
   ]);
 
@@ -209,7 +200,7 @@ const useChatSessionSync = () => {
     const sessionId = await createSessionFromFirstPrompt({
       firstPrompt: prompt,
       selectedDatasetIds,
-      snapshot: buildSnapshot(prompt),
+      snapshot: buildSnapshot(),
     });
 
     try {

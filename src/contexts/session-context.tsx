@@ -26,7 +26,12 @@ import type {
 } from "@/types/session";
 import { buildDefaultSessionName, upsertSessionInList } from "@/lib/sessions";
 
-const AUTOSAVE_DEBOUNCE_MS = 1000;
+const AUTOSAVE_DEBOUNCE_MS = 700;
+
+type PendingAutosave = {
+  sessionId: string;
+  snapshot: SessionSnapshotInput;
+};
 
 type SessionContextValue = {
   sessions: SessionListItem[];
@@ -44,6 +49,10 @@ type SessionContextValue = {
   flushActiveSessionSnapshot: (snapshot: SessionSnapshotInput) => Promise<void>;
   switchSession: (sessionId: string) => Promise<void>;
   setSessionName: (sessionId: string, name: string) => Promise<void>;
+  setSessionMemorySummary: (
+    sessionId: string,
+    summary: string
+  ) => Promise<void>;
   consumeHydrationRecord: () => void;
 };
 
@@ -61,7 +70,7 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   const autosaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const latestAutosaveRef = useRef<SessionSnapshotInput | null>(null);
+  const latestAutosaveRef = useRef<PendingAutosave | null>(null);
   const activeSessionIdRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -73,9 +82,10 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const flushPendingAutosave = useCallback(async () => {
-    const snapshot = latestAutosaveRef.current;
-    const sessionId = activeSessionIdRef.current;
-    if (!snapshot || !sessionId) return;
+    const pendingAutosave = latestAutosaveRef.current;
+    if (!pendingAutosave) return;
+
+    const { sessionId, snapshot } = pendingAutosave;
 
     const record = await getSessionRecord(sessionId);
     if (!record) return;
@@ -87,12 +97,10 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
       canvas: snapshot.canvas,
       selectedDatasetIds: snapshot.selectedDatasetIds,
       selectedDatasetNames: snapshot.selectedDatasetNames,
-      memorySummary: snapshot.memorySummary,
     };
     await upsertSessionRecord(updatedRecord);
-    upsertSessionInState(updatedRecord);
     latestAutosaveRef.current = null;
-  }, [upsertSessionInState]);
+  }, []);
 
   useEffect(() => {
     const restoreSession = async () => {
@@ -173,7 +181,6 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
         selectedDatasetNames: snapshot.selectedDatasetNames,
         messages: snapshot.messages,
         canvas: snapshot.canvas,
-        memorySummary: snapshot.memorySummary,
       };
 
       await upsertSessionRecord(record);
@@ -189,9 +196,13 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
 
   const saveActiveSessionSnapshot = useCallback(
     (snapshot: SessionSnapshotInput) => {
-      if (!activeSessionIdRef.current) return;
+      const currentActiveSessionId = activeSessionId;
+      if (!currentActiveSessionId) return;
 
-      latestAutosaveRef.current = snapshot;
+      latestAutosaveRef.current = {
+        sessionId: currentActiveSessionId,
+        snapshot,
+      };
       if (autosaveTimeoutRef.current) {
         clearTimeout(autosaveTimeoutRef.current);
       }
@@ -200,20 +211,25 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
         void flushPendingAutosave();
       }, AUTOSAVE_DEBOUNCE_MS);
     },
-    [flushPendingAutosave]
+    [activeSessionId, flushPendingAutosave]
   );
 
   const flushActiveSessionSnapshot = useCallback(
     async (snapshot: SessionSnapshotInput) => {
-      if (!activeSessionIdRef.current) return;
-      latestAutosaveRef.current = snapshot;
+      const currentActiveSessionId = activeSessionId;
+      if (!currentActiveSessionId) return;
+
+      latestAutosaveRef.current = {
+        sessionId: currentActiveSessionId,
+        snapshot,
+      };
       if (autosaveTimeoutRef.current) {
         clearTimeout(autosaveTimeoutRef.current);
         autosaveTimeoutRef.current = null;
       }
       await flushPendingAutosave();
     },
-    [flushPendingAutosave]
+    [activeSessionId, flushPendingAutosave]
   );
 
   const switchSession = useCallback(
@@ -244,8 +260,23 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
       const updated = await renameSession(sessionId, trimmedName);
       if (!updated) return;
       upsertSessionInState(updated);
+      await upsertSessionRecord(updated);
     },
     [upsertSessionInState]
+  );
+
+  const setSessionMemorySummary = useCallback(
+    async (sessionId: string, summary: string) => {
+      const updated = await getSessionRecord(sessionId);
+      if (!updated) return;
+      const updatedRecord: SessionRecord = {
+        ...updated,
+        memorySummary: summary,
+        updatedAt: new Date().toISOString(),
+      };
+      await upsertSessionRecord(updatedRecord);
+    },
+    []
   );
 
   const consumeHydrationRecord = useCallback(() => {
@@ -265,6 +296,7 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
       flushActiveSessionSnapshot,
       switchSession,
       setSessionName,
+      setSessionMemorySummary,
       consumeHydrationRecord,
     }),
     [
@@ -279,6 +311,7 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
       flushActiveSessionSnapshot,
       switchSession,
       setSessionName,
+      setSessionMemorySummary,
       consumeHydrationRecord,
     ]
   );

@@ -17,7 +17,7 @@ export type SessionRecord = {
   selectedDatasetNames: string[];
   messages: unknown[];
   canvas: SessionCanvasState;
-  memorySummary: string;
+  memorySummary?: string;
 };
 
 export type SessionListItem = Pick<
@@ -30,5 +30,5 @@ export type SessionSnapshotInput = {
   canvas: SessionCanvasState;
   selectedDatasetIds: string[];
   selectedDatasetNames: string[];
-  memorySummary: string;
+  memorySummary?: string;
 };

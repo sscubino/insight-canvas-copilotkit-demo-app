@@ -149,6 +149,19 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
     [ensureLoaded]
   );
 
+  useEffect(() => {
+    if (!isDuckDBReady) return;
+
+    const pendingSelected = datasets.filter(
+      (dataset) => dataset.isSelected && !dataset.isLoaded
+    );
+    if (pendingSelected.length === 0) return;
+
+    pendingSelected.forEach((dataset) => {
+      void ensureLoaded(dataset);
+    });
+  }, [isDuckDBReady, datasets, ensureLoaded]);
+
   const addUserFile = useCallback(
     async (file: File) => {
       const format = detectFormat(file.name);

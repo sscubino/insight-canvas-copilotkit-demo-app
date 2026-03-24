@@ -4,14 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useCopilotReadable } from "@copilotkit/react-core";
 import { useSession } from "@/contexts/session-context";
 import { getSessionRecord } from "@/lib/session-storage";
+import { clampText } from "@/lib/utils";
 
 const MAX_MEMORY_SESSIONS = 5;
 const MAX_SUMMARY_LENGTH = 280;
-
-const clampText = (text: string, limit: number): string => {
-  if (text.length <= limit) return text;
-  return `${text.slice(0, limit - 3).trimEnd()}...`;
-};
 
 const useCopilotSessionMemory = () => {
   const { sessions, activeSessionId } = useSession();

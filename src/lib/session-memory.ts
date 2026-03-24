@@ -1,4 +1,5 @@
 import { CanvasNode } from "@/types/canvas";
+import { clampText } from "@/lib/utils";
 
 type MemoryConversationTurn = {
   role: "user" | "assistant";
@@ -8,11 +9,6 @@ type MemoryConversationTurn = {
 const MAX_RECENT_MEMORY_TURNS = 6;
 const MAX_MESSAGE_CONTENT_LENGTH = 320;
 const MAX_RECENT_NODE_TITLES = 5;
-
-const clampText = (text: string, limit: number): string => {
-  if (text.length <= limit) return text;
-  return `${text.slice(0, limit - 3).trimEnd()}...`;
-};
 
 const getMessageContentText = (content: unknown): string => {
   if (typeof content === "string") return content;

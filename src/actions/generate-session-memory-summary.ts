@@ -1,6 +1,7 @@
 "use server";
 
 import Anthropic from "@anthropic-ai/sdk";
+import config from "@/lib/config";
 
 type GenerateSessionMemorySummaryInput = {
   firstPrompt: string;
@@ -70,12 +71,10 @@ const buildPrompt = (input: GenerateSessionMemorySummaryInput): string => {
 
 const getAnthropicSummary = async (prompt: string): Promise<string | null> => {
   const anthropic = new Anthropic();
-  const model =
-    process.env.SESSION_MEMORY_ANTHROPIC_MODEL ?? "claude-haiku-4-5";
 
   try {
     const message = await anthropic.messages.create({
-      model,
+      model: config.anthropic.fastModel,
       max_tokens: 220,
       temperature: 0.2,
       system:

@@ -7,12 +7,12 @@ import { useDatasets } from "@/contexts/dataset-context";
 import { useSession } from "@/contexts/session-context";
 import { generateSessionMemorySummary } from "@/actions/generate-session-memory-summary";
 import { generateSessionTitle } from "@/actions/generate-session-title";
+import { serializeForStorage } from "@/lib/sessions";
 import {
   buildHeuristicSessionMemorySummary,
   getRecentMemoryConversationTurns,
   getRecentNodeTitles,
-  serializeForStorage,
-} from "@/lib/sessions";
+} from "@/lib/session-memory";
 import type { SessionSnapshotInput } from "@/types/session";
 
 type ChatMessages = ReturnType<typeof useCopilotChatInternal>["messages"];
@@ -60,20 +60,21 @@ const useChatSessionSync = () => {
 
   const buildSnapshot = useCallback(
     (prompt: string, memorySummaryOverride?: string): SessionSnapshotInput => {
-      const fallbackSummary = buildHeuristicSessionMemorySummary({
-        prompt,
-        selectedDatasetNames,
-        nodes,
-      });
-      const currentSummary =
-        previousSummaryRef.current?.trim() || fallbackSummary;
+      const memorySummary =
+        memorySummaryOverride ||
+        previousSummaryRef.current?.trim() ||
+        buildHeuristicSessionMemorySummary({
+          prompt,
+          selectedDatasetNames,
+          nodes,
+        });
 
       return {
         messages: serializeForStorage(messages),
         canvas: { nodes, edges, selectedNodeId },
         selectedDatasetIds,
         selectedDatasetNames,
-        memorySummary: memorySummaryOverride ?? currentSummary,
+        memorySummary,
       };
     },
     [

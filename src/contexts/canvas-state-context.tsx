@@ -35,6 +35,11 @@ type CanvasStateContextValue = {
   addEdge: (sourceId: string, targetId: string) => void;
   selectNode: (id: string) => void;
   deselectNode: () => void;
+  replaceCanvasState: (state: {
+    nodes: CanvasNode[];
+    edges: CanvasEdge[];
+    selectedNodeId: string | null;
+  }) => void;
 };
 
 const CanvasStateContext = createContext<CanvasStateContextValue | null>(null);
@@ -98,6 +103,19 @@ const CanvasStateProvider = ({ children }: { children: ReactNode }) => {
     setSelectedNodeId(null);
   }, []);
 
+  const replaceCanvasState = useCallback(
+    (state: {
+      nodes: CanvasNode[];
+      edges: CanvasEdge[];
+      selectedNodeId: string | null;
+    }) => {
+      setNodes(state.nodes);
+      setEdges(state.edges);
+      setSelectedNodeId(state.selectedNodeId);
+    },
+    []
+  );
+
   return (
     <CanvasStateContext.Provider
       value={{
@@ -113,6 +131,7 @@ const CanvasStateProvider = ({ children }: { children: ReactNode }) => {
         addEdge,
         selectNode,
         deselectNode,
+        replaceCanvasState,
       }}
     >
       {children}

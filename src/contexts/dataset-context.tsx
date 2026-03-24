@@ -37,6 +37,7 @@ type DatasetContextValue = {
   addUserFile: (file: File) => Promise<void>;
   removeDataset: (id: string) => void;
   toggleSelection: (id: string) => void;
+  setSelectedDatasetIds: (datasetIds: string[]) => void;
 };
 
 const DatasetContext = createContext<DatasetContextValue | null>(null);
@@ -129,6 +130,26 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
     [ensureLoaded]
   );
 
+  const setSelectedDatasetIds = useCallback(
+    (datasetIds: string[]) => {
+      const selectedSet = new Set(datasetIds);
+      setDatasets((prev) => {
+        prev.forEach((dataset) => {
+          const shouldSelect = selectedSet.has(dataset.id);
+          if (shouldSelect && !dataset.isLoaded) {
+            ensureLoaded(dataset);
+          }
+        });
+
+        return prev.map((dataset) => ({
+          ...dataset,
+          isSelected: selectedSet.has(dataset.id),
+        }));
+      });
+    },
+    [ensureLoaded]
+  );
+
   const addUserFile = useCallback(
     async (file: File) => {
       const format = detectFormat(file.name);
@@ -203,6 +224,7 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
       addUserFile,
       removeDataset,
       toggleSelection,
+      setSelectedDatasetIds,
     }),
     [
       datasets,
@@ -215,6 +237,7 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
       addUserFile,
       removeDataset,
       toggleSelection,
+      setSelectedDatasetIds,
     ]
   );
 

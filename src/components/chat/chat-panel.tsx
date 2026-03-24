@@ -15,6 +15,7 @@ import { useDatasets } from "@/contexts/dataset-context";
 import { useCanvasState } from "@/contexts/canvas-state-context";
 import { Button } from "@/components/ui/button";
 import { PaperclipIcon } from "@/components/icons/paperclip";
+import { useChatSessionSync } from "@/hooks/use-chat-session-sync";
 
 const ChatPanel = () => {
   const { selectedNodeId, deselectNode } = useCanvasState();
@@ -23,6 +24,7 @@ const ChatPanel = () => {
     closeDrawer: closeDatasetDrawer,
     toggleDrawer,
   } = useDatasets();
+  const { handleFirstPromptSessionCreate } = useChatSessionSync();
 
   useEffect(() => {
     if (selectedNodeId) closeDatasetDrawer();
@@ -57,6 +59,7 @@ const ChatPanel = () => {
       <SidebarContent className="relative overflow-hidden">
         <CopilotChat
           instructions={SYSTEM_PROMPT}
+          onSubmitMessage={handleFirstPromptSessionCreate}
           labels={{
             title: "Insight Canvas",
             initial: "Hi! \uD83D\uDC4B How can the agent help you with?",

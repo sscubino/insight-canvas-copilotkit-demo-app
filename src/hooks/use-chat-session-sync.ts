@@ -33,7 +33,12 @@ const getMessageContentText = (message: ChatMessages[number]): string => {
 const useChatSessionSync = () => {
   const { messages, setMessages, isLoading } = useCopilotChatInternal();
   const { nodes, edges, selectedNodeId, replaceCanvasState } = useCanvasState();
-  const { selectedDatasets, setSelectedDatasetIds } = useDatasets();
+  const {
+    selectedDatasets,
+    openDrawer: openDatasetDrawer,
+    closeDrawer: closeDatasetDrawer,
+    setSelectedDatasetIds,
+  } = useDatasets();
   const {
     activeSessionId,
     hydrationRecord,
@@ -94,6 +99,13 @@ const useChatSessionSync = () => {
     setMessages(hydrationRecord.messages as ChatMessages);
     replaceCanvasState(hydrationRecord.canvas);
     setSelectedDatasetIds(hydrationRecord.selectedDatasetIds);
+
+    if (hydrationRecord.selectedDatasetIds.length === 0) {
+      openDatasetDrawer();
+    } else {
+      closeDatasetDrawer();
+    }
+
     consumeHydrationRecord();
   }, [
     hydrationRecord,
@@ -101,6 +113,8 @@ const useChatSessionSync = () => {
     replaceCanvasState,
     setSelectedDatasetIds,
     consumeHydrationRecord,
+    openDatasetDrawer,
+    closeDatasetDrawer,
   ]);
 
   useEffect(() => {
@@ -111,6 +125,7 @@ const useChatSessionSync = () => {
     setMessages([]);
     replaceCanvasState({ nodes: [], edges: [], selectedNodeId: null });
     setSelectedDatasetIds([]);
+    openDatasetDrawer();
   }, [
     resetVersion,
     isInitialized,
@@ -118,17 +133,22 @@ const useChatSessionSync = () => {
     setMessages,
     replaceCanvasState,
     setSelectedDatasetIds,
+    openDatasetDrawer,
   ]);
 
   useEffect(() => {
+    if (!isInitialized) return;
     if (!activeSessionId) return;
+    if (hydrationRecord) return;
 
     const firstUserPrompt = getFirstUserPrompt();
     saveActiveSessionSnapshot(buildSnapshot(firstUserPrompt));
   }, [
     activeSessionId,
+    isInitialized,
     messages,
     getFirstUserPrompt,
+    hydrationRecord,
     buildSnapshot,
     saveActiveSessionSnapshot,
   ]);

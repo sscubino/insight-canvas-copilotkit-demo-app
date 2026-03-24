@@ -67,7 +67,6 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
         isLoaded: false,
       }));
 
-      setIsDrawerOpen(true);
       setDatasets((prev) => [...prev, ...userDatasets]);
     };
 

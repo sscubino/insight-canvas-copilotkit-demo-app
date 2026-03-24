@@ -1,12 +1,18 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useCopilotChatInternal } from "@copilotkit/react-core";
 import { useCanvasState } from "@/contexts/canvas-state-context";
 import { useDatasets } from "@/contexts/dataset-context";
 import { useSession } from "@/contexts/session-context";
+import { generateSessionMemorySummary } from "@/actions/generate-session-memory-summary";
 import { generateSessionTitle } from "@/actions/generate-session-title";
-import { buildSessionMemorySummary, serializeForStorage } from "@/lib/sessions";
+import {
+  buildHeuristicSessionMemorySummary,
+  getRecentMemoryConversationTurns,
+  getRecentNodeTitles,
+  serializeForStorage,
+} from "@/lib/sessions";
 import type { SessionSnapshotInput } from "@/types/session";
 
 type ChatMessages = ReturnType<typeof useCopilotChatInternal>["messages"];
@@ -25,7 +31,7 @@ const getMessageContentText = (message: ChatMessages[number]): string => {
 };
 
 const useChatSessionSync = () => {
-  const { messages, setMessages } = useCopilotChatInternal();
+  const { messages, setMessages, isLoading } = useCopilotChatInternal();
   const { nodes, edges, selectedNodeId, replaceCanvasState } = useCanvasState();
   const { selectedDatasets, setSelectedDatasetIds } = useDatasets();
   const {
@@ -41,27 +47,49 @@ const useChatSessionSync = () => {
 
   const selectedDatasetIds = selectedDatasets.map((dataset) => dataset.id);
   const selectedDatasetNames = selectedDatasets.map((dataset) => dataset.name);
+  const prevIsLoadingRef = useRef(false);
+  const previousSummaryRef = useRef<string | null>(null);
+
+  const getFirstUserPrompt = useCallback((): string => {
+    const firstUserMessage = messages.find(
+      (message) => message.role === "user"
+    );
+    if (!firstUserMessage) return "";
+    return getMessageContentText(firstUserMessage).trim();
+  }, [messages]);
 
   const buildSnapshot = useCallback(
-    (prompt: string): SessionSnapshotInput => {
+    (prompt: string, memorySummaryOverride?: string): SessionSnapshotInput => {
+      const fallbackSummary = buildHeuristicSessionMemorySummary({
+        prompt,
+        selectedDatasetNames,
+        nodes,
+      });
+      const currentSummary =
+        previousSummaryRef.current?.trim() || fallbackSummary;
+
       return {
         messages: serializeForStorage(messages),
         canvas: { nodes, edges, selectedNodeId },
         selectedDatasetIds,
         selectedDatasetNames,
-        memorySummary: buildSessionMemorySummary({
-          prompt,
-          selectedDatasetNames,
-          nodes,
-        }),
+        memorySummary: memorySummaryOverride ?? currentSummary,
       };
     },
-    [messages, nodes, edges, selectedNodeId, selectedDatasetIds, selectedDatasetNames]
+    [
+      messages,
+      nodes,
+      edges,
+      selectedNodeId,
+      selectedDatasetIds,
+      selectedDatasetNames,
+    ]
   );
 
   useEffect(() => {
     if (!hydrationRecord) return;
 
+    previousSummaryRef.current = hydrationRecord.memorySummary?.trim() || null;
     setMessages(hydrationRecord.messages as ChatMessages);
     replaceCanvasState(hydrationRecord.canvas);
     setSelectedDatasetIds(hydrationRecord.selectedDatasetIds);
@@ -78,6 +106,7 @@ const useChatSessionSync = () => {
     if (!isInitialized) return;
     if (activeSessionId) return;
 
+    previousSummaryRef.current = null;
     setMessages([]);
     replaceCanvasState({ nodes: [], edges: [], selectedNodeId: null });
     setSelectedDatasetIds([]);
@@ -93,16 +122,64 @@ const useChatSessionSync = () => {
   useEffect(() => {
     if (!activeSessionId) return;
 
-    const firstUserMessage = messages.find((message) => message.role === "user");
-    const firstUserPrompt = firstUserMessage
-      ? getMessageContentText(firstUserMessage).trim()
-      : "";
+    const firstUserPrompt = getFirstUserPrompt();
     saveActiveSessionSnapshot(buildSnapshot(firstUserPrompt));
   }, [
     activeSessionId,
     messages,
+    getFirstUserPrompt,
     buildSnapshot,
     saveActiveSessionSnapshot,
+  ]);
+
+  useEffect(() => {
+    const wasLoading = prevIsLoadingRef.current;
+    prevIsLoadingRef.current = isLoading;
+
+    const justFinished = wasLoading && !isLoading;
+    if (!justFinished || !activeSessionId) return;
+
+    const persistGeneratedSummary = async () => {
+      const firstUserPrompt = getFirstUserPrompt();
+      const serializedMessages = serializeForStorage(messages);
+      const fallbackSummary = buildHeuristicSessionMemorySummary({
+        prompt: firstUserPrompt,
+        selectedDatasetNames,
+        nodes,
+      });
+
+      try {
+        const generatedSummary = await generateSessionMemorySummary({
+          firstPrompt: firstUserPrompt,
+          selectedDatasets: selectedDatasetNames,
+          previousSummary: previousSummaryRef.current ?? undefined,
+          recentConversation: getRecentMemoryConversationTurns(
+            serializedMessages as unknown[]
+          ),
+          recentNodeTitles: getRecentNodeTitles(nodes),
+        });
+        const nextSummary = generatedSummary ?? fallbackSummary;
+        previousSummaryRef.current = nextSummary;
+
+        saveActiveSessionSnapshot(buildSnapshot(firstUserPrompt, nextSummary));
+      } catch {
+        previousSummaryRef.current = fallbackSummary;
+        saveActiveSessionSnapshot(
+          buildSnapshot(firstUserPrompt, fallbackSummary)
+        );
+      }
+    };
+
+    void persistGeneratedSummary();
+  }, [
+    isLoading,
+    activeSessionId,
+    messages,
+    nodes,
+    selectedDatasetNames,
+    buildSnapshot,
+    saveActiveSessionSnapshot,
+    getFirstUserPrompt,
   ]);
 
   const handleFirstPromptSessionCreate = async (prompt: string) => {

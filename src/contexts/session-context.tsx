@@ -90,6 +90,10 @@ const SessionProvider = ({ children }: { children: ReactNode }) => {
     const record = await getSessionRecord(sessionId);
     if (!record) return;
 
+    if (snapshot.messages.length === 0 && record.messages.length > 0) {
+      return;
+    }
+
     const updatedRecord: SessionRecord = {
       ...record,
       updatedAt: new Date().toISOString(),

@@ -2,6 +2,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import config from "@/lib/config";
+import { clampText } from "@/lib/utils";
 
 type GenerateSessionMemorySummaryInput = {
   firstPrompt: string;
@@ -14,12 +15,15 @@ type GenerateSessionMemorySummaryInput = {
   recentNodeTitles: string[];
 };
 
-const SUMMARY_MAX_LENGTH = 480;
+const SUMMARY_MAX_LENGTH = 500;
 
 const sanitizeSummary = (input: string): string => {
-  const normalized = input.replace(/\s+/g, " ").trim();
-  if (normalized.length <= SUMMARY_MAX_LENGTH) return normalized;
-  return `${normalized.slice(0, SUMMARY_MAX_LENGTH - 3).trimEnd()}...`;
+  const lines = input
+    .split(/\r?\n/)
+    .map((line) => line.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+  const normalized = lines.join("\n");
+  return clampText(normalized, SUMMARY_MAX_LENGTH);
 };
 
 const normalizeConversation = (
@@ -50,15 +54,12 @@ const buildPrompt = (input: GenerateSessionMemorySummaryInput): string => {
       : "No recent conversation";
 
   return [
-    "Create a concise cross-session memory summary for a data analysis chat.",
-    "The summary must help the assistant continue future sessions with context.",
-    "Rules:",
-    "- Return plain text only.",
-    "- Focus on analysis goal, key findings, decisions, and unresolved questions.",
-    "- Avoid generic phrasing and avoid speculation.",
-    "- Use previous summary only as context, not as source of truth.",
-    "- If recent conversation conflicts with previous summary, prioritize recent conversation.",
-    "- Keep under 90 words.",
+    "Your reply must be ONLY durable facts for a future session: insights, findings, numbers, decisions, and unresolved questions worth remembering.",
+    "Nothing else: no title, no header, no 'Summary', no markdown, no bullets, no numbering, no preamble or sign-off.",
+    "Format: plain text, one short sentence per line (one fact per line). No empty lines.",
+    "Be specific; skip generic filler. Do not speculate.",
+    "Previous summary below is hints only—not authoritative. If the recent conversation disagrees, follow the conversation.",
+    "Cap total length around 90 words.",
     "",
     `First user prompt: ${input.firstPrompt || "No prompt available"}`,
     `Selected datasets: ${datasetsText}`,
@@ -78,7 +79,7 @@ const getAnthropicSummary = async (prompt: string): Promise<string | null> => {
       max_tokens: 220,
       temperature: 0.2,
       system:
-        "You generate factual cross-session memory summaries for analytics assistants.",
+        "You output only compact factual memory lines for a data assistant: insights and findings as plain text, one sentence per line, with no headings or extra prose.",
       messages: [{ role: "user", content: prompt }],
     });
     const textContent = message.content.find(
@@ -113,6 +114,7 @@ const generateSessionMemorySummary = async (
   if (!generatedSummary) return null;
 
   const sanitized = sanitizeSummary(generatedSummary);
+  console.log("Generated summary:", generatedSummary);
   return sanitized.length > 0 ? sanitized : null;
 };
 

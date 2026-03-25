@@ -1,6 +1,8 @@
 "use client";
 
 import { useReactFlow, useStore } from "@xyflow/react";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 const zoomSelector = (state: { transform: [number, number, number] }) =>
   Math.round(state.transform[2] * 100);
@@ -15,32 +17,35 @@ const CanvasZoomControls = () => {
     fitView({ padding: { x: 0.1, y: 0.3 }, duration: 300 });
 
   return (
-    <div className="absolute right-3.5 bottom-3.5 z-10 flex overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
-      <button
-        type="button"
+    <ButtonGroup className="absolute right-3.5 bottom-3.5 z-10">
+      <Button
+        variant="secondary"
+        size="sm"
         onClick={handleZoomOut}
-        className="border-r border-border px-2.5 py-1.5 font-mono text-xs font-medium text-muted transition-colors hover:bg-surface-hover"
+        className="font-mono font-medium"
         aria-label="Zoom out"
       >
         -
-      </button>
-      <button
-        type="button"
+      </Button>
+      <Button
+        variant="secondary"
+        size="sm"
         onClick={handleFitView}
-        className="border-r border-border px-2.5 py-1.5 font-mono text-xs font-medium text-muted transition-colors hover:bg-surface-hover"
+        className="font-mono font-medium"
         aria-label="Fit view"
       >
         {zoomLevel}%
-      </button>
-      <button
-        type="button"
+      </Button>
+      <Button
+        variant="secondary"
+        size="sm"
         onClick={handleZoomIn}
-        className="px-2.5 py-1.5 font-mono text-xs font-medium text-muted transition-colors hover:bg-surface-hover"
+        className="font-mono font-medium"
         aria-label="Zoom in"
       >
         +
-      </button>
-    </div>
+      </Button>
+    </ButtonGroup>
   );
 };
 

@@ -26,4 +26,5 @@ export type DuckDBContextValue = {
   error: string | null;
   runQuery: (sql: string) => Promise<QueryResult>;
   loadCSV: (tableName: string, csvContent: string) => Promise<DatasetSchema>;
+  loadJSON: (tableName: string, jsonContent: string) => Promise<DatasetSchema>;
 };

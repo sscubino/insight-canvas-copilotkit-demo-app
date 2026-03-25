@@ -2,17 +2,42 @@
 
 import { CopilotChat } from "@copilotkit/react-ui";
 import { SYSTEM_PROMPT } from "@/constants/system-prompt";
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarTitle,
+} from "@/components/ui/sidebar";
+import { DatasetDrawer } from "@/components/datasets/dataset-drawer";
+import { useDatasets } from "@/contexts/dataset-context";
+import { Button } from "@/components/ui/button";
+import { PaperclipIcon } from "@/components/icons/paperclip";
 
 const ChatPanel = () => {
-  return (
-    <aside className="flex w-md shrink-0 flex-col border border-border-card bg-surface-50 rounded-lg overflow-hidden">
-      <header className="flex items-center justify-between border-b border-border-card px-5 py-2.5">
-        <span className="text-lg font-medium text-foreground">
-          Insight Copilot
-        </span>
-      </header>
+  const { toggleDrawer } = useDatasets();
 
-      <div className="flex min-h-0 flex-1 flex-col">
+  return (
+    <Sidebar
+      side="right"
+      expandedWidth="w-md"
+      innerMinWidth="min-w-md"
+      aria-label="Chat panel"
+    >
+      <SidebarHeader>
+        <div className="flex items-center gap-2">
+          <SidebarTitle>Insight Copilot</SidebarTitle>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleDrawer}
+            aria-label="Open datasets"
+          >
+            <PaperclipIcon width={16} height={16} />
+          </Button>
+        </div>
+      </SidebarHeader>
+
+      <SidebarContent className="relative overflow-hidden">
         <CopilotChat
           instructions={SYSTEM_PROMPT}
           labels={{
@@ -22,8 +47,9 @@ const ChatPanel = () => {
           }}
           className="flex-1"
         />
-      </div>
-    </aside>
+        <DatasetDrawer />
+      </SidebarContent>
+    </Sidebar>
   );
 };
 

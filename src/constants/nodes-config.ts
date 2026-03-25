@@ -1,10 +1,10 @@
 import { NodeConfig, NodeVariant } from "@/types/canvas";
-import { ChartBarIcon } from "@/icons/chart-bar";
-import { CheckCircleIcon } from "@/icons/check-circle";
-import { EyeIcon } from "@/icons/eye";
-import { EyeglassesIcon } from "@/icons/eyeglasses";
-import { FlaskIcon } from "@/icons/flask";
-import { QuestionIcon } from "@/icons/question";
+import { ChartBarIcon } from "@/components/icons/chart-bar";
+import { CheckCircleIcon } from "@/components/icons/check-circle";
+import { EyeIcon } from "@/components/icons/eye";
+import { EyeglassesIcon } from "@/components/icons/eyeglasses";
+import { FlaskIcon } from "@/components/icons/flask";
+import { QuestionIcon } from "@/components/icons/question";
 
 export const NODE_VARIANTS = [
   "chart",

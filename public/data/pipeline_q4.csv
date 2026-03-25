@@ -1,0 +1,201 @@
+deal_id,company_name,deal_stage,deal_value,created_date,expected_close_date,sales_rep,industry,lead_source,win_probability
+DEAL-001,Prism Analytics,Qualification,125723,2024-11-21,2025-01-15,Marcus Johnson,Healthcare,Inbound,39
+DEAL-002,Falcon Dynamics,Closed Won,372257,2024-11-02,2025-02-15,Elena Rodriguez,Technology,Partner,100
+DEAL-003,Sapphire Systems,Negotiation,313494,2024-12-02,2025-01-03,Marcus Johnson,Finance,Event,83
+DEAL-004,Ember Creative,Qualification,98848,2024-12-27,2025-01-30,Elena Rodriguez,Finance,Inbound,34
+DEAL-005,Maple Solutions,Closed Lost,51033,2024-12-31,2025-03-15,James O'Brien,Finance,Event,0
+DEAL-006,Acme Corp,Closed Won,227930,2024-10-06,2024-12-20,Marcus Johnson,Finance,Partner,100
+DEAL-007,Vortex Media,Closed Won,322461,2024-10-11,2025-02-13,James O'Brien,Technology,Referral,100
+DEAL-008,DataForge,Closed Lost,396909,2024-10-17,2024-12-18,James O'Brien,Retail,Outbound,0
+DEAL-009,CloudBridge IO,Qualification,17217,2024-12-04,2025-03-05,Marcus Johnson,Manufacturing,Event,21
+DEAL-010,Silverline Partners,Closed Lost,79926,2024-10-11,2025-02-03,Priya Patel,Retail,Inbound,0
+DEAL-011,ClearView Systems,Qualification,110274,2024-11-18,2025-01-06,Sarah Chen,Education,Outbound,36
+DEAL-012,ClearView Systems,Closed Won,437607,2024-11-26,2025-01-04,Marcus Johnson,Finance,Event,100
+DEAL-013,Harbor Systems,Closed Lost,319398,2024-10-08,2024-11-17,David Kim,Healthcare,Partner,0
+DEAL-014,Zenith Labs,Prospecting,160175,2024-11-22,2024-12-14,Marcus Johnson,Healthcare,Event,13
+DEAL-015,Nebula AI,Closed Won,408999,2024-10-19,2024-12-18,James O'Brien,Healthcare,Referral,100
+DEAL-016,Quantum Dynamics,Qualification,267790,2024-10-16,2025-01-23,Priya Patel,Technology,Partner,41
+DEAL-017,ClearView Systems,Qualification,181556,2024-10-07,2025-01-08,James O'Brien,Manufacturing,Event,32
+DEAL-018,Pinnacle Systems,Qualification,488936,2024-11-17,2024-12-17,Priya Patel,Education,Event,48
+DEAL-019,Crestwood Partners,Proposal,123513,2024-11-26,2025-01-01,David Kim,Education,Referral,67
+DEAL-020,Harbor Systems,Qualification,358525,2024-10-14,2025-01-09,David Kim,Healthcare,Event,44
+DEAL-021,Aether Biotech,Prospecting,480873,2024-11-07,2025-03-06,Priya Patel,Technology,Partner,24
+DEAL-022,Meridian Group,Negotiation,492499,2024-11-07,2025-02-04,Priya Patel,Manufacturing,Referral,77
+DEAL-023,DataForge,Closed Won,153001,2024-11-22,2025-02-21,James O'Brien,Education,Partner,100
+DEAL-024,Keystone Manufacturing,Closed Lost,106959,2024-12-19,2025-03-21,James O'Brien,Finance,Outbound,0
+DEAL-025,Forge Financial,Closed Lost,369032,2024-11-14,2024-11-22,Priya Patel,Healthcare,Outbound,0
+DEAL-026,Aether Biotech,Closed Lost,394554,2024-12-21,2025-01-30,David Kim,Healthcare,Event,0
+DEAL-027,Titan Healthcare,Prospecting,283789,2024-11-14,2025-03-03,Marcus Johnson,Technology,Partner,13
+DEAL-028,Keystone Manufacturing,Closed Won,494208,2024-11-09,2024-12-28,Marcus Johnson,Finance,Event,100
+DEAL-029,Beacon Analytics,Closed Won,329955,2024-11-29,2025-02-15,David Kim,Retail,Referral,100
+DEAL-030,Quantum Dynamics,Prospecting,309354,2024-10-26,2024-11-07,Sarah Chen,Technology,Event,19
+DEAL-031,Beacon Analytics,Closed Won,377724,2024-11-08,2025-02-17,Elena Rodriguez,Retail,Referral,100
+DEAL-032,Prism Analytics,Negotiation,143832,2024-10-25,2024-11-26,James O'Brien,Finance,Outbound,72
+DEAL-033,Granite Tech,Closed Lost,208959,2024-10-17,2025-02-15,James O'Brien,Retail,Outbound,0
+DEAL-034,Vertex Cloud,Qualification,305240,2024-11-16,2025-01-26,David Kim,Manufacturing,Outbound,28
+DEAL-035,Phoenix Robotics,Closed Lost,353657,2024-12-01,2025-02-19,Marcus Johnson,Technology,Partner,0
+DEAL-036,Acme Corp,Closed Won,65223,2024-10-31,2025-03-04,Priya Patel,Manufacturing,Inbound,100
+DEAL-037,Falcon Dynamics,Closed Won,284451,2024-11-12,2024-11-20,Priya Patel,Education,Inbound,100
+DEAL-038,DataForge,Negotiation,76383,2024-12-14,2025-01-30,Elena Rodriguez,Technology,Event,68
+DEAL-039,IronClad Security,Proposal,296119,2024-10-05,2024-10-24,Priya Patel,Healthcare,Event,56
+DEAL-040,Vortex Media,Qualification,66429,2024-10-08,2025-01-29,James O'Brien,Healthcare,Referral,45
+DEAL-041,Vortex Media,Prospecting,411632,2024-11-05,2025-02-13,Elena Rodriguez,Healthcare,Referral,27
+DEAL-042,Ivory Consulting,Prospecting,70902,2024-12-23,2025-03-08,Marcus Johnson,Healthcare,Partner,13
+DEAL-043,Crestwood Partners,Closed Won,203833,2024-10-12,2024-10-27,Marcus Johnson,Finance,Outbound,100
+DEAL-044,DataForge,Closed Won,183306,2024-12-18,2025-03-12,Sarah Chen,Finance,Event,100
+DEAL-045,CloudBridge IO,Qualification,81842,2024-10-25,2025-01-18,James O'Brien,Education,Partner,43
+DEAL-046,Apex Digital,Negotiation,415393,2024-10-02,2024-12-07,Marcus Johnson,Retail,Event,81
+DEAL-047,DataForge,Qualification,410822,2024-12-17,2025-01-03,James O'Brien,Finance,Referral,48
+DEAL-048,ClearView Systems,Closed Won,15685,2024-11-10,2024-11-28,Priya Patel,Healthcare,Outbound,100
+DEAL-049,Paladin Consulting,Closed Won,157097,2024-10-02,2024-12-21,Sarah Chen,Manufacturing,Event,100
+DEAL-050,Opal Innovations,Proposal,363379,2024-10-10,2024-10-27,Priya Patel,Finance,Referral,45
+DEAL-051,IronClad Security,Proposal,292297,2024-10-05,2025-01-16,Marcus Johnson,Education,Inbound,59
+DEAL-052,Harbor Systems,Negotiation,477510,2024-11-06,2025-02-23,Marcus Johnson,Healthcare,Partner,76
+DEAL-053,Crestwood Partners,Qualification,141213,2024-11-22,2024-12-05,Marcus Johnson,Retail,Inbound,27
+DEAL-054,TechVista Solutions,Closed Won,444172,2024-11-25,2024-12-02,Marcus Johnson,Healthcare,Outbound,100
+DEAL-055,Prism Analytics,Prospecting,308958,2024-12-20,2025-02-03,James O'Brien,Healthcare,Inbound,18
+DEAL-056,ClearView Systems,Closed Won,496228,2024-12-22,2025-01-02,James O'Brien,Technology,Outbound,100
+DEAL-057,Meridian Group,Proposal,255699,2024-12-15,2025-01-20,Elena Rodriguez,Technology,Referral,53
+DEAL-058,Evergreen Tech,Qualification,259090,2024-12-04,2024-12-31,Marcus Johnson,Education,Inbound,43
+DEAL-059,Prism Analytics,Qualification,75576,2024-11-25,2025-02-18,James O'Brien,Education,Outbound,48
+DEAL-060,Mosaic Digital,Qualification,357453,2024-10-23,2025-01-03,Elena Rodriguez,Retail,Inbound,40
+DEAL-061,IronClad Security,Closed Won,365237,2024-10-31,2025-01-07,David Kim,Manufacturing,Event,100
+DEAL-062,Catalyst Ventures,Prospecting,174888,2024-12-07,2025-02-23,Elena Rodriguez,Finance,Event,17
+DEAL-063,TechVista Solutions,Closed Lost,499563,2024-10-25,2024-11-25,Sarah Chen,Manufacturing,Inbound,0
+DEAL-064,Prism Analytics,Prospecting,145627,2024-11-10,2025-01-04,David Kim,Finance,Inbound,19
+DEAL-065,Ivory Consulting,Proposal,196123,2024-12-13,2025-02-25,Sarah Chen,Healthcare,Referral,46
+DEAL-066,Summit Retail,Closed Lost,283321,2024-11-19,2024-12-14,Priya Patel,Healthcare,Event,0
+DEAL-067,Zenith Labs,Proposal,323906,2024-10-08,2024-10-21,Sarah Chen,Manufacturing,Inbound,47
+DEAL-068,Infinity Pharma,Negotiation,85446,2024-11-15,2025-02-11,Sarah Chen,Technology,Inbound,67
+DEAL-069,Sapphire Systems,Qualification,139175,2024-10-23,2024-12-23,Sarah Chen,Education,Inbound,30
+DEAL-070,Radiant Solutions,Closed Lost,47448,2024-11-25,2024-12-16,David Kim,Education,Referral,0
+DEAL-071,TrueNorth Logistics,Closed Won,407482,2024-12-03,2025-02-02,Elena Rodriguez,Education,Referral,100
+DEAL-072,Mosaic Digital,Prospecting,132650,2024-11-11,2025-02-14,Sarah Chen,Technology,Outbound,18
+DEAL-073,Apex Digital,Closed Won,147072,2024-11-04,2025-02-02,Priya Patel,Retail,Partner,100
+DEAL-074,Keystone Manufacturing,Negotiation,278678,2024-11-01,2025-01-01,Sarah Chen,Retail,Referral,81
+DEAL-075,Paladin Consulting,Prospecting,264095,2024-10-10,2025-01-23,David Kim,Manufacturing,Event,10
+DEAL-076,Granite Tech,Qualification,285276,2024-11-11,2025-03-28,Sarah Chen,Finance,Event,39
+DEAL-077,Orion Software,Closed Won,242906,2024-10-27,2024-11-20,David Kim,Manufacturing,Referral,100
+DEAL-078,TechVista Solutions,Closed Lost,29932,2024-12-16,2025-01-02,Elena Rodriguez,Technology,Outbound,0
+DEAL-079,Ember Creative,Negotiation,312398,2024-11-22,2024-12-23,Elena Rodriguez,Technology,Inbound,81
+DEAL-080,Ember Creative,Qualification,340630,2024-10-16,2025-01-13,Sarah Chen,Technology,Event,26
+DEAL-081,Maple Solutions,Qualification,367135,2024-11-06,2024-12-29,Priya Patel,Healthcare,Event,46
+DEAL-082,Aether Biotech,Qualification,207455,2024-10-14,2025-01-08,David Kim,Technology,Inbound,44
+DEAL-083,Ivory Consulting,Proposal,87998,2024-11-04,2025-03-25,Priya Patel,Education,Inbound,48
+DEAL-084,Phoenix Robotics,Prospecting,210078,2024-10-05,2025-03-15,Marcus Johnson,Finance,Partner,18
+DEAL-085,Summit Retail,Closed Won,439352,2024-12-01,2025-01-04,James O'Brien,Finance,Partner,100
+DEAL-086,Zenith Labs,Negotiation,104785,2024-11-02,2024-12-26,Priya Patel,Retail,Outbound,69
+DEAL-087,Forge Financial,Closed Won,320553,2024-12-04,2025-01-09,Elena Rodriguez,Technology,Outbound,100
+DEAL-088,Acme Corp,Qualification,182083,2024-12-11,2025-02-11,David Kim,Education,Event,38
+DEAL-089,Silverline Partners,Prospecting,228219,2024-12-14,2024-12-31,James O'Brien,Technology,Inbound,23
+DEAL-090,Summit Retail,Prospecting,105488,2024-10-01,2024-11-26,Sarah Chen,Healthcare,Referral,17
+DEAL-091,Cobalt Enterprises,Qualification,359737,2024-12-30,2025-02-14,David Kim,Healthcare,Inbound,46
+DEAL-092,BlueSky Networks,Proposal,161117,2024-12-18,2025-01-08,James O'Brien,Finance,Partner,40
+DEAL-093,Catalyst Ventures,Closed Lost,256407,2024-10-06,2025-02-03,Elena Rodriguez,Retail,Referral,0
+DEAL-094,Granite Tech,Qualification,175439,2024-10-28,2025-02-01,David Kim,Retail,Outbound,21
+DEAL-095,Radiant Solutions,Closed Won,381626,2024-10-27,2025-03-16,James O'Brien,Healthcare,Partner,100
+DEAL-096,Mosaic Digital,Closed Lost,447995,2024-11-14,2025-01-05,Elena Rodriguez,Finance,Inbound,0
+DEAL-097,Forge Financial,Closed Won,85121,2024-10-03,2025-03-14,Marcus Johnson,Manufacturing,Inbound,100
+DEAL-098,Falcon Dynamics,Proposal,297587,2024-10-09,2025-03-01,Priya Patel,Finance,Outbound,70
+DEAL-099,Maple Solutions,Closed Lost,366096,2024-12-10,2025-01-28,Sarah Chen,Education,Partner,0
+DEAL-100,Stratos Energy,Closed Lost,227107,2024-11-07,2024-11-22,Marcus Johnson,Education,Outbound,0
+DEAL-101,Silverline Partners,Closed Lost,253956,2024-10-06,2024-11-26,James O'Brien,Manufacturing,Partner,0
+DEAL-102,Crestwood Partners,Proposal,441597,2024-12-09,2025-02-02,James O'Brien,Finance,Inbound,58
+DEAL-103,Catalyst Ventures,Qualification,362057,2024-10-27,2025-02-01,Sarah Chen,Technology,Referral,22
+DEAL-104,Horizon Health,Closed Won,316219,2024-11-19,2025-01-05,Sarah Chen,Retail,Referral,100
+DEAL-105,Ember Creative,Qualification,469933,2024-11-05,2025-02-24,Marcus Johnson,Finance,Inbound,24
+DEAL-106,Catalyst Ventures,Closed Won,79667,2024-12-10,2025-02-20,Marcus Johnson,Manufacturing,Partner,100
+DEAL-107,Radiant Solutions,Proposal,394360,2024-12-10,2025-01-02,James O'Brien,Technology,Referral,49
+DEAL-108,Crestwood Partners,Qualification,39757,2024-10-04,2025-02-13,James O'Brien,Finance,Outbound,35
+DEAL-109,Quantum Dynamics,Qualification,489085,2024-12-04,2024-12-15,Priya Patel,Retail,Outbound,34
+DEAL-110,Infinity Pharma,Closed Lost,26060,2024-12-22,2025-02-12,Sarah Chen,Technology,Outbound,0
+DEAL-111,Mosaic Digital,Qualification,404511,2024-10-02,2025-02-01,James O'Brien,Manufacturing,Inbound,40
+DEAL-112,IronClad Security,Closed Won,86612,2024-10-28,2024-11-15,David Kim,Manufacturing,Outbound,100
+DEAL-113,Opal Innovations,Negotiation,15925,2024-10-17,2025-03-13,David Kim,Technology,Referral,69
+DEAL-114,Evergreen Tech,Prospecting,211282,2024-10-08,2025-03-24,Priya Patel,Manufacturing,Outbound,17
+DEAL-115,Zenith Labs,Closed Lost,367484,2024-11-06,2025-02-10,Sarah Chen,Finance,Partner,0
+DEAL-116,Aether Biotech,Closed Lost,359760,2024-11-17,2025-01-14,Priya Patel,Healthcare,Partner,0
+DEAL-117,Harbor Systems,Prospecting,221246,2024-11-02,2025-03-11,David Kim,Finance,Partner,22
+DEAL-118,Prism Analytics,Prospecting,408881,2024-11-08,2025-03-17,Sarah Chen,Education,Referral,27
+DEAL-119,Harbor Systems,Closed Lost,446023,2024-10-30,2024-12-20,Sarah Chen,Healthcare,Partner,0
+DEAL-120,ClearView Systems,Proposal,192943,2024-10-29,2025-01-20,James O'Brien,Healthcare,Referral,50
+DEAL-121,Cobalt Enterprises,Prospecting,248090,2024-11-17,2025-01-05,James O'Brien,Finance,Event,14
+DEAL-122,Beacon Analytics,Closed Lost,97979,2024-12-20,2025-02-05,Priya Patel,Retail,Outbound,0
+DEAL-123,ClearView Systems,Prospecting,295843,2024-12-28,2025-03-23,David Kim,Retail,Outbound,26
+DEAL-124,CloudBridge IO,Closed Won,420955,2024-11-29,2025-01-02,David Kim,Manufacturing,Referral,100
+DEAL-125,BlueSky Networks,Proposal,374119,2024-11-24,2025-02-07,Sarah Chen,Technology,Outbound,50
+DEAL-126,Horizon Health,Negotiation,378414,2024-12-20,2025-01-27,James O'Brien,Healthcare,Referral,65
+DEAL-127,Silverline Partners,Prospecting,335575,2024-10-11,2024-12-04,James O'Brien,Manufacturing,Outbound,11
+DEAL-128,Acme Corp,Proposal,100679,2024-11-03,2025-03-02,David Kim,Retail,Event,56
+DEAL-129,Orion Software,Negotiation,391252,2024-12-16,2025-03-15,Marcus Johnson,Retail,Outbound,70
+DEAL-130,Meridian Group,Proposal,258483,2024-12-01,2025-02-18,James O'Brien,Manufacturing,Outbound,62
+DEAL-131,Atlas Commerce,Closed Won,317975,2024-11-28,2025-03-02,Elena Rodriguez,Finance,Partner,100
+DEAL-132,Apex Digital,Negotiation,258700,2024-11-27,2025-02-20,Sarah Chen,Education,Event,84
+DEAL-133,Acme Corp,Proposal,204751,2024-10-25,2024-12-02,James O'Brien,Finance,Inbound,55
+DEAL-134,Radiant Solutions,Prospecting,288637,2024-10-26,2024-12-04,Sarah Chen,Technology,Outbound,27
+DEAL-135,IronClad Security,Qualification,409434,2024-12-15,2025-03-27,Priya Patel,Technology,Referral,24
+DEAL-136,Pinnacle Systems,Prospecting,105928,2024-12-30,2025-01-13,Marcus Johnson,Retail,Outbound,16
+DEAL-137,Vertex Cloud,Prospecting,143592,2024-10-28,2025-03-16,James O'Brien,Finance,Referral,15
+DEAL-138,TechVista Solutions,Qualification,343501,2024-11-14,2025-02-15,James O'Brien,Technology,Outbound,29
+DEAL-139,ClearView Systems,Qualification,484260,2024-12-14,2024-12-26,Priya Patel,Finance,Referral,45
+DEAL-140,Summit Retail,Proposal,417735,2024-10-24,2025-02-28,David Kim,Manufacturing,Event,60
+DEAL-141,Infinity Pharma,Prospecting,322116,2024-10-02,2025-02-06,Sarah Chen,Finance,Inbound,18
+DEAL-142,Elevate Education,Closed Lost,366758,2024-10-04,2025-01-27,David Kim,Technology,Outbound,0
+DEAL-143,Stratos Energy,Proposal,358428,2024-11-17,2025-02-23,Priya Patel,Finance,Referral,58
+DEAL-144,IronClad Security,Closed Won,353824,2024-11-19,2024-12-17,Priya Patel,Retail,Inbound,100
+DEAL-145,Falcon Dynamics,Prospecting,111011,2024-10-12,2025-02-19,Sarah Chen,Finance,Event,12
+DEAL-146,Meridian Group,Qualification,295094,2024-11-11,2025-01-13,Priya Patel,Retail,Event,21
+DEAL-147,Vortex Media,Proposal,202679,2024-10-22,2024-10-30,Priya Patel,Manufacturing,Outbound,50
+DEAL-148,TechVista Solutions,Closed Lost,349140,2024-10-22,2025-03-26,Sarah Chen,Healthcare,Inbound,0
+DEAL-149,NovaTech Inc,Negotiation,76770,2024-11-09,2025-02-14,Priya Patel,Education,Referral,64
+DEAL-150,Horizon Health,Qualification,37713,2024-12-14,2025-01-23,Marcus Johnson,Finance,Event,30
+DEAL-151,Prism Analytics,Prospecting,5527,2024-10-15,2025-03-24,David Kim,Retail,Outbound,27
+DEAL-152,Meridian Group,Negotiation,327981,2024-11-10,2025-03-22,Marcus Johnson,Healthcare,Event,71
+DEAL-153,Vortex Media,Proposal,238998,2024-12-05,2025-02-08,Marcus Johnson,Finance,Partner,53
+DEAL-154,Jade Networks,Proposal,112597,2024-10-05,2024-12-06,Sarah Chen,Retail,Inbound,54
+DEAL-155,Radiant Solutions,Qualification,12741,2024-10-23,2024-11-07,Sarah Chen,Technology,Outbound,28
+DEAL-156,Quantum Dynamics,Prospecting,41102,2024-10-03,2024-12-12,Sarah Chen,Technology,Referral,13
+DEAL-157,TrueNorth Logistics,Qualification,319324,2024-11-17,2025-02-27,Sarah Chen,Manufacturing,Outbound,34
+DEAL-158,Vertex Cloud,Closed Won,173110,2024-11-30,2025-01-01,Sarah Chen,Finance,Outbound,100
+DEAL-159,Summit Retail,Closed Lost,318925,2024-12-28,2025-02-12,Sarah Chen,Education,Outbound,0
+DEAL-160,Cobalt Enterprises,Prospecting,170773,2024-12-25,2025-01-26,David Kim,Education,Outbound,26
+DEAL-161,Cobalt Enterprises,Prospecting,223273,2024-12-18,2025-02-22,David Kim,Healthcare,Inbound,18
+DEAL-162,CloudBridge IO,Negotiation,420276,2024-10-05,2024-11-22,Marcus Johnson,Healthcare,Outbound,85
+DEAL-163,Catalyst Ventures,Prospecting,47119,2024-10-22,2025-02-15,Marcus Johnson,Healthcare,Partner,28
+DEAL-164,Sapphire Systems,Closed Lost,236043,2024-12-08,2024-12-17,David Kim,Retail,Event,0
+DEAL-165,Evergreen Tech,Closed Lost,138069,2024-12-19,2025-01-29,Elena Rodriguez,Manufacturing,Outbound,0
+DEAL-166,Vertex Cloud,Closed Lost,286686,2024-12-11,2025-03-26,Priya Patel,Manufacturing,Outbound,0
+DEAL-167,Quantum Dynamics,Prospecting,460256,2024-12-05,2025-02-27,David Kim,Technology,Outbound,14
+DEAL-168,Meridian Group,Closed Won,279434,2024-12-17,2025-01-23,Elena Rodriguez,Manufacturing,Referral,100
+DEAL-169,Ember Creative,Negotiation,194399,2024-10-03,2024-12-21,Elena Rodriguez,Technology,Inbound,65
+DEAL-170,Jade Networks,Closed Won,137153,2024-12-16,2025-01-17,Priya Patel,Healthcare,Outbound,100
+DEAL-171,Vertex Cloud,Proposal,93263,2024-12-20,2025-02-26,Priya Patel,Finance,Outbound,58
+DEAL-172,Sapphire Systems,Proposal,270884,2024-10-27,2025-01-13,Elena Rodriguez,Technology,Event,47
+DEAL-173,Orion Software,Qualification,344751,2024-12-29,2025-03-19,Priya Patel,Manufacturing,Outbound,35
+DEAL-174,Vertex Cloud,Prospecting,152014,2024-10-28,2025-01-20,Sarah Chen,Finance,Inbound,26
+DEAL-175,Infinity Pharma,Qualification,147694,2024-11-18,2025-03-01,Elena Rodriguez,Technology,Outbound,39
+DEAL-176,Evergreen Tech,Closed Won,322563,2024-11-19,2025-03-03,Marcus Johnson,Retail,Referral,100
+DEAL-177,Apex Digital,Prospecting,257627,2024-10-25,2024-12-10,Sarah Chen,Retail,Event,26
+DEAL-178,Nimbus Data,Negotiation,464956,2024-11-09,2025-03-25,Elena Rodriguez,Education,Event,84
+DEAL-179,Nimbus Data,Prospecting,456405,2024-10-01,2025-03-13,Elena Rodriguez,Retail,Referral,24
+DEAL-180,Granite Tech,Proposal,360167,2024-11-01,2025-02-04,Sarah Chen,Education,Inbound,43
+DEAL-181,Paladin Consulting,Closed Lost,475052,2024-10-21,2024-12-29,Elena Rodriguez,Healthcare,Outbound,0
+DEAL-182,BlueSky Networks,Prospecting,205693,2024-12-12,2025-02-18,David Kim,Manufacturing,Referral,19
+DEAL-183,Silverline Partners,Qualification,48828,2024-10-08,2024-11-29,James O'Brien,Healthcare,Partner,38
+DEAL-184,Zenith Labs,Closed Won,114729,2024-11-25,2025-02-28,Elena Rodriguez,Manufacturing,Referral,100
+DEAL-185,Atlas Commerce,Prospecting,80625,2024-10-14,2024-11-11,Marcus Johnson,Retail,Inbound,20
+DEAL-186,Paladin Consulting,Qualification,253094,2024-10-09,2025-01-26,Marcus Johnson,Retail,Referral,36
+DEAL-187,Opal Innovations,Closed Won,176001,2024-12-15,2025-02-15,David Kim,Healthcare,Event,100
+DEAL-188,Vertex Cloud,Qualification,257661,2024-10-18,2024-12-23,Priya Patel,Finance,Event,33
+DEAL-189,Titan Healthcare,Closed Won,29152,2024-11-14,2024-12-10,Marcus Johnson,Manufacturing,Partner,100
+DEAL-190,Falcon Dynamics,Prospecting,464794,2024-12-26,2025-03-11,James O'Brien,Retail,Inbound,24
+DEAL-191,Nimbus Data,Prospecting,457670,2024-12-26,2025-01-29,David Kim,Manufacturing,Event,24
+DEAL-192,Horizon Health,Qualification,284338,2024-10-03,2024-11-27,David Kim,Manufacturing,Outbound,22
+DEAL-193,Crestwood Partners,Proposal,445012,2024-10-18,2024-12-21,David Kim,Education,Referral,52
+DEAL-194,Maple Solutions,Closed Won,305137,2024-12-29,2025-01-13,David Kim,Manufacturing,Inbound,100
+DEAL-195,ClearView Systems,Closed Won,480042,2024-10-26,2025-02-15,David Kim,Healthcare,Inbound,100
+DEAL-196,Elevate Education,Qualification,69018,2024-11-10,2025-02-07,Marcus Johnson,Manufacturing,Referral,28
+DEAL-197,ClearView Systems,Closed Won,489727,2024-11-28,2025-01-21,David Kim,Education,Outbound,100
+DEAL-198,Titan Healthcare,Closed Won,28164,2024-10-04,2024-10-29,Elena Rodriguez,Education,Referral,100
+DEAL-199,Pinnacle Systems,Proposal,452156,2024-12-04,2025-03-25,David Kim,Technology,Event,54
+DEAL-200,Beacon Analytics,Proposal,202464,2024-10-24,2024-12-10,Priya Patel,Technology,Outbound,69

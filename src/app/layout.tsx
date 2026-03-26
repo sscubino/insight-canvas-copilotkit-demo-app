@@ -8,6 +8,7 @@ import "@copilotkit/react-ui/styles.css";
 import "./globals.css";
 import { BackgroundShapes } from "@/components/layout/background-shapes";
 import { cn } from "@/lib/utils";
+import { INSIGHT_CANVAS_AGENT_ID } from "@/mastra/constants";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -41,7 +42,11 @@ const RootLayout = ({
         )}
       >
         <BackgroundShapes />
-        <CopilotKit runtimeUrl="/api/copilotkit" enableInspector={false}>
+        <CopilotKit
+          runtimeUrl="/api/copilotkit"
+          enableInspector={false}
+          agent={INSIGHT_CANVAS_AGENT_ID}
+        >
           <DuckDBProvider>
             <AppStateBootstrap />
             <AppSidebar />

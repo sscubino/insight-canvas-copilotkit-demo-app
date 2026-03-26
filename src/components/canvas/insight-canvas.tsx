@@ -1,19 +1,24 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import {
   ReactFlow,
   ReactFlowProvider,
   Background,
   type DefaultEdgeOptions,
+  type Connection,
   BackgroundVariant,
 } from "@xyflow/react";
+import { useCoAgent } from "@copilotkit/react-core";
 import "@xyflow/react/dist/style.css";
 
 import { NODE_TYPES } from "@/constants/nodes-config";
 import { CanvasZoomControls } from "./canvas-zoom-controls";
 import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
 import { useAutoFitNewNodes } from "@/hooks/use-auto-fit-new-nodes";
+import { INSIGHT_CANVAS_AGENT_ID } from "@/mastra/constants";
+import { generateEdgeId } from "@/lib/canvas";
+import type { AgentCanvasState } from "@/mastra/agents/state";
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
   style: {
@@ -33,9 +38,39 @@ const InsightCanvasInner = () => {
     selectNode,
     deselectNode,
   } = useWorkspaceState();
+  const { state: agentState, setState: setAgentStateRaw } =
+    useCoAgent<AgentCanvasState>({
+      name: INSIGHT_CANVAS_AGENT_ID,
+    });
+  const agentStateRef = useRef(agentState);
+  agentStateRef.current = agentState;
+  const setAgentStateRef = useRef(setAgentStateRaw);
+  setAgentStateRef.current = setAgentStateRaw;
   const containerRef = useRef<HTMLDivElement>(null);
 
   useAutoFitNewNodes({ nodes, containerRef });
+
+  const handleConnect = useCallback(
+    (connection: Connection) => {
+      onConnect(connection);
+
+      const currentEdges = agentStateRef.current?.edges ?? [];
+      const newEdge = {
+        id: generateEdgeId(connection.source, connection.target),
+        source: connection.source,
+        target: connection.target,
+      };
+      setAgentStateRef.current({
+        ...(agentStateRef.current ?? {
+          nodes: [],
+          edges: [],
+          selectedNodeId: null,
+        }),
+        edges: [...currentEdges, newEdge],
+      });
+    },
+    [onConnect]
+  );
 
   return (
     <div ref={containerRef} className="relative h-full w-full">
@@ -44,7 +79,7 @@ const InsightCanvasInner = () => {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
+        onConnect={handleConnect}
         onNodeClick={(_, node) => selectNode(node.id)}
         onPaneClick={() => deselectNode()}
         nodeTypes={NODE_TYPES}

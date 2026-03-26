@@ -20,8 +20,9 @@ import { useChatSessionSync } from "@/hooks/use-chat-session-sync";
 
 const ChatPanel = () => {
   const { selectedNodeId, deselectNode } = useWorkspaceState();
-  const { selectedDatasets } = useDatasetsState();
-  const { isInitialized: isSessionInitialized } = useSessionState();
+  const { selectedDatasets, isDatasetsInitialized } = useDatasetsState();
+  const { isInitialized: isSessionInitialized, hydrationRecord } =
+    useSessionState();
   const { handleFirstPromptSessionCreate } = useChatSessionSync();
   const [isDatasetDrawerOpen, setIsDatasetDrawerOpen] = useState(false);
 
@@ -32,10 +33,17 @@ const ChatPanel = () => {
   }, [selectedNodeId]);
 
   useEffect(() => {
-    if (!isSessionInitialized) return;
-    if (selectedDatasets.length !== 0) return;
-    setIsDatasetDrawerOpen(true);
-  }, [selectedDatasets, isSessionInitialized]);
+    if (!isSessionInitialized || !isDatasetsInitialized || hydrationRecord)
+      return;
+    if (selectedDatasets.length === 0) {
+      setIsDatasetDrawerOpen(true);
+    }
+  }, [
+    selectedDatasets,
+    isSessionInitialized,
+    isDatasetsInitialized,
+    hydrationRecord,
+  ]);
 
   const handleToggleDatasetDrawer = () => {
     if (!isDatasetDrawerOpen) deselectNode();

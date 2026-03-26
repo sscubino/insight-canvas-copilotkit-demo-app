@@ -11,11 +11,16 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@ag-ui/mastra": "^1.0.1",
+    "@ai-sdk/anthropic": "^3.0.64",
     "@anthropic-ai/sdk": "^0.80.0",
     "@copilotkit/react-core": "^1.54.0",
     "@copilotkit/react-ui": "^1.54.0",
     "@copilotkit/runtime": "^1.54.0",
     "@duckdb/duckdb-wasm": "1.29.0",
+    "@mastra/core": "^1.17.0",
+    "@mastra/libsql": "^1.7.2",
+    "@mastra/memory": "^1.10.0",
     "@xyflow/react": "^12.10.1",
     "clsx": "^2.1.1",
     "idb-keyval": "^6.2.2",
@@ -26,6 +31,7 @@
     "vega": "^6.2.0",
     "vega-embed": "^7.1.0",
     "vega-lite": "^6.4.2",
+    "zod": "^4.3.6",
     "zustand": "^5.0.12"
   },
   "devDependencies": {

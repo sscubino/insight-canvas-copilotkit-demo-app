@@ -1,24 +1,27 @@
-import { SYSTEM_PROMPT } from "@/constants/system-prompt";
 import {
   CopilotRuntime,
+  ExperimentalEmptyAdapter,
   copilotRuntimeNextJSAppRouterEndpoint,
 } from "@copilotkit/runtime";
-import { BuiltInAgent } from "@copilotkit/runtime/v2";
+import { MastraAgent } from "@ag-ui/mastra";
 import { NextRequest } from "next/server";
-import CONFIG from "@/constants/config";
+import { mastra } from "@/mastra";
 
-const builtInAgent = new BuiltInAgent({
-  model: CONFIG.COPILOTKIT.BUILT_IN_AGENT_MODEL,
-  prompt: SYSTEM_PROMPT,
-});
+const serviceAdapter = new ExperimentalEmptyAdapter();
 
-const runtime = new CopilotRuntime({
-  agents: { default: builtInAgent },
-});
+const DEFAULT_RESOURCE_ID = "default-user";
 
 export const POST = async (req: NextRequest) => {
+  const runtime = new CopilotRuntime({
+    agents: MastraAgent.getLocalAgents({
+      mastra,
+      resourceId: DEFAULT_RESOURCE_ID,
+    }),
+  });
+
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
     runtime,
+    serviceAdapter,
     endpoint: "/api/copilotkit",
   });
 

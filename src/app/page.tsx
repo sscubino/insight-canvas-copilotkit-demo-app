@@ -2,13 +2,13 @@
 
 import { InsightCanvas } from "@/components/canvas/insight-canvas";
 import { ChatPanel } from "@/components/chat/chat-panel";
-import { useCopilotCanvas } from "@/hooks/use-copilot-canvas";
+import { useCanvasAgent } from "@/hooks/use-canvas-agent";
 import { useCopilotDataTools } from "@/hooks/use-copilot-data-tools";
 import { useCopilotSessionMemory } from "@/hooks/use-copilot-session-memory";
 import { useDatasetsState } from "@/state/hooks/use-datasets-state";
 
-const CopilotCanvasSync = () => {
-  useCopilotCanvas();
+const CanvasAgentSync = () => {
+  useCanvasAgent();
   return null;
 };
 
@@ -26,7 +26,7 @@ const CopilotSessionMemorySync = () => {
 const Home = () => {
   return (
     <>
-      <CopilotCanvasSync />
+      <CanvasAgentSync />
       <CopilotDataToolsSync />
       <CopilotSessionMemorySync />
       <div className="flex h-full space-x-2">

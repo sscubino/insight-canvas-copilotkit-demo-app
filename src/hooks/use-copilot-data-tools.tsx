@@ -1,8 +1,11 @@
 "use client";
 
 import { useCopilotReadable, useCopilotAction } from "@copilotkit/react-core";
+import { useCoAgent } from "@copilotkit/react-core";
 import { useDuckDB } from "@/contexts/duckdb-context";
-import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
+import { INSIGHT_CANVAS_AGENT_ID } from "@/mastra/constants";
+import { computePosition, generateNodeId, generateEdgeId } from "@/lib/canvas";
+import { toReactFlowNodes } from "@/hooks/use-canvas-agent";
 import {
   QueryRunningStatus,
   QueryFallbackStatus,
@@ -10,8 +13,8 @@ import {
   ChartGeneratingStatus,
   ChartCreatedStatus,
 } from "@/components/chat/data-tool-renders";
+import type { AgentCanvasState } from "@/mastra/agents/state";
 import type { DatasetSchema, QueryResult } from "@/types/duckdb";
-import type { NodeSource } from "@/types/canvas";
 
 const formatSchemaForAgent = (schema: DatasetSchema): string => {
   const columnsDesc = schema.columns
@@ -28,7 +31,10 @@ const formatSchemasForAgent = (schemas: DatasetSchema[]): string => {
 
 export const useCopilotDataTools = (schemas: DatasetSchema[]) => {
   const { runQuery } = useDuckDB();
-  const { addNode } = useWorkspaceState();
+  const { state: agentState, setState: setAgentState } =
+    useCoAgent<AgentCanvasState>({
+      name: INSIGHT_CANVAS_AGENT_ID,
+    });
 
   useCopilotReadable({
     description:
@@ -122,21 +128,41 @@ export const useCopilotDataTools = (schemas: DatasetSchema[]) => {
         );
       }
 
-      const now = new Date().toISOString();
-      const source: NodeSource = "agent";
+      const currentNodes = agentState?.nodes ?? [];
+      const currentEdges = agentState?.edges ?? [];
 
-      const nodeId = addNode(
-        {
-          variant: "chart" as const,
-          title,
-          createdAt: now,
-          source,
-          description,
-          sourceQuery,
-          chartSpec: parsedSpec,
-        },
-        sourceNodeId
-      );
+      const rfNodes = toReactFlowNodes(currentNodes);
+      const position = computePosition(rfNodes, sourceNodeId);
+      const nodeId = generateNodeId("chart");
+
+      const newNode: AgentCanvasState["nodes"][number] = {
+        id: nodeId,
+        variant: "chart",
+        title,
+        createdAt: new Date().toISOString(),
+        source: "agent",
+        position,
+        description,
+        sourceQuery,
+        chartSpec: parsedSpec,
+      };
+
+      const newEdges = sourceNodeId
+        ? [
+            ...currentEdges,
+            {
+              id: generateEdgeId(sourceNodeId, nodeId),
+              source: sourceNodeId,
+              target: nodeId,
+            },
+          ]
+        : currentEdges;
+
+      setAgentState({
+        nodes: [...currentNodes, newNode],
+        edges: newEdges,
+        selectedNodeId: agentState?.selectedNodeId ?? null,
+      });
 
       return `Created chart "${title}" with id="${nodeId}" on the canvas.`;
     },

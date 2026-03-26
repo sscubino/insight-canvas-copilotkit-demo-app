@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { useCopilotChatInternal } from "@copilotkit/react-core";
+import { useCoAgent } from "@copilotkit/react-core";
 import { generateSessionTitle } from "@/actions/generate-session-title";
 import { persistSessionMemorySummary } from "@/lib/workflows/session-memory-workflows";
 import { useSessionWorkflows } from "@/lib/workflows/session-workflows";
@@ -10,6 +11,9 @@ import { serializeForStorage } from "@/lib/sessions";
 import { useDatasetsState } from "@/state/hooks/use-datasets-state";
 import { useSessionState } from "@/state/hooks/use-session-state";
 import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
+import { INSIGHT_CANVAS_AGENT_ID } from "@/mastra/constants";
+import { toAgentNodes, toAgentEdges } from "@/hooks/use-canvas-agent";
+import type { AgentCanvasState } from "@/mastra/agents/state";
 import type { SessionSnapshotInput } from "@/types/session";
 import { getFirstUserPrompt, type ChatMessages } from "@/lib/copilotkit-chat";
 
@@ -30,11 +34,16 @@ const useChatSessionSync = () => {
     setSessionMemorySummary,
     consumeHydrationRecord,
   } = useSessionWorkflows();
+  const { setState: setAgentCanvasStateRaw } = useCoAgent<AgentCanvasState>({
+    name: INSIGHT_CANVAS_AGENT_ID,
+  });
 
   const copilotkitStatusRef = useRef<CopilotkitStatus>("uninitialized");
   const prevIsLoadingRef = useRef(false);
   const previousSummaryRef = useRef<string | null>(null);
   const previousSummaryMessagesLengthRef = useRef<number>(0);
+  const agentSetterRef = useRef(setAgentCanvasStateRaw);
+  agentSetterRef.current = setAgentCanvasStateRaw;
 
   const isCopilotkitReady = copilotkitStatusRef.current === "ready";
 
@@ -67,6 +76,17 @@ const useChatSessionSync = () => {
     replaceCanvasState(hydrationRecord.canvas);
     setSelectedDatasetIds(hydrationRecord.selectedDatasetIds);
 
+    const {
+      nodes: hNodes,
+      edges: hEdges,
+      selectedNodeId: hSelected,
+    } = hydrationRecord.canvas;
+    agentSetterRef.current({
+      nodes: toAgentNodes(hNodes),
+      edges: toAgentEdges(hEdges),
+      selectedNodeId: hSelected,
+    });
+
     if (isCopilotkitReady) {
       const hydratedMessages = hydrationRecord.messages as ChatMessages;
       previousSummaryMessagesLengthRef.current = hydratedMessages.length;
@@ -92,6 +112,7 @@ const useChatSessionSync = () => {
     previousSummaryRef.current = null;
     setMessages([]);
     replaceCanvasState({ nodes: [], edges: [], selectedNodeId: null });
+    agentSetterRef.current({ nodes: [], edges: [], selectedNodeId: null });
     setSelectedDatasetIds([]);
   }, [
     resetVersion,

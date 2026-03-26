@@ -123,8 +123,22 @@ export const useCanvasAgent = (
     lastAgentSnapshotRef.current = snapshot;
 
     syncingFromAgentRef.current = true;
+
+    const incomingRFNodes = toReactFlowNodes(state.nodes);
+    const existingNodes = useAppStore.getState().nodes;
+    const existingNodesMap = new Map(existingNodes.map((n) => [n.id, n]));
+
+    const mergedNodes = incomingRFNodes.map((node) => {
+      const existing = existingNodesMap.get(node.id);
+      if (!existing || existing.data.variant !== node.data.variant) return node;
+      return {
+        ...node,
+        data: { ...existing.data, ...node.data } as CanvasNodeData,
+      };
+    });
+
     replaceCanvasState({
-      nodes: toReactFlowNodes(state.nodes),
+      nodes: mergedNodes,
       edges: toReactFlowEdges(state.edges),
       selectedNodeId: state.selectedNodeId,
     });
@@ -132,7 +146,13 @@ export const useCanvasAgent = (
     requestAnimationFrame(() => {
       syncingFromAgentRef.current = false;
     });
-  }, [state?.nodes, state?.edges, state?.selectedNodeId, replaceCanvasState, hydrationRecord]);
+  }, [
+    state?.nodes,
+    state?.edges,
+    state?.selectedNodeId,
+    replaceCanvasState,
+    hydrationRecord,
+  ]);
 
   const setAgentState: AgentStateSetter = useCallback(
     (

@@ -58,7 +58,12 @@ export const createWorkspaceSlice: StateCreator<
   addNode: (data, sourceNodeId) => {
     let nodeId = "";
     set((state) => {
-      const result = addNodeToCanvas(data, state.nodes, state.edges, sourceNodeId);
+      const result = addNodeToCanvas(
+        data,
+        state.nodes,
+        state.edges,
+        sourceNodeId
+      );
       nodeId = result.nodeId;
       return {
         nodes: result.nodes,

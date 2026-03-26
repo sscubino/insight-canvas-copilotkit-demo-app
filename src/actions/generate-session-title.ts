@@ -1,7 +1,7 @@
 "use server";
 
 import Anthropic from "@anthropic-ai/sdk";
-import config from "@/lib/config";
+import CONFIG from "@/constants/config";
 
 type GenerateSessionTitleInput = {
   firstPrompt: string;
@@ -43,7 +43,7 @@ const getAnthropicTitle = async (prompt: string): Promise<string | null> => {
 
   try {
     const message = await anthropic.messages.create({
-      model: config.anthropic.fastModel,
+      model: CONFIG.ANTHROPIC.FAST_MODEL,
       max_tokens: 40,
       temperature: 0.3,
       system: "You generate concise titles for analytics sessions.",

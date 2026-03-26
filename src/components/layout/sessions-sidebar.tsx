@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { StatusDot } from "@/components/ui/status-dot";
 import { PlusIcon } from "@/components/icons/plus";
-import { useSessionWorkflows } from "@/lib/application/session-workflows";
+import { useSessionWorkflows } from "@/lib/workflows/session-workflows";
 import { useSessionState } from "@/state/hooks/use-session-state";
 import {
   Sidebar,

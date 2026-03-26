@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useCopilotChatInternal } from "@copilotkit/react-core";
 import { generateSessionTitle } from "@/actions/generate-session-title";
-import { persistSessionMemorySummary } from "@/lib/application/session-memory-workflows";
-import { useSessionWorkflows } from "@/lib/application/session-workflows";
-import { useDatasetWorkflows } from "@/lib/application/dataset-workflows";
+import { persistSessionMemorySummary } from "@/lib/workflows/session-memory-workflows";
+import { useSessionWorkflows } from "@/lib/workflows/session-workflows";
+import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import { serializeForStorage } from "@/lib/sessions";
 import { useDatasetsState } from "@/state/hooks/use-datasets-state";
 import { useSessionState } from "@/state/hooks/use-session-state";

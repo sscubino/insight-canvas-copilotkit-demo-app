@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useDatasetWorkflows } from "@/lib/application/dataset-workflows";
-import { useSessionBootstrap } from "@/lib/application/session-workflows";
+import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
+import { useSessionBootstrap } from "@/lib/workflows/session-workflows";
 
 export const AppStateBootstrap = () => {
   const { initializeDatasets } = useDatasetWorkflows();

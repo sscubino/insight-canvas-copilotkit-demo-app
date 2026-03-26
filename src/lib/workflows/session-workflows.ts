@@ -10,7 +10,7 @@ import {
   upsertSessionRecord,
 } from "@/lib/session-storage";
 import { buildDefaultSessionName } from "@/lib/sessions";
-import { createAutosaveQueue } from "@/lib/application/autosave-queue";
+import { createAutosaveQueue } from "@/lib/workflows/autosave-queue";
 import type { SessionRecord, SessionSnapshotInput } from "@/types/session";
 import { useAppStore } from "@/state/store";
 

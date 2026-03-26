@@ -16,7 +16,10 @@ type PersistSessionMemorySummaryArgs = {
   nodes: CanvasNode[];
   selectedDatasetNames: string[];
   previousSummary: string | null;
-  setSessionMemorySummary: (sessionId: string, summary: string) => Promise<void>;
+  setSessionMemorySummary: (
+    sessionId: string,
+    summary: string
+  ) => Promise<void>;
 };
 
 export const persistSessionMemorySummary = async ({

@@ -130,15 +130,18 @@ export const useDatasetWorkflows = () => {
     [isDuckDBReady, loadDatasetIntoDuckDB, upsertDataset]
   );
 
-  const removeDataset = useCallback(async (id: string) => {
-    const dataset = useAppStore
-      .getState()
-      .datasets.find((item) => item.id === id);
-    if (!dataset || dataset.source === "sample") return;
+  const removeDataset = useCallback(
+    async (id: string) => {
+      const dataset = useAppStore
+        .getState()
+        .datasets.find((item) => item.id === id);
+      if (!dataset || dataset.source === "sample") return;
 
-    await removeStoredDataset(id);
-    removeDatasetById(id);
-  }, [removeDatasetById]);
+      await removeStoredDataset(id);
+      removeDatasetById(id);
+    },
+    [removeDatasetById]
+  );
 
   const toggleSelection = useCallback(
     (id: string) => {

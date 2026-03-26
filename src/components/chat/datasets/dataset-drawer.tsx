@@ -3,7 +3,7 @@
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/chat/datasets/dataset-card";
-import { useDatasetWorkflows } from "@/lib/application/dataset-workflows";
+import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import { useDatasetsState } from "@/state/hooks/use-datasets-state";
 
 type DatasetDrawerProps = {

@@ -86,11 +86,11 @@ const DeleteButton = ({
   datasetName: string;
 }) => (
   <Button
-    variant="ghost"
+    variant="destructive"
     size="sm-icon"
     onClick={onDelete}
     aria-label={`Delete ${datasetName}`}
-    className="text-dim opacity-0 transition-all hover:bg-destructive hover:text-destructive-foreground focus-visible:opacity-100 group-hover:opacity-100 group-focus-visible:opacity-100"
+    className="opacity-0 transition-all focus-visible:opacity-100 group-hover:opacity-100 group-focus-visible:opacity-100"
   >
     <TrashIcon />
   </Button>

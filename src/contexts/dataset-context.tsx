@@ -14,11 +14,16 @@ import { useDuckDB } from "@/contexts/duckdb-context";
 import {
   getStoredDatasets,
   storeDataset,
-  getDatasetContent,
   removeStoredDataset,
 } from "@/lib/dataset-storage";
-import { SAMPLE_DATASETS } from "@/constants/sample-datasets";
-import type { DatasetInfo, DatasetFormat, DatasetMeta } from "@/types/dataset";
+import {
+  buildSampleDatasetsInfo,
+  detectFormat,
+  getDatasetContent,
+  getDatasetMetaFromUploadedFile,
+  markDatasetAsLoaded,
+} from "@/lib/datasets";
+import type { DatasetInfo } from "@/types/dataset";
 import type { DatasetSchema } from "@/types/duckdb";
 
 type DatasetContextValue = {
@@ -36,40 +41,13 @@ type DatasetContextValue = {
 
 const DatasetContext = createContext<DatasetContextValue | null>(null);
 
-const detectFormat = (fileName: string): DatasetFormat | null => {
-  const ext = fileName.split(".").pop()?.toLowerCase();
-  if (ext === "csv") return "csv";
-  if (ext === "json" || ext === "jsonl" || ext === "ndjson") return "json";
-  return null;
-};
-
-const toTableName = (fileName: string): string =>
-  fileName
-    .replace(/\.[^.]+$/, "")
-    .replace(/[^a-zA-Z0-9_]/g, "_")
-    .toLowerCase();
-
-const buildSampleDatasets = (): DatasetInfo[] =>
-  SAMPLE_DATASETS.map((s) => ({
-    id: s.id,
-    name: s.name,
-    fileName: s.fileName,
-    tableName: s.tableName,
-    source: "sample" as const,
-    format: "csv" as const,
-    schema: null,
-    isLoaded: false,
-    isSelected: false,
-    emoji: s.emoji,
-    rowCount: s.rows,
-    columnCount: s.cols,
-  }));
-
 const DatasetProvider = ({ children }: { children: ReactNode }) => {
   const { status: duckDBStatus, loadCSV, loadJSON } = useDuckDB();
   const isDuckDBReady = duckDBStatus === "ready";
 
-  const [datasets, setDatasets] = useState<DatasetInfo[]>(buildSampleDatasets);
+  const [datasets, setDatasets] = useState<DatasetInfo[]>(
+    buildSampleDatasetsInfo
+  );
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const initializedRef = useRef(false);
   const loadingRef = useRef<Set<string>>(new Set());
@@ -80,10 +58,6 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
 
     const restoreUserDatasets = async () => {
       const stored = await getStoredDatasets();
-      if (stored.length === 0) {
-        setIsDrawerOpen(true);
-        return;
-      }
 
       const userDatasets: DatasetInfo[] = stored.map((meta) => ({
         ...meta,
@@ -92,35 +66,21 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
         isLoaded: false,
       }));
 
-      setDatasets((prev) => [...prev, ...userDatasets]);
       setIsDrawerOpen(true);
+      setDatasets((prev) => [...prev, ...userDatasets]);
     };
 
     restoreUserDatasets();
   }, []);
 
   const loadDatasetIntoDuckDB = useCallback(
-    async (dataset: DatasetInfo, content: string): Promise<DatasetSchema> => {
-      if (dataset.format === "json") {
-        return loadJSON(dataset.tableName, content);
-      }
-      return loadCSV(dataset.tableName, content);
+    async (dataset: DatasetInfo, content: string) => {
+      const { format, tableName } = dataset;
+      return format === "json"
+        ? loadJSON(tableName, content)
+        : loadCSV(tableName, content);
     },
     [loadCSV, loadJSON]
-  );
-
-  const fetchSampleContent = useCallback(
-    async (dataset: DatasetInfo): Promise<string> => {
-      const sample = SAMPLE_DATASETS.find((s) => s.id === dataset.id);
-      if (!sample) throw new Error(`Sample dataset "${dataset.id}" not found`);
-      const response = await fetch(sample.filePath);
-      if (!response.ok)
-        throw new Error(
-          `Failed to fetch ${sample.filePath}: ${response.statusText}`
-        );
-      return response.text();
-    },
-    []
   );
 
   const ensureLoaded = useCallback(
@@ -130,28 +90,12 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
       loadingRef.current.add(dataset.id);
 
       try {
-        let content: string;
-        if (dataset.source === "sample") {
-          content = await fetchSampleContent(dataset);
-        } else {
-          const stored = await getDatasetContent(dataset.id);
-          if (!stored) throw new Error(`No stored content for "${dataset.id}"`);
-          content = stored;
-        }
-
+        const content = await getDatasetContent(dataset);
         const schema = await loadDatasetIntoDuckDB(dataset, content);
 
         setDatasets((prev) =>
           prev.map((d) =>
-            d.id === dataset.id
-              ? {
-                  ...d,
-                  schema,
-                  isLoaded: true,
-                  rowCount: schema.rowCount,
-                  columnCount: schema.columns.length,
-                }
-              : d
+            d.id === dataset.id ? markDatasetAsLoaded(d, schema) : d
           )
         );
       } catch (err) {
@@ -160,7 +104,7 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
         loadingRef.current.delete(dataset.id);
       }
     },
-    [isDuckDBReady, fetchSampleContent, loadDatasetIntoDuckDB]
+    [isDuckDBReady, loadDatasetIntoDuckDB]
   );
 
   const toggleSelection = useCallback(
@@ -191,52 +135,26 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
       if (!format) throw new Error(`Unsupported file format: ${file.name}`);
 
       const content = await file.text();
-      const id = `user-${Date.now()}-${file.name}`;
-      const tableName = toTableName(file.name);
-      const name = file.name.replace(/\.[^.]+$/, "").replace(/[_-]/g, " ");
 
+      const meta = getDatasetMetaFromUploadedFile(file, format);
       const newDataset: DatasetInfo = {
-        id,
-        name,
-        fileName: file.name,
-        tableName,
-        source: "user",
-        format,
+        ...meta,
         schema: null,
         isLoaded: false,
         isSelected: true,
       };
 
-      const meta: DatasetMeta = {
-        id,
-        name,
-        fileName: file.name,
-        tableName,
-        source: "user",
-        format,
-      };
       await storeDataset(meta, content);
 
       setDatasets((prev) => [...prev, newDataset]);
 
       if (isDuckDBReady) {
         try {
-          const schema =
-            format === "json"
-              ? await loadJSON(tableName, content)
-              : await loadCSV(tableName, content);
+          const schema = await loadDatasetIntoDuckDB(newDataset, content);
 
           setDatasets((prev) =>
             prev.map((d) =>
-              d.id === id
-                ? {
-                    ...d,
-                    schema,
-                    isLoaded: true,
-                    rowCount: schema.rowCount,
-                    columnCount: schema.columns.length,
-                  }
-                : d
+              d.id === meta.id ? markDatasetAsLoaded(d, schema) : d
             )
           );
         } catch (err) {
@@ -244,7 +162,7 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
         }
       }
     },
-    [isDuckDBReady, loadCSV, loadJSON]
+    [isDuckDBReady, loadDatasetIntoDuckDB]
   );
 
   const removeDataset = useCallback((id: string) => {

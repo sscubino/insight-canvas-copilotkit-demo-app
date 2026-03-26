@@ -52,7 +52,7 @@ export const useAutoFitNewNodes = ({
     if (!hasOffscreenNode) return;
 
     const timer = setTimeout(() => {
-      fitView({ padding: { x: 0.1, y: 0.3 }, duration: 500 });
+      fitView({ padding: 0.1, duration: 500 });
     }, 50);
 
     return () => clearTimeout(timer);

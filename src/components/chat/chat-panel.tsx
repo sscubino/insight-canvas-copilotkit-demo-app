@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { CopilotChat } from "@copilotkit/react-ui";
 import { SYSTEM_PROMPT } from "@/constants/system-prompt";
 import {
@@ -8,13 +9,29 @@ import {
   SidebarContent,
   SidebarTitle,
 } from "@/components/ui/sidebar";
-import { DatasetDrawer } from "@/components/datasets/dataset-drawer";
+import { DatasetDrawer } from "@/components/chat/datasets/dataset-drawer";
+import { NodeDetailDrawer } from "@/components/chat/node-detail/node-detail-drawer";
 import { useDatasets } from "@/contexts/dataset-context";
+import { useCanvasState } from "@/contexts/canvas-state-context";
 import { Button } from "@/components/ui/button";
 import { PaperclipIcon } from "@/components/icons/paperclip";
 
 const ChatPanel = () => {
-  const { toggleDrawer } = useDatasets();
+  const { selectedNodeId, deselectNode } = useCanvasState();
+  const {
+    isDrawerOpen: isDatasetDrawerOpen,
+    closeDrawer: closeDatasetDrawer,
+    toggleDrawer,
+  } = useDatasets();
+
+  useEffect(() => {
+    if (selectedNodeId) closeDatasetDrawer();
+  }, [selectedNodeId, closeDatasetDrawer]);
+
+  const handleToggleDatasetDrawer = () => {
+    if (!isDatasetDrawerOpen) deselectNode();
+    toggleDrawer();
+  };
 
   return (
     <Sidebar
@@ -29,7 +46,7 @@ const ChatPanel = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={toggleDrawer}
+            onClick={handleToggleDatasetDrawer}
             aria-label="Open datasets"
           >
             <PaperclipIcon width={16} height={16} />
@@ -48,6 +65,7 @@ const ChatPanel = () => {
           className="flex-1"
         />
         <DatasetDrawer />
+        <NodeDetailDrawer />
       </SidebarContent>
     </Sidebar>
   );

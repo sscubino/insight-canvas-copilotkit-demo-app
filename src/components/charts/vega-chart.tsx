@@ -146,7 +146,7 @@ const VegaChart = memo(({ spec, className }: VegaChartProps) => {
     <div
       ref={containerRef}
       className={cn(
-        "w-full overflow-hidden [&_.vega-embed]:p-0! min-w-max",
+        "w-full overflow-hidden [&_.vega-embed]:p-0! [&>svg]:bg-transparent!",
         isBarChartWithoutLegend(spec) && "pr-6",
         className
       )}

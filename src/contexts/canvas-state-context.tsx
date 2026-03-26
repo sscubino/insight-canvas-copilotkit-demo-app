@@ -25,6 +25,7 @@ import {
 type CanvasStateContextValue = {
   nodes: CanvasNode[];
   edges: CanvasEdge[];
+  selectedNodeId: string | null;
   onNodesChange: OnNodesChange<CanvasNode>;
   onEdgesChange: OnEdgesChange<CanvasEdge>;
   onConnect: OnConnect;
@@ -32,6 +33,8 @@ type CanvasStateContextValue = {
   updateNode: (id: string, data: Partial<CanvasNodeData>) => void;
   removeNode: (id: string) => void;
   addEdge: (sourceId: string, targetId: string) => void;
+  selectNode: (id: string) => void;
+  deselectNode: () => void;
 };
 
 const CanvasStateContext = createContext<CanvasStateContextValue | null>(null);
@@ -39,6 +42,7 @@ const CanvasStateContext = createContext<CanvasStateContextValue | null>(null);
 const CanvasStateProvider = ({ children }: { children: ReactNode }) => {
   const [nodes, setNodes] = useState<CanvasNode[]>([]);
   const [edges, setEdges] = useState<CanvasEdge[]>([]);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   const onNodesChange: OnNodesChange<CanvasNode> = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -86,11 +90,20 @@ const CanvasStateProvider = ({ children }: { children: ReactNode }) => {
     setEdges((eds) => addEdgeToCanvas(eds, sourceId, targetId));
   }, []);
 
+  const selectNode = useCallback((id: string) => {
+    setSelectedNodeId((prev) => (prev === id ? null : id));
+  }, []);
+
+  const deselectNode = useCallback(() => {
+    setSelectedNodeId(null);
+  }, []);
+
   return (
     <CanvasStateContext.Provider
       value={{
         nodes,
         edges,
+        selectedNodeId,
         onNodesChange,
         onEdgesChange,
         onConnect,
@@ -98,6 +111,8 @@ const CanvasStateProvider = ({ children }: { children: ReactNode }) => {
         updateNode,
         removeNode,
         addEdge,
+        selectNode,
+        deselectNode,
       }}
     >
       {children}

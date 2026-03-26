@@ -66,7 +66,11 @@ export type CanvasEdge = Edge;
 
 export type NodeConfig = {
   label: string;
-  eyebrowClass: string;
-  wrapperClass: string;
+  textColorClass: string;
+  borderClass: string;
+  selectedBorderClass: string;
+  selectedShadowClass: string;
+  selectedDotClass: string;
+  pillContainerClass: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
 };

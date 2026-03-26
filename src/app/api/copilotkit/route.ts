@@ -1,25 +1,23 @@
+import { SYSTEM_PROMPT } from "@/constants/system-prompt";
 import {
   CopilotRuntime,
   copilotRuntimeNextJSAppRouterEndpoint,
-  AnthropicAdapter,
 } from "@copilotkit/runtime";
-import Anthropic from "@anthropic-ai/sdk";
+import { BuiltInAgent } from "@copilotkit/runtime/v2";
+import { NextRequest } from "next/server";
 
-const anthropicClient = new Anthropic({
-  baseURL: "https://api.anthropic.com/v1",
+const builtInAgent = new BuiltInAgent({
+  model: "anthropic/claude-sonnet-4-6",
+  prompt: SYSTEM_PROMPT,
 });
 
-const serviceAdapter = new AnthropicAdapter({
-  anthropic: anthropicClient,
-  model: "claude-sonnet-4-20250514",
+const runtime = new CopilotRuntime({
+  agents: { default: builtInAgent },
 });
 
-const runtime = new CopilotRuntime();
-
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
     runtime,
-    serviceAdapter,
     endpoint: "/api/copilotkit",
   });
 

@@ -49,14 +49,16 @@ const useChatSessionSync = () => {
 
   // Control copilotkit status changes
   useEffect(() => {
-    if (copilotkitStatusRef.current === "ready") return;
-    if (copilotkitStatusRef.current === "uninitialized") {
-      copilotkitStatusRef.current = isLoading
-        ? "initializing"
-        : "uninitialized";
-    } else {
-      copilotkitStatusRef.current = isLoading ? "loading" : "ready";
-    }
+    const COPILOTKIT_TRANSITIONS = {
+      uninitialized: { loading: "initializing", idle: "uninitialized" },
+      initializing: { loading: "initializing", idle: "ready" },
+      loading: { loading: "loading", idle: "ready" },
+      ready: { loading: "loading", idle: "ready" },
+    } as const;
+    const event = isLoading ? "loading" : "idle";
+    const current = copilotkitStatusRef.current;
+    const next = COPILOTKIT_TRANSITIONS[current][event];
+    copilotkitStatusRef.current = next;
   }, [isLoading]);
 
   // Hydrate session
@@ -74,6 +76,7 @@ const useChatSessionSync = () => {
       consumeHydrationRecord();
     }
   }, [
+    isLoading,
     isCopilotkitReady,
     isInitialized,
     hydrationRecord,

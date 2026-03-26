@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Spline_Sans_Mono } from "next/font/google";
 import { CopilotKit } from "@copilotkit/react-core";
 import { DuckDBProvider } from "@/contexts/duckdb-context";
-import { SessionProvider } from "@/contexts/session-context";
 import { SessionsSidebar } from "@/components/layout/sessions-sidebar";
+import { AppStateBootstrap } from "@/components/state/app-state-bootstrap";
 import "@copilotkit/react-ui/styles.css";
 import "./globals.css";
 import { BackgroundShapes } from "@/components/layout/background-shapes";
@@ -43,10 +43,9 @@ const RootLayout = ({
         <BackgroundShapes />
         <CopilotKit runtimeUrl="/api/copilotkit" enableInspector={false}>
           <DuckDBProvider>
-            <SessionProvider>
-              <SessionsSidebar />
-              <div className="flex-1 ml-2">{children}</div>
-            </SessionProvider>
+            <AppStateBootstrap />
+            <SessionsSidebar />
+            <div className="flex-1 ml-2">{children}</div>
           </DuckDBProvider>
         </CopilotKit>
       </body>

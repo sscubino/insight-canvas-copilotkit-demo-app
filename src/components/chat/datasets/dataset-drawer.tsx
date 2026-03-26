@@ -1,19 +1,19 @@
 "use client";
 
-import { useDatasets } from "@/contexts/dataset-context";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/chat/datasets/dataset-card";
+import { useDatasetWorkflows } from "@/lib/application/dataset-workflows";
+import { useDatasetsState } from "@/state/hooks/use-datasets-state";
 
-const DatasetDrawer = () => {
-  const {
-    datasets,
-    isDrawerOpen,
-    closeDrawer,
-    addUserFile,
-    toggleSelection,
-    removeDataset,
-  } = useDatasets();
+type DatasetDrawerProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
+  const { datasets } = useDatasetsState();
+  const { addUserFile, toggleSelection, removeDataset } = useDatasetWorkflows();
 
   const handleFileSelect = async (file: File) => {
     try {
@@ -28,8 +28,8 @@ const DatasetDrawer = () => {
 
   return (
     <Drawer
-      isOpen={isDrawerOpen}
-      onClose={closeDrawer}
+      isOpen={isOpen}
+      onClose={onClose}
       className="max-h-[calc(100%-80px)]"
     >
       <DrawerContent>
@@ -62,7 +62,9 @@ const DatasetDrawer = () => {
                     key={dataset.id}
                     dataset={dataset}
                     onToggle={toggleSelection}
-                    onDelete={removeDataset}
+                    onDelete={(id) => {
+                      void removeDataset(id);
+                    }}
                   />
                 ))}
               </div>

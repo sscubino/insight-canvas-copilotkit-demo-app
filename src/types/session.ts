@@ -8,7 +8,6 @@ export type SessionCanvasState = {
 
 export type SessionRecord = {
   id: string;
-  threadId: string;
   name: string;
   createdAt: string;
   updatedAt: string;

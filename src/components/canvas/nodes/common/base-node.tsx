@@ -3,7 +3,7 @@ import { Handle, Position } from "@xyflow/react";
 import type { CanvasNodeData, NodeConfig } from "@/types/canvas";
 import { NODE_CONFIG } from "@/constants/nodes-config";
 import { cn } from "@/lib/utils";
-import { useCanvasState } from "@/contexts/canvas-state-context";
+import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
 import { StatusDot } from "@/components/ui/status-dot";
 
 type BaseNodeWrapperProps = {
@@ -152,7 +152,7 @@ type BaseNodeProps = {
 };
 
 const BaseNode = ({ data, children, className, id }: BaseNodeProps) => {
-  const { selectedNodeId } = useCanvasState();
+  const { selectedNodeId } = useWorkspaceState();
   const config = NODE_CONFIG[data.variant];
   const Icon = config.icon;
 

@@ -12,7 +12,7 @@ import "@xyflow/react/dist/style.css";
 
 import { NODE_TYPES } from "@/constants/nodes-config";
 import { CanvasZoomControls } from "./canvas-zoom-controls";
-import { useCanvasState } from "@/contexts/canvas-state-context";
+import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
 import { useAutoFitNewNodes } from "@/hooks/use-auto-fit-new-nodes";
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
@@ -32,7 +32,7 @@ const InsightCanvasInner = () => {
     onConnect,
     selectNode,
     deselectNode,
-  } = useCanvasState();
+  } = useWorkspaceState();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useAutoFitNewNodes({ nodes, containerRef });

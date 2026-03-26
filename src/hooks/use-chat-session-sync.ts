@@ -45,7 +45,9 @@ const useChatSessionSync = () => {
   const agentSetterRef = useRef(setAgentCanvasStateRaw);
   agentSetterRef.current = setAgentCanvasStateRaw;
 
-  const isCopilotkitReady = copilotkitStatusRef.current === "ready";
+  const isCopilotkitInitialized = !["uninitialized", "initializing"].includes(
+    copilotkitStatusRef.current
+  );
 
   const buildSnapshot = useCallback((): SessionSnapshotInput => {
     return {
@@ -58,14 +60,16 @@ const useChatSessionSync = () => {
 
   // Control copilotkit status changes
   useEffect(() => {
-    if (copilotkitStatusRef.current === "ready") return;
-    if (copilotkitStatusRef.current === "uninitialized") {
-      copilotkitStatusRef.current = isLoading
-        ? "initializing"
-        : "uninitialized";
-    } else {
-      copilotkitStatusRef.current = isLoading ? "loading" : "ready";
-    }
+    const COPILOTKIT_TRANSITIONS = {
+      uninitialized: { loading: "initializing", idle: "uninitialized" },
+      initializing: { loading: "initializing", idle: "ready" },
+      loading: { loading: "loading", idle: "ready" },
+      ready: { loading: "loading", idle: "ready" },
+    } as const;
+    const event = isLoading ? "loading" : "idle";
+    const current = copilotkitStatusRef.current;
+    const next = COPILOTKIT_TRANSITIONS[current][event];
+    copilotkitStatusRef.current = next;
   }, [isLoading]);
 
   // Hydrate session
@@ -87,14 +91,15 @@ const useChatSessionSync = () => {
       selectedNodeId: hSelected,
     });
 
-    if (isCopilotkitReady) {
+    if (isCopilotkitInitialized) {
       const hydratedMessages = hydrationRecord.messages as ChatMessages;
       previousSummaryMessagesLengthRef.current = hydratedMessages.length;
       setMessages(hydratedMessages);
       consumeHydrationRecord();
     }
   }, [
-    isCopilotkitReady,
+    isLoading,
+    isCopilotkitInitialized,
     isInitialized,
     hydrationRecord,
     setMessages,
@@ -142,7 +147,7 @@ const useChatSessionSync = () => {
   // Persist session summary
   useEffect(() => {
     if (!isInitialized) return;
-    if (!isCopilotkitReady) return;
+    if (!isCopilotkitInitialized) return;
 
     const wasLoading = prevIsLoadingRef.current;
     prevIsLoadingRef.current = isLoading;
@@ -175,7 +180,7 @@ const useChatSessionSync = () => {
     selectedDatasets,
     isInitialized,
     hydrationRecord,
-    isCopilotkitReady,
+    isCopilotkitInitialized,
     setSessionMemorySummary,
   ]);
 

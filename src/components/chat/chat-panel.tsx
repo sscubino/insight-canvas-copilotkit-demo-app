@@ -15,8 +15,10 @@ import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
 import { useDatasetsState } from "@/state/hooks/use-datasets-state";
 import { useSessionState } from "@/state/hooks/use-session-state";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { PaperclipIcon } from "@/components/icons/paperclip";
 import { useChatSessionSync } from "@/hooks/use-chat-session-sync";
+import { cn } from "@/lib/utils";
 
 const ChatPanel = () => {
   const { selectedNodeId, deselectNode } = useWorkspaceState();
@@ -26,6 +28,9 @@ const ChatPanel = () => {
   const { handleFirstPromptSessionCreate } = useChatSessionSync();
   const [isDatasetDrawerOpen, setIsDatasetDrawerOpen] = useState(false);
 
+  const isWorkspaceInitialized =
+    isSessionInitialized && isDatasetsInitialized && !hydrationRecord;
+
   useEffect(() => {
     if (selectedNodeId) {
       setIsDatasetDrawerOpen(false);
@@ -33,17 +38,11 @@ const ChatPanel = () => {
   }, [selectedNodeId]);
 
   useEffect(() => {
-    if (!isSessionInitialized || !isDatasetsInitialized || hydrationRecord)
-      return;
+    if (!isWorkspaceInitialized) return;
     if (selectedDatasets.length === 0) {
       setIsDatasetDrawerOpen(true);
     }
-  }, [
-    selectedDatasets,
-    isSessionInitialized,
-    isDatasetsInitialized,
-    hydrationRecord,
-  ]);
+  }, [selectedDatasets, isWorkspaceInitialized]);
 
   const handleToggleDatasetDrawer = () => {
     if (!isDatasetDrawerOpen) deselectNode();
@@ -80,8 +79,16 @@ const ChatPanel = () => {
             initial: "Hi! \uD83D\uDC4B How can the agent help you with?",
             placeholder: "Type a prompt...",
           }}
-          className="flex-1"
+          className={cn(
+            "flex-1 transition-opacity duration-200",
+            !isWorkspaceInitialized && "opacity-0"
+          )}
         />
+        {!isWorkspaceInitialized && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Spinner size="lg" />
+          </div>
+        )}
         <DatasetDrawer
           isOpen={isDatasetDrawerOpen}
           onClose={() => setIsDatasetDrawerOpen(false)}

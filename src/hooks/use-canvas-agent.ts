@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useCoAgent } from "@copilotkit/react-core";
 import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
+import { useAppStore } from "@/state/store";
 import { INSIGHT_CANVAS_AGENT_ID } from "@/mastra/constants";
 import { computePosition, generateNodeId, generateEdgeId } from "@/lib/canvas";
 import type { AgentCanvasState } from "@/mastra/agents/state";
@@ -100,6 +101,7 @@ export const useCanvasAgent = (
   });
 
   const { replaceCanvasState } = useWorkspaceState();
+  const hydrationRecord = useAppStore((s) => s.hydrationRecord);
   const syncingFromAgentRef = useRef(false);
   const lastAgentSnapshotRef = useRef<string>("");
   const setStateRef = useRef(setStateRaw);
@@ -111,6 +113,12 @@ export const useCanvasAgent = (
     if (!state?.nodes) return;
 
     const snapshot = JSON.stringify({ nodes: state.nodes, edges: state.edges });
+
+    if (hydrationRecord) {
+      lastAgentSnapshotRef.current = snapshot;
+      return;
+    }
+
     if (snapshot === lastAgentSnapshotRef.current) return;
     lastAgentSnapshotRef.current = snapshot;
 
@@ -124,7 +132,7 @@ export const useCanvasAgent = (
     requestAnimationFrame(() => {
       syncingFromAgentRef.current = false;
     });
-  }, [state?.nodes, state?.edges, state?.selectedNodeId, replaceCanvasState]);
+  }, [state?.nodes, state?.edges, state?.selectedNodeId, replaceCanvasState, hydrationRecord]);
 
   const setAgentState: AgentStateSetter = useCallback(
     (

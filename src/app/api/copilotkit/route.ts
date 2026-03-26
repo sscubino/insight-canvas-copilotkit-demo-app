@@ -5,9 +5,10 @@ import {
 } from "@copilotkit/runtime";
 import { BuiltInAgent } from "@copilotkit/runtime/v2";
 import { NextRequest } from "next/server";
+import config from "@/lib/config";
 
 const builtInAgent = new BuiltInAgent({
-  model: "anthropic/claude-sonnet-4-6",
+  model: config.copilotkit.builtInAgentModel,
   prompt: SYSTEM_PROMPT,
 });
 

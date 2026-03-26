@@ -15,3 +15,8 @@ export const joinWithConjunction = (
     items[items.length - 1]
   );
 };
+
+export const clampText = (text: string, limit: number): string => {
+  if (text.length <= limit) return text;
+  return `${text.slice(0, limit - 3).trimEnd()}...`;
+};

@@ -37,6 +37,7 @@ type DatasetContextValue = {
   addUserFile: (file: File) => Promise<void>;
   removeDataset: (id: string) => void;
   toggleSelection: (id: string) => void;
+  setSelectedDatasetIds: (datasetIds: string[]) => void;
 };
 
 const DatasetContext = createContext<DatasetContextValue | null>(null);
@@ -66,7 +67,6 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
         isLoaded: false,
       }));
 
-      setIsDrawerOpen(true);
       setDatasets((prev) => [...prev, ...userDatasets]);
     };
 
@@ -128,6 +128,39 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
     },
     [ensureLoaded]
   );
+
+  const setSelectedDatasetIds = useCallback(
+    (datasetIds: string[]) => {
+      const selectedSet = new Set(datasetIds);
+      setDatasets((prev) => {
+        prev.forEach((dataset) => {
+          const shouldSelect = selectedSet.has(dataset.id);
+          if (shouldSelect && !dataset.isLoaded) {
+            ensureLoaded(dataset);
+          }
+        });
+
+        return prev.map((dataset) => ({
+          ...dataset,
+          isSelected: selectedSet.has(dataset.id),
+        }));
+      });
+    },
+    [ensureLoaded]
+  );
+
+  useEffect(() => {
+    if (!isDuckDBReady) return;
+
+    const pendingSelected = datasets.filter(
+      (dataset) => dataset.isSelected && !dataset.isLoaded
+    );
+    if (pendingSelected.length === 0) return;
+
+    pendingSelected.forEach((dataset) => {
+      void ensureLoaded(dataset);
+    });
+  }, [isDuckDBReady, datasets, ensureLoaded]);
 
   const addUserFile = useCallback(
     async (file: File) => {
@@ -203,6 +236,7 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
       addUserFile,
       removeDataset,
       toggleSelection,
+      setSelectedDatasetIds,
     }),
     [
       datasets,
@@ -215,6 +249,7 @@ const DatasetProvider = ({ children }: { children: ReactNode }) => {
       addUserFile,
       removeDataset,
       toggleSelection,
+      setSelectedDatasetIds,
     ]
   );
 

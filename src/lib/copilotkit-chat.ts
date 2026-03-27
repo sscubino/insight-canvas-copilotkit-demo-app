@@ -24,3 +24,26 @@ export const getFirstUserPrompt = (messages: ChatMessages): string => {
   if (!firstUserMessage) return "";
   return getMessageContentText(firstUserMessage).trim();
 };
+
+/** Plain text from an AG-UI user message (v2 CopilotChat / useAgent). */
+export const getAgUiUserMessageText = (message: {
+  role: string;
+  content: unknown;
+}): string => {
+  if (message.role !== "user") return "";
+  const { content } = message;
+  if (typeof content === "string") return content;
+  if (!Array.isArray(content)) return "";
+  return content
+    .filter(
+      (part): part is { type: "text"; text: string } =>
+        typeof part === "object" &&
+        part !== null &&
+        "type" in part &&
+        part.type === "text" &&
+        "text" in part &&
+        typeof (part as { text: unknown }).text === "string"
+    )
+    .map((part) => part.text)
+    .join("");
+};

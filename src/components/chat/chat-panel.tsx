@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CopilotChat } from "@copilotkit/react-ui";
-import { SYSTEM_PROMPT } from "@/constants/system-prompt";
+import { CopilotChat } from "@copilotkit/react-core/v2";
 import {
   Sidebar,
   SidebarHeader,
@@ -19,13 +18,14 @@ import { Spinner } from "@/components/ui/spinner";
 import { PaperclipIcon } from "@/components/icons/paperclip";
 import { useChatSessionSync } from "@/hooks/use-chat-session-sync";
 import { cn } from "@/lib/utils";
+import { INSIGHT_CANVAS_AGENT_ID } from "@/mastra/constants";
 
 const ChatPanel = () => {
   const { selectedNodeId, deselectNode } = useWorkspaceState();
   const { selectedDatasets, isDatasetsInitialized } = useDatasetsState();
   const { isInitialized: isSessionInitialized, hydrationRecord } =
     useSessionState();
-  const { handleFirstPromptSessionCreate } = useChatSessionSync();
+  useChatSessionSync();
   const [isDatasetDrawerOpen, setIsDatasetDrawerOpen] = useState(false);
 
   const isWorkspaceInitialized =
@@ -72,12 +72,12 @@ const ChatPanel = () => {
 
       <SidebarContent className="relative overflow-hidden">
         <CopilotChat
-          instructions={SYSTEM_PROMPT}
-          onSubmitMessage={handleFirstPromptSessionCreate}
+          agentId={INSIGHT_CANVAS_AGENT_ID}
           labels={{
-            title: "Insight Canvas",
-            initial: "Hi! \uD83D\uDC4B How can the agent help you with?",
-            placeholder: "Type a prompt...",
+            modalHeaderTitle: "Insight Canvas",
+            welcomeMessageText:
+              "Hi! \uD83D\uDC4B How can the agent help you with?",
+            chatInputPlaceholder: "Type a prompt...",
           }}
           className={cn(
             "flex-1 transition-opacity duration-200",

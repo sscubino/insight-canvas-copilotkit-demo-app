@@ -15,11 +15,17 @@ import { INSIGHT_CANVAS_AGENT_ID } from "@/mastra/constants";
 import { toAgentNodes, toAgentEdges } from "@/hooks/use-canvas-agent";
 import type { AgentCanvasState } from "@/mastra/agents/state";
 import type { SessionSnapshotInput } from "@/types/session";
-import { getFirstUserPrompt, type ChatMessages } from "@/lib/copilotkit-chat";
+import {
+  getAgUiUserMessageText,
+  getFirstUserPrompt,
+  type ChatMessages,
+} from "@/lib/copilotkit-chat";
+import { useAgent } from "@copilotkit/react-core/v2";
 
 type CopilotkitStatus = "uninitialized" | "initializing" | "loading" | "ready";
 
 const useChatSessionSync = () => {
+  const { agent } = useAgent({ agentId: INSIGHT_CANVAS_AGENT_ID });
   const { messages, setMessages, isLoading } = useCopilotChatInternal();
   const { nodes, edges, selectedNodeId, replaceCanvasState } =
     useWorkspaceState();
@@ -44,6 +50,10 @@ const useChatSessionSync = () => {
   const previousSummaryMessagesLengthRef = useRef<number>(0);
   const agentSetterRef = useRef(setAgentCanvasStateRaw);
   agentSetterRef.current = setAgentCanvasStateRaw;
+  const handledFirstPromptUserMessageIdRef = useRef<string | null>(null);
+  const prevActiveSessionIdForFirstPromptRef = useRef<string | null>(
+    activeSessionId
+  );
 
   const isCopilotkitInitialized = !["uninitialized", "initializing"].includes(
     copilotkitStatusRef.current
@@ -184,28 +194,59 @@ const useChatSessionSync = () => {
     setSessionMemorySummary,
   ]);
 
-  const handleFirstPromptSessionCreate = async (prompt: string) => {
+  const persistFirstPromptSession = useCallback(
+    async (prompt: string) => {
+      const sessionId = await createSessionFromFirstPrompt({
+        firstPrompt: prompt,
+        selectedDatasetIds: selectedDatasets.map((dataset) => dataset.id),
+        snapshot: buildSnapshot(),
+      });
+
+      try {
+        const title = await generateSessionTitle({
+          firstPrompt: prompt,
+          selectedDatasets: selectedDatasets.map((dataset) => dataset.name),
+        });
+        if (!title || title.trim().length === 0) return;
+        await setSessionName(sessionId, title);
+      } catch (error) {
+        console.error("Failed to generate session title:", error);
+      }
+    },
+    [
+      buildSnapshot,
+      createSessionFromFirstPrompt,
+      selectedDatasets,
+      setSessionName,
+    ]
+  );
+
+  useEffect(() => {
+    const prev = prevActiveSessionIdForFirstPromptRef.current;
+    if (prev && !activeSessionId) {
+      handledFirstPromptUserMessageIdRef.current = null;
+    }
+    prevActiveSessionIdForFirstPromptRef.current = activeSessionId;
+  }, [activeSessionId]);
+
+  useEffect(() => {
     if (activeSessionId) return;
 
-    const sessionId = await createSessionFromFirstPrompt({
-      firstPrompt: prompt,
-      selectedDatasetIds: selectedDatasets.map((dataset) => dataset.id),
-      snapshot: buildSnapshot(),
-    });
+    const firstUserMessage = agent.messages.find(
+      (message) => message.role === "user"
+    );
+    if (!firstUserMessage?.id) return;
 
-    try {
-      const title = await generateSessionTitle({
-        firstPrompt: prompt,
-        selectedDatasets: selectedDatasets.map((dataset) => dataset.name),
-      });
-      if (!title || title.trim().length === 0) return;
-      await setSessionName(sessionId, title);
-    } catch (error) {
-      console.error("Failed to generate session title:", error);
+    const prompt = getAgUiUserMessageText(firstUserMessage).trim();
+    if (!prompt) return;
+
+    if (handledFirstPromptUserMessageIdRef.current === firstUserMessage.id) {
+      return;
     }
-  };
 
-  return { handleFirstPromptSessionCreate };
+    handledFirstPromptUserMessageIdRef.current = firstUserMessage.id;
+    void persistFirstPromptSession(prompt);
+  }, [activeSessionId, agent.messages, persistFirstPromptSession]);
 };
 
 export { useChatSessionSync };

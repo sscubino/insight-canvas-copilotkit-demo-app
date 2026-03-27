@@ -4,7 +4,7 @@ import { CopilotKit } from "@copilotkit/react-core";
 import { DuckDBProvider } from "@/contexts/duckdb-context";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppStateBootstrap } from "@/components/state/app-state-bootstrap";
-import "@copilotkit/react-ui/styles.css";
+import "@copilotkit/react-ui/v2/styles.css";
 import "./globals.css";
 import { BackgroundShapes } from "@/components/layout/background-shapes";
 import { cn } from "@/lib/utils";

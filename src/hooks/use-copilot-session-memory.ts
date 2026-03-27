@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useCopilotReadable } from "@copilotkit/react-core";
+import { useAgentContext } from "@copilotkit/react-core/v2";
 import { useSessionState } from "@/state/hooks/use-session-state";
 import { getSessionRecord } from "@/lib/session-storage";
 import { clampText } from "@/lib/utils";
@@ -67,7 +67,7 @@ const useCopilotSessionMemory = () => {
     void loadSessionMemory();
   }, [candidateSessionIds]);
 
-  useCopilotReadable({
+  useAgentContext({
     description:
       "Compact memory from previous sessions (excluding the current active session). Use it as context for continuity when relevant.",
     value: memoryText,

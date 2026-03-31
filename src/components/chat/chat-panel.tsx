@@ -28,7 +28,6 @@ import {
 
 const ChatPanel = () => {
   const { agent } = useAgent();
-  const selectedNodeId = useAppStore((s) => s.selectedNodeId);
   const deselectNode = useAppStore((s) => s.deselectNode);
   const selectedDatasets = useSelectedDatasets();
   const isSessionInitialized = useAppStore((s) => s.isInitialized);
@@ -38,10 +37,16 @@ const ChatPanel = () => {
   const isWorkspaceInitialized = isSessionInitialized && !hydrationRecord;
 
   useEffect(() => {
-    if (selectedNodeId) {
-      setIsDatasetDrawerOpen(false);
-    }
-  }, [selectedNodeId]);
+    const unsub = useAppStore.subscribe((state, prevState) => {
+      if (
+        state.selectedNodeId &&
+        state.selectedNodeId !== prevState.selectedNodeId
+      ) {
+        setIsDatasetDrawerOpen(false);
+      }
+    });
+    return unsub;
+  }, []);
 
   useEffect(() => {
     if (!isWorkspaceInitialized) return;

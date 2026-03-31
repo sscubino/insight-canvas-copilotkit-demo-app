@@ -42,7 +42,6 @@ const buildStructuralFingerprint = (s: SessionCanvasState): string => {
       sourceHandle: e.sourceHandle,
       targetHandle: e.targetHandle,
     })),
-    selectedNodeId: s.selectedNodeId,
   });
 };
 
@@ -140,6 +139,8 @@ export const useCanvasAgentSharedState = () => {
     };
 
     const unsub = useAppStore.subscribe((state, prevState) => {
+      if (state.nodes === prevState.nodes && state.edges === prevState.edges)
+        return;
       if (canvasHydrationGate.isBlocked()) return;
       if (applyingFromAgentRef.current) return;
       const canvas = pickWorkspaceCanvas(state);

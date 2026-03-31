@@ -49,7 +49,9 @@ export const useDatasetWorkflows = () => {
       try {
         const content = await getDatasetContent(dataset);
         const schema = await loadDatasetIntoDuckDB(dataset, content);
-        useAppStore.getState().upsertDataset(markDatasetAsLoaded(dataset, schema));
+        useAppStore
+          .getState()
+          .upsertDataset(markDatasetAsLoaded(dataset, schema));
       } catch (error) {
         console.error(`Failed to load dataset "${dataset.id}":`, error);
       } finally {
@@ -109,7 +111,9 @@ export const useDatasetWorkflows = () => {
 
       try {
         const schema = await loadDatasetIntoDuckDB(dataset, content);
-        useAppStore.getState().upsertDataset(markDatasetAsLoaded(dataset, schema));
+        useAppStore
+          .getState()
+          .upsertDataset(markDatasetAsLoaded(dataset, schema));
       } catch (error) {
         console.error(`Failed to load user file "${file.name}":`, error);
       }
@@ -117,18 +121,15 @@ export const useDatasetWorkflows = () => {
     [isDuckDBReady, loadDatasetIntoDuckDB]
   );
 
-  const removeDataset = useCallback(
-    async (id: string) => {
-      const dataset = useAppStore
-        .getState()
-        .datasets.find((item) => item.id === id);
-      if (!dataset || dataset.source === "sample") return;
+  const removeDataset = useCallback(async (id: string) => {
+    const dataset = useAppStore
+      .getState()
+      .datasets.find((item) => item.id === id);
+    if (!dataset || dataset.source === "sample") return;
 
-      await removeStoredDataset(id);
-      useAppStore.getState().removeDatasetById(id);
-    },
-    []
-  );
+    await removeStoredDataset(id);
+    useAppStore.getState().removeDatasetById(id);
+  }, []);
 
   const toggleSelection = useCallback(
     (id: string) => {

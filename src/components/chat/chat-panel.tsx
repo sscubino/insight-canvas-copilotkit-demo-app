@@ -60,8 +60,13 @@ const ChatPanel = () => {
   };
 
   const handleFirstPromptSessionCreate = async (prompt: string) => {
-    const { activeSessionId, datasets, nodes, edges, selectedNodeId: selNodeId } =
-      useAppStore.getState();
+    const {
+      activeSessionId,
+      datasets,
+      nodes,
+      edges,
+      selectedNodeId: selNodeId,
+    } = useAppStore.getState();
     if (activeSessionId) return;
 
     const selected = datasets.filter((d) => d.isSelected);

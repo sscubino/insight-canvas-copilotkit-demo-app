@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CopilotChat } from "@copilotkit/react-ui";
 import { useAgent } from "@copilotkit/react-core/v2";
 import { SYSTEM_PROMPT } from "@/constants/system-prompt";

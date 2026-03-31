@@ -160,12 +160,17 @@ const DrawerDialog = ({
 
 type DrawerProps = {
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   children: ReactNode;
   className?: string;
 };
 
-const Drawer = ({ isOpen, onClose, children, className }: DrawerProps) => {
+const Drawer = ({
+  isOpen,
+  onClose = () => {},
+  children,
+  className,
+}: DrawerProps) => {
   return (
     <div
       className={cn(

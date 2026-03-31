@@ -1,6 +1,7 @@
 "use client";
 
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerFooter } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
 import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/chat/datasets/dataset-card";
 import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
@@ -25,13 +26,10 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
 
   const sampleDatasets = datasets.filter((d) => d.source === "sample");
   const userDatasets = datasets.filter((d) => d.source === "user");
+  const hasSelectedDatasets = datasets.some((d) => d.isSelected);
 
   return (
-    <Drawer
-      isOpen={isOpen}
-      onClose={onClose}
-      className="max-h-[calc(100%-80px)]"
-    >
+    <Drawer isOpen={isOpen} className="max-h-[calc(100%-80px)]">
       <DrawerContent>
         <div className="flex w-full flex-col items-center gap-4">
           <p className="text-center text-sm font-medium text-foreground">
@@ -91,6 +89,19 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
           </div>
         </div>
       </DrawerContent>
+
+      <DrawerFooter>
+        <Button
+          variant="primary"
+          size="md"
+          className="w-full"
+          disabled={!hasSelectedDatasets}
+          onClick={onClose}
+          aria-label="Confirm dataset selection"
+        >
+          Confirm Selection
+        </Button>
+      </DrawerFooter>
     </Drawer>
   );
 };

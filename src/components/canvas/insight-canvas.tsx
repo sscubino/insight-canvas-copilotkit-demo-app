@@ -12,7 +12,7 @@ import "@xyflow/react/dist/style.css";
 
 import { NODE_TYPES } from "@/constants/nodes-config";
 import { CanvasZoomControls } from "./canvas-zoom-controls";
-import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
+import { useAppStore } from "@/state/store";
 import { useAutoFitNewNodes } from "@/hooks/use-auto-fit-new-nodes";
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
@@ -24,15 +24,13 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
 };
 
 const InsightCanvasInner = () => {
-  const {
-    nodes,
-    edges,
-    onNodesChange,
-    onEdgesChange,
-    onConnect,
-    selectNode,
-    deselectNode,
-  } = useWorkspaceState();
+  const nodes = useAppStore((s) => s.nodes);
+  const edges = useAppStore((s) => s.edges);
+  const onNodesChange = useAppStore((s) => s.onNodesChange);
+  const onEdgesChange = useAppStore((s) => s.onEdgesChange);
+  const onConnect = useAppStore((s) => s.onConnect);
+  const selectNode = useAppStore((s) => s.selectNode);
+  const deselectNode = useAppStore((s) => s.deselectNode);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useAutoFitNewNodes({ nodes, containerRef });

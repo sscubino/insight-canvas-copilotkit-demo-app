@@ -2,12 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@/components/icons/plus";
-import { useSessionWorkflows } from "@/lib/workflows/session-workflows";
+import { startNewSession } from "@/lib/workflows/session-workflows";
 import { useSidebar } from "@/components/ui/sidebar";
 
 const NewSessionButton = () => {
   const { collapsed } = useSidebar();
-  const { startNewSession } = useSessionWorkflows();
 
   return (
     <Button

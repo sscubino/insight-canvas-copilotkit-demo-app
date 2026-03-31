@@ -76,7 +76,7 @@ export const useCopilotDataTools = (schemas: DatasetSchema[]) => {
 
   useAgentContext({
     description:
-      "The dataset schemas currently loaded in DuckDB. Use these to write correct SQL queries with valid table and column names. You can join across tables if multiple are available.",
+      "The dataset schemas selected for this session. Only query these tables — the database may contain other tables from different sessions that you must ignore. Use these schemas to write correct SQL queries with valid table and column names. You can join across tables if multiple are listed here.",
     value: schemaContextText,
   });
 

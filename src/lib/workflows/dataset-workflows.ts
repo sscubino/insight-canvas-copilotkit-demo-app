@@ -23,21 +23,8 @@ export const useDatasetWorkflows = () => {
   const { status: duckDBStatus, loadCSV, loadJSON } = useDuckDB();
   const isDuckDBReady = duckDBStatus === "ready";
 
-  const setDatasets = useAppStore((state) => state.setDatasets);
-  const appendDatasets = useAppStore((state) => state.appendDatasets);
-  const upsertDataset = useAppStore((state) => state.upsertDataset);
-  const removeDatasetById = useAppStore((state) => state.removeDatasetById);
-  const toggleDatasetSelection = useAppStore(
-    (state) => state.toggleDatasetSelection
-  );
-  const setSelectedDatasetIdsInState = useAppStore(
-    (state) => state.setSelectedDatasetIds
-  );
   const isDatasetsInitialized = useAppStore(
     (state) => state.isDatasetsInitialized
-  );
-  const setIsDatasetsInitialized = useAppStore(
-    (state) => state.setIsDatasetsInitialized
   );
 
   const loadDatasetIntoDuckDB = useCallback(
@@ -62,21 +49,21 @@ export const useDatasetWorkflows = () => {
       try {
         const content = await getDatasetContent(dataset);
         const schema = await loadDatasetIntoDuckDB(dataset, content);
-        upsertDataset(markDatasetAsLoaded(dataset, schema));
+        useAppStore.getState().upsertDataset(markDatasetAsLoaded(dataset, schema));
       } catch (error) {
         console.error(`Failed to load dataset "${dataset.id}":`, error);
       } finally {
         loadingDatasetIds.delete(dataset.id);
       }
     },
-    [isDuckDBReady, loadDatasetIntoDuckDB, upsertDataset]
+    [isDuckDBReady, loadDatasetIntoDuckDB]
   );
 
   const initializeDatasets = useCallback(async () => {
     if (useAppStore.getState().isDatasetsInitialized) return;
 
-    setIsDatasetsInitialized(true);
-    setDatasets(buildSampleDatasetsInfo());
+    useAppStore.getState().setIsDatasetsInitialized(true);
+    useAppStore.getState().setDatasets(buildSampleDatasetsInfo());
 
     const stored = await getStoredDatasets();
     const userDatasets: DatasetInfo[] = stored.map((meta) => ({
@@ -85,8 +72,8 @@ export const useDatasetWorkflows = () => {
       isSelected: false,
       isLoaded: false,
     }));
-    appendDatasets(userDatasets);
-  }, [appendDatasets, setDatasets, setIsDatasetsInitialized]);
+    useAppStore.getState().appendDatasets(userDatasets);
+  }, []);
 
   useEffect(() => {
     if (!isDuckDBReady || !isDatasetsInitialized) return;
@@ -116,18 +103,18 @@ export const useDatasetWorkflows = () => {
       };
 
       await storeDataset(meta, content);
-      upsertDataset(dataset);
+      useAppStore.getState().upsertDataset(dataset);
 
       if (!isDuckDBReady) return;
 
       try {
         const schema = await loadDatasetIntoDuckDB(dataset, content);
-        upsertDataset(markDatasetAsLoaded(dataset, schema));
+        useAppStore.getState().upsertDataset(markDatasetAsLoaded(dataset, schema));
       } catch (error) {
         console.error(`Failed to load user file "${file.name}":`, error);
       }
     },
-    [isDuckDBReady, loadDatasetIntoDuckDB, upsertDataset]
+    [isDuckDBReady, loadDatasetIntoDuckDB]
   );
 
   const removeDataset = useCallback(
@@ -138,14 +125,14 @@ export const useDatasetWorkflows = () => {
       if (!dataset || dataset.source === "sample") return;
 
       await removeStoredDataset(id);
-      removeDatasetById(id);
+      useAppStore.getState().removeDatasetById(id);
     },
-    [removeDatasetById]
+    []
   );
 
   const toggleSelection = useCallback(
     (id: string) => {
-      toggleDatasetSelection(id);
+      useAppStore.getState().toggleDatasetSelection(id);
 
       const dataset = useAppStore
         .getState()
@@ -154,12 +141,12 @@ export const useDatasetWorkflows = () => {
         void ensureLoaded(dataset.id);
       }
     },
-    [toggleDatasetSelection, ensureLoaded]
+    [ensureLoaded]
   );
 
   const setSelectedDatasetIds = useCallback(
     (datasetIds: string[]) => {
-      setSelectedDatasetIdsInState(datasetIds);
+      useAppStore.getState().setSelectedDatasetIds(datasetIds);
       const selectedSet = new Set(datasetIds);
 
       const datasets = useAppStore.getState().datasets;
@@ -169,7 +156,7 @@ export const useDatasetWorkflows = () => {
         }
       });
     },
-    [setSelectedDatasetIdsInState, ensureLoaded]
+    [ensureLoaded]
   );
 
   return {

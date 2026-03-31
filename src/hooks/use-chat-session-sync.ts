@@ -1,17 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { generateSessionTitle } from "@/actions/generate-session-title";
 import { persistSessionMemorySummary } from "@/lib/workflows/session-memory-workflows";
-import { useSessionWorkflows } from "@/lib/workflows/session-workflows";
+import {
+  saveActiveSessionSnapshot,
+  setSessionMemorySummary,
+  consumeHydrationRecord,
+} from "@/lib/workflows/session-workflows";
 import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import {
   canvasHydrationGate,
   getCanvasAgentBridge,
 } from "@/lib/canvas-agent-bridge";
 import { serializeForStorage } from "@/lib/sessions";
-import { useDatasetsState } from "@/state/hooks/use-datasets-state";
-import { useSessionState } from "@/state/hooks/use-session-state";
+import { useSelectedDatasets } from "@/hooks/use-datasets-state";
 import { useAppStore } from "@/state/store";
 import type { SessionSnapshotInput } from "@/types/session";
 import { getFirstUserPrompt } from "@/lib/copilotkit-chat";
@@ -21,32 +23,24 @@ type CopilotkitStatus = "uninitialized" | "initializing" | "running" | "ready";
 
 const useChatSessionSync = () => {
   const { agent } = useAgent();
-  const replaceCanvasState = useAppStore((s) => s.replaceCanvasState);
-  const { selectedDatasets } = useDatasetsState();
+  const selectedDatasets = useSelectedDatasets();
   const { setSelectedDatasetIds } = useDatasetWorkflows();
-  const { activeSessionId, hydrationRecord, resetVersion, isInitialized } =
-    useSessionState();
-  const {
-    createSessionFromFirstPrompt,
-    saveActiveSessionSnapshot,
-    setSessionName,
-    setSessionMemorySummary,
-    consumeHydrationRecord,
-  } = useSessionWorkflows();
-
+  const activeSessionId = useAppStore((s) => s.activeSessionId);
+  const hydrationRecord = useAppStore((s) => s.hydrationRecord);
+  const resetVersion = useAppStore((s) => s.resetVersion);
+  const isInitialized = useAppStore((s) => s.isInitialized);
   const copilotkitStatusRef = useRef<CopilotkitStatus>("uninitialized");
   const previousSummaryRef = useRef<string | null>(null);
   const previousSummaryMessagesLengthRef = useRef<number>(0);
 
-  // Always-current refs so the subscription effect only depends on `agent`
   const activeSessionIdRef = useRef(activeSessionId);
   activeSessionIdRef.current = activeSessionId;
   const hydrationRecordRef = useRef(hydrationRecord);
   hydrationRecordRef.current = hydrationRecord;
   const selectedDatasetsRef = useRef(selectedDatasets);
   selectedDatasetsRef.current = selectedDatasets;
-  const setSessionMemorySummaryRef = useRef(setSessionMemorySummary);
-  setSessionMemorySummaryRef.current = setSessionMemorySummary;
+  const setSelectedDatasetIdsRef = useRef(setSelectedDatasetIds);
+  setSelectedDatasetIdsRef.current = setSelectedDatasetIds;
 
   const isCopilotkitReady = copilotkitStatusRef.current === "ready";
 
@@ -88,8 +82,8 @@ const useChatSessionSync = () => {
     if (!hydrationRecord) return;
 
     canvasHydrationGate.setBlocked(true);
-    replaceCanvasState(hydrationRecord.canvas);
-    setSelectedDatasetIds(hydrationRecord.selectedDatasetIds);
+    useAppStore.getState().replaceCanvasState(hydrationRecord.canvas);
+    setSelectedDatasetIdsRef.current(hydrationRecord.selectedDatasetIds);
 
     if (isCopilotkitReady) {
       const hydratedMessages = hydrationRecord.messages as Message[];
@@ -105,9 +99,6 @@ const useChatSessionSync = () => {
     isCopilotkitReady,
     isInitialized,
     hydrationRecord,
-    replaceCanvasState,
-    setSelectedDatasetIds,
-    consumeHydrationRecord,
   ]);
 
   // Reset session
@@ -121,23 +112,17 @@ const useChatSessionSync = () => {
 
     canvasHydrationGate.setBlocked(true);
     agent.setMessages([]);
-    replaceCanvasState({ nodes: [], edges: [], selectedNodeId: null });
-    setSelectedDatasetIds([]);
+    useAppStore
+      .getState()
+      .replaceCanvasState({ nodes: [], edges: [], selectedNodeId: null });
+    setSelectedDatasetIdsRef.current([]);
     getCanvasAgentBridge()?.syncCanvasToAgent({
       nodes: [],
       edges: [],
       selectedNodeId: null,
     });
     canvasHydrationGate.setBlocked(false);
-  }, [
-    agent,
-    resetVersion,
-    isInitialized,
-    activeSessionId,
-    hydrationRecord,
-    replaceCanvasState,
-    setSelectedDatasetIds,
-  ]);
+  }, [agent, resetVersion, isInitialized, activeSessionId, hydrationRecord]);
 
   // Save active session snapshot (messages / dataset changes)
   useEffect(() => {
@@ -146,13 +131,7 @@ const useChatSessionSync = () => {
     if (hydrationRecord) return;
 
     saveActiveSessionSnapshot(buildSnapshot());
-  }, [
-    activeSessionId,
-    isInitialized,
-    hydrationRecord,
-    buildSnapshot,
-    saveActiveSessionSnapshot,
-  ]);
+  }, [activeSessionId, isInitialized, hydrationRecord, buildSnapshot]);
 
   // Save active session snapshot (canvas changes — Zustand subscription avoids re-renders)
   useEffect(() => {
@@ -174,7 +153,7 @@ const useChatSessionSync = () => {
     });
 
     return unsub;
-  }, [isInitialized, saveActiveSessionSnapshot]);
+  }, [isInitialized]);
 
   // Persist session summary after each agent run
   useEffect(() => {
@@ -193,7 +172,7 @@ const useChatSessionSync = () => {
           nodes,
           selectedDatasetNames: selectedDatasetsRef.current.map((d) => d.name),
           previousSummary: previousSummaryRef.current,
-          setSessionMemorySummary: setSessionMemorySummaryRef.current,
+          setSessionMemorySummary,
         }).then((nextSummary) => {
           previousSummaryRef.current = nextSummary;
           previousSummaryMessagesLengthRef.current = messages.length;
@@ -203,29 +182,6 @@ const useChatSessionSync = () => {
 
     return () => sub.unsubscribe();
   }, [agent]);
-
-  const handleFirstPromptSessionCreate = async (prompt: string) => {
-    if (activeSessionId) return;
-
-    const sessionId = await createSessionFromFirstPrompt({
-      firstPrompt: prompt,
-      selectedDatasetIds: selectedDatasets.map((dataset) => dataset.id),
-      snapshot: buildSnapshot(),
-    });
-
-    try {
-      const title = await generateSessionTitle({
-        firstPrompt: prompt,
-        selectedDatasets: selectedDatasets.map((dataset) => dataset.name),
-      });
-      if (!title || title.trim().length === 0) return;
-      await setSessionName(sessionId, title);
-    } catch (error) {
-      console.error("Failed to generate session title:", error);
-    }
-  };
-
-  return { handleFirstPromptSessionCreate };
 };
 
 export { useChatSessionSync };

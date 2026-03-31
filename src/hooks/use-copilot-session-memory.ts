@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useAgentContext } from "@copilotkit/react-core/v2";
-import { useSessionState } from "@/state/hooks/use-session-state";
+import { useAppStore } from "@/state/store";
 import { getSessionRecord } from "@/lib/session-storage";
 import { clampText } from "@/lib/utils";
 
@@ -10,7 +10,8 @@ const MAX_MEMORY_SESSIONS = 5;
 const MAX_SUMMARY_LENGTH = 280;
 
 const useCopilotSessionMemory = () => {
-  const { sessions, activeSessionId } = useSessionState();
+  const sessions = useAppStore((s) => s.sessions);
+  const activeSessionId = useAppStore((s) => s.activeSessionId);
   const [memoryText, setMemoryText] = useState("No previous sessions yet.");
 
   const candidateSessionIds = useMemo(() => {

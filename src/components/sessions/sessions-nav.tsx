@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { StatusDot } from "@/components/ui/status-dot";
-import { useSessionWorkflows } from "@/lib/workflows/session-workflows";
-import { useSessionState } from "@/state/hooks/use-session-state";
+import { switchSession } from "@/lib/workflows/session-workflows";
+import { useAppStore } from "@/state/store";
 import {
   SidebarNavSection,
   SidebarNavSectionTitle,
@@ -20,8 +20,9 @@ const SESSION_DOT_CLASSES = [
 ] as const;
 
 const SessionsNav = () => {
-  const { sessions, activeSessionId, isInitialized } = useSessionState();
-  const { switchSession } = useSessionWorkflows();
+  const sessions = useAppStore((s) => s.sessions);
+  const activeSessionId = useAppStore((s) => s.activeSessionId);
+  const isInitialized = useAppStore((s) => s.isInitialized);
 
   return (
     <SidebarNavSection

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CopilotChat } from "@copilotkit/react-ui";
+import { useAgent } from "@copilotkit/react-core/v2";
 import { SYSTEM_PROMPT } from "@/constants/system-prompt";
 import {
   Sidebar,
@@ -12,22 +13,26 @@ import {
 import { DatasetDrawer } from "@/components/chat/datasets/dataset-drawer";
 import { NodeDetailDrawer } from "@/components/chat/node-detail/node-detail-drawer";
 import { useAppStore } from "@/state/store";
-import { useDatasetsState } from "@/state/hooks/use-datasets-state";
-import { useSessionState } from "@/state/hooks/use-session-state";
+import { useSelectedDatasets } from "@/hooks/use-datasets-state";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { PaperclipIcon } from "@/components/icons/paperclip";
-import { useChatSessionSync } from "@/hooks/use-chat-session-sync";
 import { UserMessage } from "@/components/chat/user-message";
 import { cn } from "@/lib/utils";
+import { generateSessionTitle } from "@/actions/generate-session-title";
+import { serializeForStorage } from "@/lib/sessions";
+import {
+  createSessionFromFirstPrompt,
+  setSessionName,
+} from "@/lib/workflows/session-workflows";
 
 const ChatPanel = () => {
+  const { agent } = useAgent();
   const selectedNodeId = useAppStore((s) => s.selectedNodeId);
   const deselectNode = useAppStore((s) => s.deselectNode);
-  const { selectedDatasets } = useDatasetsState();
-  const { isInitialized: isSessionInitialized, hydrationRecord } =
-    useSessionState();
-  const { handleFirstPromptSessionCreate } = useChatSessionSync();
+  const selectedDatasets = useSelectedDatasets();
+  const isSessionInitialized = useAppStore((s) => s.isInitialized);
+  const hydrationRecord = useAppStore((s) => s.hydrationRecord);
   const [isDatasetDrawerOpen, setIsDatasetDrawerOpen] = useState(false);
 
   const isWorkspaceInitialized = isSessionInitialized && !hydrationRecord;
@@ -47,6 +52,35 @@ const ChatPanel = () => {
   const handleToggleDatasetDrawer = () => {
     if (!isDatasetDrawerOpen) deselectNode();
     setIsDatasetDrawerOpen((prev) => !prev);
+  };
+
+  const handleFirstPromptSessionCreate = async (prompt: string) => {
+    const { activeSessionId, datasets, nodes, edges, selectedNodeId: selNodeId } =
+      useAppStore.getState();
+    if (activeSessionId) return;
+
+    const selected = datasets.filter((d) => d.isSelected);
+    const sessionId = await createSessionFromFirstPrompt({
+      firstPrompt: prompt,
+      selectedDatasetIds: selected.map((d) => d.id),
+      snapshot: {
+        messages: serializeForStorage(agent.messages),
+        canvas: { nodes, edges, selectedNodeId: selNodeId },
+        selectedDatasetIds: selected.map((d) => d.id),
+        selectedDatasetNames: selected.map((d) => d.name),
+      },
+    });
+
+    try {
+      const title = await generateSessionTitle({
+        firstPrompt: prompt,
+        selectedDatasets: selected.map((d) => d.name),
+      });
+      if (!title || title.trim().length === 0) return;
+      await setSessionName(sessionId, title);
+    } catch (error) {
+      console.error("Failed to generate session title:", error);
+    }
   };
 
   return (

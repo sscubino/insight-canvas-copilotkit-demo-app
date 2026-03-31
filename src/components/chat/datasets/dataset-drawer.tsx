@@ -6,24 +6,17 @@ import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/chat/datasets/dataset-card";
 import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import { useAppStore } from "@/state/store";
-import { Spinner } from "@/components/ui/spinner";
+import { useEffect } from "react";
 
 type DatasetDrawerProps = {
   isOpen: boolean;
   onClose: () => void;
+  setIsOpen: (isOpen: boolean) => void;
 };
 
-const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
+const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
   const datasets = useAppStore((s) => s.datasets);
   const { addUserFile, toggleSelection, removeDataset } = useDatasetWorkflows();
-
-  const handleFileSelect = async (file: File) => {
-    try {
-      await addUserFile(file);
-    } catch (err) {
-      console.error("Failed to add file:", err);
-    }
-  };
 
   const sampleDatasets = datasets.filter((d) => d.source === "sample");
   const userDatasets = datasets.filter((d) => d.source === "user");
@@ -31,6 +24,32 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
   const areAllSelectedDatasetsLoaded = datasets.every(
     (d) => !d.isSelected || d.isLoaded
   );
+
+  useEffect(() => {
+    if (hasSelectedDatasets) return;
+
+    setIsOpen(true);
+  }, [hasSelectedDatasets, setIsOpen]);
+
+  useEffect(() => {
+    const unsub = useAppStore.subscribe((state, prevState) => {
+      const { selectedNodeId } = state;
+      const { selectedNodeId: prevSelecetedNodeId } = prevState;
+      if (selectedNodeId && selectedNodeId !== prevSelecetedNodeId) {
+        setIsOpen(false);
+      }
+    });
+
+    return unsub;
+  }, [setIsOpen]);
+
+  const handleNewFile = async (file: File) => {
+    try {
+      await addUserFile(file);
+    } catch (err) {
+      console.error("Failed to add file:", err);
+    }
+  };
 
   return (
     <Drawer isOpen={isOpen} className="max-h-[calc(100%-80px)]">
@@ -41,7 +60,7 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
           </p>
 
           <div className="flex w-full flex-col items-center gap-2">
-            <FileDropZone onFileSelect={handleFileSelect} />
+            <FileDropZone onFileSelect={handleNewFile} />
             <p className="text-center font-sans text-xs font-medium text-dim">
               Supported formats: CSV, JSON
             </p>
@@ -100,7 +119,7 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
           size="md"
           className="w-full duration-500"
           disabled={!hasSelectedDatasets || !areAllSelectedDatasetsLoaded}
-          onClick={onClose}
+          onClick={() => setIsOpen(false)}
           aria-label="Confirm dataset selection"
         >
           Confirm Selection

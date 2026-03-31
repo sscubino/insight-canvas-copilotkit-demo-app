@@ -11,17 +11,19 @@ import {
 } from "@/components/ui/sidebar";
 import { DatasetDrawer } from "@/components/chat/datasets/dataset-drawer";
 import { NodeDetailDrawer } from "@/components/chat/node-detail/node-detail-drawer";
-import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
+import { useAppStore } from "@/state/store";
 import { useDatasetsState } from "@/state/hooks/use-datasets-state";
 import { useSessionState } from "@/state/hooks/use-session-state";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { PaperclipIcon } from "@/components/icons/paperclip";
 import { useChatSessionSync } from "@/hooks/use-chat-session-sync";
+import { UserMessage } from "@/components/chat/user-message";
 import { cn } from "@/lib/utils";
 
 const ChatPanel = () => {
-  const { selectedNodeId, deselectNode } = useWorkspaceState();
+  const selectedNodeId = useAppStore((s) => s.selectedNodeId);
+  const deselectNode = useAppStore((s) => s.deselectNode);
   const { selectedDatasets } = useDatasetsState();
   const { isInitialized: isSessionInitialized, hydrationRecord } =
     useSessionState();
@@ -72,6 +74,7 @@ const ChatPanel = () => {
         <CopilotChat
           instructions={SYSTEM_PROMPT}
           onSubmitMessage={handleFirstPromptSessionCreate}
+          UserMessage={UserMessage}
           labels={{
             title: "Insight Canvas",
             initial: "Hi! \uD83D\uDC4B How can the agent help you with?",

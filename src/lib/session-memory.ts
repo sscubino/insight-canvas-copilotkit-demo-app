@@ -1,5 +1,6 @@
 import { CanvasNode } from "@/types/canvas";
-import { clampText } from "@/lib/utils";
+import { clampText, isRecord } from "@/lib/utils";
+import { Message } from "@copilotkit/react-core/v2";
 
 type MemoryConversationTurn = {
   role: "user" | "assistant";
@@ -12,11 +13,7 @@ const MAX_RECENT_NODE_TITLES = 5;
 
 const getMessageContentText = (content: unknown): string => {
   if (typeof content === "string") return content;
-  if (
-    content &&
-    typeof content === "object" &&
-    "text" in (content as Record<string, unknown>)
-  ) {
+  if (isRecord(content) && "text" in content) {
     const contentWithText = content as { text?: unknown };
     return typeof contentWithText.text === "string" ? contentWithText.text : "";
   }
@@ -73,3 +70,11 @@ export const buildHeuristicSessionMemorySummary = ({
 };
 
 export const buildSessionMemorySummary = buildHeuristicSessionMemorySummary;
+
+export const buildMessagesSummaryFingerprint = (
+  messages: Message[]
+): string => {
+  const last = messages[messages.length - 1];
+  const id = last?.id ?? "";
+  return `${messages.length}:${id}`;
+};

@@ -2,13 +2,13 @@
 
 import { InsightCanvas } from "@/components/canvas/insight-canvas";
 import { ChatPanel } from "@/components/chat/chat-panel";
-import { useCopilotCanvas } from "@/hooks/use-copilot-canvas";
+import { useCanvasAgentSharedState } from "@/hooks/use-canvas-agent-shared-state";
 import { useCopilotDataTools } from "@/hooks/use-copilot-data-tools";
 import { useCopilotSessionMemory } from "@/hooks/use-copilot-session-memory";
 import { useDatasetsState } from "@/state/hooks/use-datasets-state";
 
 const CopilotCanvasSync = () => {
-  useCopilotCanvas();
+  useCanvasAgentSharedState();
   return null;
 };
 

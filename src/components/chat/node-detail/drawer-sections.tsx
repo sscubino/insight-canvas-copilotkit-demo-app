@@ -14,7 +14,7 @@ import { CheckIcon } from "@/components/icons/check";
 import { XIcon } from "@/components/icons/x";
 import { CaretLeftIcon } from "@/components/icons/caret-left";
 import { Button } from "@/components/ui/button";
-import type { CanvasNode, CanvasEdge, NodeVariant } from "@/types/canvas";
+import type { CanvasNode, NodeVariant } from "@/types/canvas";
 
 type DrawerSectionLabelProps = {
   children: ReactNode;
@@ -167,9 +167,8 @@ const DrawerTextBlock = ({ children, className }: DrawerTextBlockProps) => (
 );
 
 type DrawerConnectedNodesProps = {
-  nodeId: string;
-  nodes: CanvasNode[];
-  edges: CanvasEdge[];
+  incomingNodes: CanvasNode[];
+  outgoingNodes: CanvasNode[];
   onNodeClick?: (id: string) => void;
 };
 
@@ -222,29 +221,18 @@ const ConnectedNodeItem = ({
 };
 
 const DrawerConnectedNodes = ({
-  nodeId,
-  nodes,
-  edges,
+  incomingNodes,
+  outgoingNodes,
   onNodeClick,
 }: DrawerConnectedNodesProps) => {
-  const incoming = edges
-    .filter((e) => e.target === nodeId)
-    .map((e) => nodes.find((n) => n.id === e.source))
-    .filter(Boolean) as CanvasNode[];
-
-  const outgoing = edges
-    .filter((e) => e.source === nodeId)
-    .map((e) => nodes.find((n) => n.id === e.target))
-    .filter(Boolean) as CanvasNode[];
-
-  if (incoming.length === 0 && outgoing.length === 0) return null;
+  if (incomingNodes.length === 0 && outgoingNodes.length === 0) return null;
 
   return (
     <div className="flex flex-col gap-2">
       <DrawerSectionLabel>Connected Nodes</DrawerSectionLabel>
       <div className="px-1">
         <DrawerCard className="flex flex-col gap-2">
-          {incoming.map((node) => (
+          {incomingNodes.map((node) => (
             <ConnectedNodeItem
               key={node.id}
               node={node}
@@ -252,7 +240,7 @@ const DrawerConnectedNodes = ({
               onNodeClick={onNodeClick}
             />
           ))}
-          {outgoing.map((node) => (
+          {outgoingNodes.map((node) => (
             <ConnectedNodeItem
               key={node.id}
               node={node}

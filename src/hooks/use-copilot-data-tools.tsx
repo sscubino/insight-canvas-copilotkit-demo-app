@@ -7,7 +7,7 @@ import {
 } from "@copilotkit/react-core/v2";
 import { z } from "zod";
 import { useDuckDB } from "@/contexts/duckdb-context";
-import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
+import { useAppStore } from "@/state/store";
 import {
   QueryRunningStatus,
   QueryFallbackStatus,
@@ -70,7 +70,7 @@ const generateChartParameters = z.object({
 
 export const useCopilotDataTools = (schemas: DatasetSchema[]) => {
   const { runQuery } = useDuckDB();
-  const { addNode } = useWorkspaceState();
+  const addNode = useAppStore((s) => s.addNode);
 
   const schemaContextText = formatSchemasForAgent(schemas);
 

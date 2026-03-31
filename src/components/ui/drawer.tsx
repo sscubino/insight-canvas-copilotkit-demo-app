@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, noop } from "@/lib/utils";
 import type { ComponentPropsWithoutRef, PointerEvent, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -167,7 +167,7 @@ type DrawerProps = {
 
 const Drawer = ({
   isOpen,
-  onClose = () => {},
+  onClose = noop,
   children,
   className,
 }: DrawerProps) => {

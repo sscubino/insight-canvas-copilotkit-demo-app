@@ -6,6 +6,7 @@ import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/chat/datasets/dataset-card";
 import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import { useAppStore } from "@/state/store";
+import { Spinner } from "@/components/ui/spinner";
 
 type DatasetDrawerProps = {
   isOpen: boolean;
@@ -27,6 +28,9 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
   const sampleDatasets = datasets.filter((d) => d.source === "sample");
   const userDatasets = datasets.filter((d) => d.source === "user");
   const hasSelectedDatasets = datasets.some((d) => d.isSelected);
+  const areAllSelectedDatasetsLoaded = datasets.every(
+    (d) => !d.isSelected || d.isLoaded
+  );
 
   return (
     <Drawer isOpen={isOpen} className="max-h-[calc(100%-80px)]">
@@ -94,8 +98,8 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
         <Button
           variant="primary"
           size="md"
-          className="w-full"
-          disabled={!hasSelectedDatasets}
+          className="w-full duration-500"
+          disabled={!hasSelectedDatasets || !areAllSelectedDatasetsLoaded}
           onClick={onClose}
           aria-label="Confirm dataset selection"
         >

@@ -9,7 +9,6 @@ import {
 import { VegaChart } from "@/components/charts/vega-chart";
 import type {
   CanvasNode,
-  CanvasEdge,
   CanvasNodeData,
   ChartNodeData,
   ExperimentNodeData,
@@ -18,8 +17,8 @@ import { DrawerContent } from "@/components/ui/drawer";
 
 type NodeDetailContentProps = {
   node: CanvasNode;
-  nodes: CanvasNode[];
-  edges: CanvasEdge[];
+  incomingNodes: CanvasNode[];
+  outgoingNodes: CanvasNode[];
   onNodeClick?: (id: string) => void;
   onNodeDataChange?: (data: Partial<CanvasNodeData>) => void;
 };
@@ -111,8 +110,8 @@ const ExperimentSections = ({ data }: { data: ExperimentNodeData }) => (
 
 const NodeDetailContent = ({
   node,
-  nodes,
-  edges,
+  incomingNodes,
+  outgoingNodes,
   onNodeClick,
   onNodeDataChange,
 }: NodeDetailContentProps) => {
@@ -124,9 +123,8 @@ const NodeDetailContent = ({
       {data.variant === "chart" && <ChartSections data={data} />}
       {data.variant === "experiment" && <ExperimentSections data={data} />}
       <DrawerConnectedNodes
-        nodeId={node.id}
-        nodes={nodes}
-        edges={edges}
+        incomingNodes={incomingNodes}
+        outgoingNodes={outgoingNodes}
         onNodeClick={onNodeClick}
       />
     </DrawerContent>

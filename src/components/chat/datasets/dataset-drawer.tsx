@@ -4,7 +4,7 @@ import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/chat/datasets/dataset-card";
 import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
-import { useDatasetsState } from "@/state/hooks/use-datasets-state";
+import { useAppStore } from "@/state/store";
 
 type DatasetDrawerProps = {
   isOpen: boolean;
@@ -12,7 +12,7 @@ type DatasetDrawerProps = {
 };
 
 const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
-  const { datasets } = useDatasetsState();
+  const datasets = useAppStore((s) => s.datasets);
   const { addUserFile, toggleSelection, removeDataset } = useDatasetWorkflows();
 
   const handleFileSelect = async (file: File) => {

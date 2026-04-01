@@ -10,6 +10,7 @@ import CONFIG from "@/constants/config";
 const builtInAgent = new BuiltInAgent({
   model: CONFIG.COPILOTKIT.BUILT_IN_AGENT_MODEL,
   prompt: SYSTEM_PROMPT,
+  maxSteps: 10,
 });
 
 const runtime = new CopilotRuntime({

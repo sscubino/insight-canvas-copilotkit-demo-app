@@ -1,16 +1,11 @@
-import { useCopilotChatInternal } from "@copilotkit/react-core";
+import { isRecord } from "@/lib/utils";
+import { Message } from "@copilotkit/react-core/v2";
 
-export type ChatMessages = ReturnType<
-  typeof useCopilotChatInternal
->["messages"];
-
-export const getMessageContentText = (
-  message: ChatMessages[number]
-): string => {
+export const getMessageContentText = (message: Message): string => {
   if (typeof message.content === "string") return message.content;
   if (
     message.content &&
-    typeof message.content === "object" &&
+    isRecord(message.content) &&
     "text" in message.content
   ) {
     const content = message.content as { text?: unknown };
@@ -19,7 +14,7 @@ export const getMessageContentText = (
   return "";
 };
 
-export const getFirstUserPrompt = (messages: ChatMessages): string => {
+export const getFirstUserPrompt = (messages: Message[]): string => {
   const firstUserMessage = messages.find((message) => message.role === "user");
   if (!firstUserMessage) return "";
   return getMessageContentText(firstUserMessage).trim();

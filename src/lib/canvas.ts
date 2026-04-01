@@ -106,3 +106,25 @@ export const addEdgeToCanvas = (
     },
   ];
 };
+
+export const getConnectedNodesForNodeId = (
+  nodeId: string | null,
+  nodes: CanvasNode[],
+  edges: CanvasEdge[]
+) => {
+  if (!nodeId) {
+    return { incomingNodes: [], outgoingNodes: [] };
+  }
+
+  const incomingNodes = edges
+    .filter((e) => e.target === nodeId)
+    .map((e) => nodes.find((n) => n.id === e.source))
+    .filter(Boolean) as CanvasNode[];
+
+  const outgoingNodes = edges
+    .filter((e) => e.source === nodeId)
+    .map((e) => nodes.find((n) => n.id === e.target))
+    .filter(Boolean) as CanvasNode[];
+
+  return { incomingNodes, outgoingNodes };
+};

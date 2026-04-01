@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, memo } from "react";
-import { cn } from "@/lib/utils";
+import { cn, isRecord } from "@/lib/utils";
 
 type VegaChartProps = {
   spec: Record<string, unknown> | undefined;
@@ -61,8 +61,8 @@ const hasRightLegend = (spec: Record<string, unknown>): boolean => {
     if (!channel) return false;
     const legend = channel.legend;
     if (legend === null) return false;
-    if (typeof legend === "object" && legend !== null) {
-      const orient = (legend as Record<string, unknown>).orient;
+    if (isRecord(legend)) {
+      const orient = legend.orient;
       return !orient || orient === "right";
     }
     return true;
@@ -74,11 +74,7 @@ const isBarChartWithoutLegend = (
 ): boolean => {
   if (!spec) return false;
   const mark = spec.mark;
-  const isBar =
-    mark === "bar" ||
-    (typeof mark === "object" &&
-      mark !== null &&
-      (mark as Record<string, unknown>).type === "bar");
+  const isBar = mark === "bar" || (isRecord(mark) && mark.type === "bar");
   return isBar && !hasRightLegend(spec);
 };
 

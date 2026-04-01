@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Spline_Sans_Mono } from "next/font/google";
 import { CopilotKit } from "@copilotkit/react-core";
 import { DuckDBProvider } from "@/contexts/duckdb-context";
-import { SessionsSidebar } from "@/components/layout/sessions-sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppStateBootstrap } from "@/components/state/app-state-bootstrap";
 import "@copilotkit/react-ui/styles.css";
 import "./globals.css";
@@ -44,7 +44,7 @@ const RootLayout = ({
         <CopilotKit runtimeUrl="/api/copilotkit" enableInspector={false}>
           <DuckDBProvider>
             <AppStateBootstrap />
-            <SessionsSidebar />
+            <AppSidebar />
             <div className="flex-1 ml-2">{children}</div>
           </DuckDBProvider>
         </CopilotKit>

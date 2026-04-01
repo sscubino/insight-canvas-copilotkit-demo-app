@@ -2,7 +2,7 @@
 
 import { useCopilotReadable, useCopilotAction } from "@copilotkit/react-core";
 import { useDuckDB } from "@/contexts/duckdb-context";
-import { useCanvasState } from "@/contexts/canvas-state-context";
+import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
 import {
   QueryRunningStatus,
   QueryFallbackStatus,
@@ -28,7 +28,7 @@ const formatSchemasForAgent = (schemas: DatasetSchema[]): string => {
 
 export const useCopilotDataTools = (schemas: DatasetSchema[]) => {
   const { runQuery } = useDuckDB();
-  const { addNode } = useCanvasState();
+  const { addNode } = useWorkspaceState();
 
   useCopilotReadable({
     description:

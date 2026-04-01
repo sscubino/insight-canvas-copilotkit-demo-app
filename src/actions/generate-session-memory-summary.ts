@@ -1,7 +1,7 @@
 "use server";
 
 import Anthropic from "@anthropic-ai/sdk";
-import config from "@/lib/config";
+import CONFIG from "@/constants/config";
 import { clampText } from "@/lib/utils";
 
 type GenerateSessionMemorySummaryInput = {
@@ -75,7 +75,7 @@ const getAnthropicSummary = async (prompt: string): Promise<string | null> => {
 
   try {
     const message = await anthropic.messages.create({
-      model: config.anthropic.fastModel,
+      model: CONFIG.ANTHROPIC.FAST_MODEL,
       max_tokens: 220,
       temperature: 0.2,
       system:

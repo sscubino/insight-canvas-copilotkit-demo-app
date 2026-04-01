@@ -1,115 +1,89 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useCopilotChatInternal } from "@copilotkit/react-core";
-import { useCanvasState } from "@/contexts/canvas-state-context";
-import { useDatasets } from "@/contexts/dataset-context";
-import { useSession } from "@/contexts/session-context";
-import { generateSessionMemorySummary } from "@/actions/generate-session-memory-summary";
 import { generateSessionTitle } from "@/actions/generate-session-title";
+import { persistSessionMemorySummary } from "@/lib/workflows/session-memory-workflows";
+import { useSessionWorkflows } from "@/lib/workflows/session-workflows";
+import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import { serializeForStorage } from "@/lib/sessions";
-import {
-  buildHeuristicSessionMemorySummary,
-  getRecentMemoryConversationTurns,
-  getRecentNodeTitles,
-} from "@/lib/session-memory";
+import { useDatasetsState } from "@/state/hooks/use-datasets-state";
+import { useSessionState } from "@/state/hooks/use-session-state";
+import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
 import type { SessionSnapshotInput } from "@/types/session";
+import { getFirstUserPrompt, type ChatMessages } from "@/lib/copilotkit-chat";
 
-type ChatMessages = ReturnType<typeof useCopilotChatInternal>["messages"];
-
-const getMessageContentText = (message: ChatMessages[number]): string => {
-  if (typeof message.content === "string") return message.content;
-  if (
-    message.content &&
-    typeof message.content === "object" &&
-    "text" in message.content
-  ) {
-    const content = message.content as { text?: unknown };
-    return typeof content.text === "string" ? content.text : "";
-  }
-  return "";
-};
+type CopilotkitStatus = "uninitialized" | "initializing" | "loading" | "ready";
 
 const useChatSessionSync = () => {
   const { messages, setMessages, isLoading } = useCopilotChatInternal();
-  const { nodes, edges, selectedNodeId, replaceCanvasState } = useCanvasState();
+  const { nodes, edges, selectedNodeId, replaceCanvasState } =
+    useWorkspaceState();
+  const { selectedDatasets } = useDatasetsState();
+  const { setSelectedDatasetIds } = useDatasetWorkflows();
+  const { activeSessionId, hydrationRecord, resetVersion, isInitialized } =
+    useSessionState();
   const {
-    selectedDatasets,
-    openDrawer: openDatasetDrawer,
-    closeDrawer: closeDatasetDrawer,
-    setSelectedDatasetIds,
-  } = useDatasets();
-  const {
-    activeSessionId,
-    hydrationRecord,
-    resetVersion,
-    isInitialized,
     createSessionFromFirstPrompt,
     saveActiveSessionSnapshot,
     setSessionName,
     setSessionMemorySummary,
     consumeHydrationRecord,
-  } = useSession();
+  } = useSessionWorkflows();
 
-  const { selectedDatasetIds, selectedDatasetNames } = useMemo(() => {
-    return {
-      selectedDatasetIds: selectedDatasets.map((dataset) => dataset.id),
-      selectedDatasetNames: selectedDatasets.map((dataset) => dataset.name),
-    };
-  }, [selectedDatasets]);
-
+  const copilotkitStatusRef = useRef<CopilotkitStatus>("uninitialized");
   const prevIsLoadingRef = useRef(false);
   const previousSummaryRef = useRef<string | null>(null);
+  const previousSummaryMessagesLengthRef = useRef<number>(0);
 
-  const getFirstUserPrompt = useCallback((): string => {
-    const firstUserMessage = messages.find(
-      (message) => message.role === "user"
-    );
-    if (!firstUserMessage) return "";
-    return getMessageContentText(firstUserMessage).trim();
-  }, [messages]);
+  const isCopilotkitReady = copilotkitStatusRef.current === "ready";
 
   const buildSnapshot = useCallback((): SessionSnapshotInput => {
     return {
       messages: serializeForStorage(messages),
       canvas: { nodes, edges, selectedNodeId },
-      selectedDatasetIds,
-      selectedDatasetNames,
+      selectedDatasetIds: selectedDatasets.map((dataset) => dataset.id),
+      selectedDatasetNames: selectedDatasets.map((dataset) => dataset.name),
     };
-  }, [
-    messages,
-    nodes,
-    edges,
-    selectedNodeId,
-    selectedDatasetIds,
-    selectedDatasetNames,
-  ]);
+  }, [messages, nodes, edges, selectedNodeId, selectedDatasets]);
 
+  // Control copilotkit status changes
   useEffect(() => {
+    if (copilotkitStatusRef.current === "ready") return;
+    if (copilotkitStatusRef.current === "uninitialized") {
+      copilotkitStatusRef.current = isLoading
+        ? "initializing"
+        : "uninitialized";
+    } else {
+      copilotkitStatusRef.current = isLoading ? "loading" : "ready";
+    }
+  }, [isLoading]);
+
+  // Hydrate session
+  useEffect(() => {
+    if (!isInitialized) return;
     if (!hydrationRecord) return;
 
-    previousSummaryRef.current = hydrationRecord.memorySummary?.trim() || null;
-    setMessages(hydrationRecord.messages as ChatMessages);
     replaceCanvasState(hydrationRecord.canvas);
     setSelectedDatasetIds(hydrationRecord.selectedDatasetIds);
 
-    if (hydrationRecord.selectedDatasetIds.length === 0) {
-      openDatasetDrawer();
-    } else {
-      closeDatasetDrawer();
+    if (isCopilotkitReady) {
+      const hydratedMessages = hydrationRecord.messages as ChatMessages;
+      previousSummaryMessagesLengthRef.current = hydratedMessages.length;
+      setMessages(hydratedMessages);
+      consumeHydrationRecord();
     }
-
-    consumeHydrationRecord();
   }, [
+    isCopilotkitReady,
+    isInitialized,
     hydrationRecord,
     setMessages,
     replaceCanvasState,
     setSelectedDatasetIds,
     consumeHydrationRecord,
-    openDatasetDrawer,
-    closeDatasetDrawer,
   ]);
 
+  // Reset session
   useEffect(() => {
     if (!isInitialized) return;
     if (activeSessionId) return;
@@ -119,7 +93,6 @@ const useChatSessionSync = () => {
     setMessages([]);
     replaceCanvasState({ nodes: [], edges: [], selectedNodeId: null });
     setSelectedDatasetIds([]);
-    openDatasetDrawer();
   }, [
     resetVersion,
     isInitialized,
@@ -128,9 +101,9 @@ const useChatSessionSync = () => {
     setMessages,
     replaceCanvasState,
     setSelectedDatasetIds,
-    openDatasetDrawer,
   ]);
 
+  // Save active session snapshot
   useEffect(() => {
     if (!isInitialized) return;
     if (!activeSessionId) return;
@@ -141,45 +114,35 @@ const useChatSessionSync = () => {
     activeSessionId,
     isInitialized,
     hydrationRecord,
-    getFirstUserPrompt,
     buildSnapshot,
     saveActiveSessionSnapshot,
   ]);
 
+  // Persist session summary
   useEffect(() => {
+    if (!isInitialized) return;
+    if (!isCopilotkitReady) return;
+
     const wasLoading = prevIsLoadingRef.current;
     prevIsLoadingRef.current = isLoading;
 
     const justFinished = wasLoading && !isLoading;
     if (!justFinished || !activeSessionId) return;
 
+    if (previousSummaryMessagesLengthRef.current >= messages.length) return;
+
     const persistGeneratedSummary = async () => {
-      const firstUserPrompt = getFirstUserPrompt();
-      const serializedMessages = serializeForStorage(messages);
-      const fallbackSummary = buildHeuristicSessionMemorySummary({
-        prompt: firstUserPrompt,
-        selectedDatasetNames,
+      const firstUserPrompt = getFirstUserPrompt(messages);
+      const nextSummary = await persistSessionMemorySummary({
+        activeSessionId,
+        firstUserPrompt,
+        messages,
         nodes,
+        selectedDatasetNames: selectedDatasets.map((dataset) => dataset.name),
+        previousSummary: previousSummaryRef.current,
+        setSessionMemorySummary,
       });
-
-      try {
-        const generatedSummary = await generateSessionMemorySummary({
-          firstPrompt: firstUserPrompt,
-          selectedDatasets: selectedDatasetNames,
-          previousSummary: previousSummaryRef.current ?? undefined,
-          recentConversation: getRecentMemoryConversationTurns(
-            serializedMessages as unknown[]
-          ),
-          recentNodeTitles: getRecentNodeTitles(nodes),
-        });
-        const nextSummary = generatedSummary ?? fallbackSummary;
-        previousSummaryRef.current = nextSummary;
-
-        setSessionMemorySummary(activeSessionId, nextSummary);
-      } catch {
-        previousSummaryRef.current = fallbackSummary;
-        setSessionMemorySummary(activeSessionId, fallbackSummary);
-      }
+      previousSummaryRef.current = nextSummary;
     };
 
     void persistGeneratedSummary();
@@ -188,10 +151,11 @@ const useChatSessionSync = () => {
     activeSessionId,
     messages,
     nodes,
-    selectedDatasetNames,
-    buildSnapshot,
+    selectedDatasets,
+    isInitialized,
+    hydrationRecord,
+    isCopilotkitReady,
     setSessionMemorySummary,
-    getFirstUserPrompt,
   ]);
 
   const handleFirstPromptSessionCreate = async (prompt: string) => {
@@ -199,14 +163,14 @@ const useChatSessionSync = () => {
 
     const sessionId = await createSessionFromFirstPrompt({
       firstPrompt: prompt,
-      selectedDatasetIds,
+      selectedDatasetIds: selectedDatasets.map((dataset) => dataset.id),
       snapshot: buildSnapshot(),
     });
 
     try {
       const title = await generateSessionTitle({
         firstPrompt: prompt,
-        selectedDatasets: selectedDatasetNames,
+        selectedDatasets: selectedDatasets.map((dataset) => dataset.name),
       });
       if (!title || title.trim().length === 0) return;
       await setSessionName(sessionId, title);

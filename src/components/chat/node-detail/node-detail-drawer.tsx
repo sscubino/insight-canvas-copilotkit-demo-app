@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useCopilotChatInternal } from "@copilotkit/react-core";
 import { Drawer, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
-import { useCanvasState } from "@/contexts/canvas-state-context";
+import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
 import { NodeDetailContent } from "@/components/chat/node-detail/node-detail-content";
 import { NodeDetailFooter } from "@/components/chat/node-detail/node-detail-footer";
 import type { CanvasNodeData } from "@/types/canvas";
@@ -17,7 +17,7 @@ const NodeDetailDrawer = () => {
     updateNode,
     nodes,
     edges,
-  } = useCanvasState();
+  } = useWorkspaceState();
   const { sendMessage } = useCopilotChatInternal();
   const [hasPendingEdits, setHasPendingEdits] = useState(false);
   const selectedNode = nodes.find((n) => n.id === selectedNodeId);

@@ -2,12 +2,12 @@
 
 import { useCopilotReadable, useCopilotAction } from "@copilotkit/react-core";
 import { NODE_VARIANTS } from "@/constants/nodes-config";
-import { useCanvasState } from "@/contexts/canvas-state-context";
+import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
 import type { NodeSource } from "@/types/canvas";
 import { joinWithConjunction } from "@/lib/utils";
 
 const serializeNodesForAgent = (
-  nodes: ReturnType<typeof useCanvasState>["nodes"]
+  nodes: ReturnType<typeof useWorkspaceState>["nodes"]
 ): string => {
   if (nodes.length === 0) return "No nodes on canvas yet.";
 
@@ -29,7 +29,7 @@ const serializeNodesForAgent = (
 };
 
 const serializeEdgesForAgent = (
-  edges: ReturnType<typeof useCanvasState>["edges"]
+  edges: ReturnType<typeof useWorkspaceState>["edges"]
 ): string => {
   if (edges.length === 0) return "No connections yet.";
   return edges.map((e) => `${e.source} → ${e.target}`).join("\n");
@@ -37,7 +37,7 @@ const serializeEdgesForAgent = (
 
 export const useCopilotCanvas = () => {
   const { nodes, edges, addNode, updateNode, removeNode, addEdge } =
-    useCanvasState();
+    useWorkspaceState();
 
   useCopilotReadable({
     description:

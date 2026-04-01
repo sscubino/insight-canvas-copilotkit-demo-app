@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CopilotChat } from "@copilotkit/react-ui";
 import { SYSTEM_PROMPT } from "@/constants/system-prompt";
 import {
@@ -11,28 +11,35 @@ import {
 } from "@/components/ui/sidebar";
 import { DatasetDrawer } from "@/components/chat/datasets/dataset-drawer";
 import { NodeDetailDrawer } from "@/components/chat/node-detail/node-detail-drawer";
-import { useDatasets } from "@/contexts/dataset-context";
-import { useCanvasState } from "@/contexts/canvas-state-context";
+import { useWorkspaceState } from "@/state/hooks/use-workspace-state";
+import { useDatasetsState } from "@/state/hooks/use-datasets-state";
+import { useSessionState } from "@/state/hooks/use-session-state";
 import { Button } from "@/components/ui/button";
 import { PaperclipIcon } from "@/components/icons/paperclip";
 import { useChatSessionSync } from "@/hooks/use-chat-session-sync";
 
 const ChatPanel = () => {
-  const { selectedNodeId, deselectNode } = useCanvasState();
-  const {
-    isDrawerOpen: isDatasetDrawerOpen,
-    closeDrawer: closeDatasetDrawer,
-    toggleDrawer,
-  } = useDatasets();
+  const { selectedNodeId, deselectNode } = useWorkspaceState();
+  const { selectedDatasets } = useDatasetsState();
+  const { isInitialized: isSessionInitialized } = useSessionState();
   const { handleFirstPromptSessionCreate } = useChatSessionSync();
+  const [isDatasetDrawerOpen, setIsDatasetDrawerOpen] = useState(false);
 
   useEffect(() => {
-    if (selectedNodeId) closeDatasetDrawer();
-  }, [selectedNodeId, closeDatasetDrawer]);
+    if (selectedNodeId) {
+      setIsDatasetDrawerOpen(false);
+    }
+  }, [selectedNodeId]);
+
+  useEffect(() => {
+    if (!isSessionInitialized) return;
+    if (selectedDatasets.length !== 0) return;
+    setIsDatasetDrawerOpen(true);
+  }, [selectedDatasets, isSessionInitialized]);
 
   const handleToggleDatasetDrawer = () => {
     if (!isDatasetDrawerOpen) deselectNode();
-    toggleDrawer();
+    setIsDatasetDrawerOpen((prev) => !prev);
   };
 
   return (
@@ -67,7 +74,10 @@ const ChatPanel = () => {
           }}
           className="flex-1"
         />
-        <DatasetDrawer />
+        <DatasetDrawer
+          isOpen={isDatasetDrawerOpen}
+          onClose={() => setIsDatasetDrawerOpen(false)}
+        />
         <NodeDetailDrawer />
       </SidebarContent>
     </Sidebar>

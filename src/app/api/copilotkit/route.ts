@@ -5,10 +5,10 @@ import {
 } from "@copilotkit/runtime";
 import { BuiltInAgent } from "@copilotkit/runtime/v2";
 import { NextRequest } from "next/server";
-import config from "@/lib/config";
+import CONFIG from "@/constants/config";
 
 const builtInAgent = new BuiltInAgent({
-  model: config.copilotkit.builtInAgentModel,
+  model: CONFIG.COPILOTKIT.BUILT_IN_AGENT_MODEL,
   prompt: SYSTEM_PROMPT,
 });
 

@@ -4,7 +4,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { StatusDot } from "@/components/ui/status-dot";
 import { PlusIcon } from "@/components/icons/plus";
-import { useSession } from "@/contexts/session-context";
+import { useSessionWorkflows } from "@/lib/workflows/session-workflows";
+import { useSessionState } from "@/state/hooks/use-session-state";
 import {
   Sidebar,
   SidebarHeader,
@@ -27,7 +28,8 @@ const SESSION_DOT_CLASSES = [
 ] as const;
 
 const SessionsSidebar = () => {
-  const { sessions, activeSessionId, switchSession } = useSession();
+  const { sessions, activeSessionId } = useSessionState();
+  const { switchSession } = useSessionWorkflows();
 
   return (
     <Sidebar
@@ -82,7 +84,7 @@ const SessionsSidebar = () => {
 
 const SessionsSidebarFooter = () => {
   const { collapsed } = useSidebar();
-  const { startNewSession } = useSession();
+  const { startNewSession } = useSessionWorkflows();
 
   return (
     <SidebarFooter hideWhenCollapsed={false}>

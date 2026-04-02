@@ -4,8 +4,16 @@ import {
 } from "@copilotkit/react-ui";
 import { NODE_CONFIG } from "@/constants/nodes-config";
 import type { CanvasNodeData, NodeVariant } from "@/types/canvas";
+import type { DatasetInfo, DatasetSource } from "@/types/dataset";
 import { ArrowDownIcon } from "@/components/icons/arrow-down";
-import { USER_EDIT_PREFIX, CANVAS_EDIT_MARKER } from "@/constants/chat";
+import { DatasetCard } from "@/components/chat/datasets/dataset-card";
+import { noop } from "@/lib/utils";
+import {
+  USER_EDIT_PREFIX,
+  CANVAS_EDIT_MARKER,
+  DATASET_SELECTION_PREFIX,
+  DATASET_SELECTION_MARKER,
+} from "@/constants/chat";
 
 type CanvasEditPayload = {
   type: "canvas-edit";
@@ -87,10 +95,87 @@ const CanvasEditMessage = ({ payload }: { payload: CanvasEditPayload }) => {
   );
 };
 
+type DatasetSelectionPayload = {
+  type: "dataset-selection";
+  datasets: Array<{
+    id: string;
+    name: string;
+    fileName: string;
+    tableName: string;
+    source: DatasetSource;
+    emoji?: string;
+    rowCount?: number;
+    columnCount?: number;
+  }>;
+};
+
+const buildDatasetSelectionPayload = (datasets: DatasetInfo[]): string =>
+  JSON.stringify({
+    type: "dataset-selection",
+    datasets: datasets.map(
+      ({ id, name, fileName, tableName, source, emoji, rowCount, columnCount }) => ({
+        id,
+        name,
+        fileName,
+        tableName,
+        source,
+        emoji,
+        rowCount,
+        columnCount,
+      })
+    ),
+  });
+
+const parseDatasetSelectionPayload = (
+  content: unknown
+): DatasetSelectionPayload | null => {
+  if (typeof content !== "string") return null;
+  if (!content.includes(DATASET_SELECTION_MARKER)) return null;
+  try {
+    const parsed = JSON.parse(content) as DatasetSelectionPayload;
+    if (parsed.type !== "dataset-selection") return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+};
+
+const DatasetSelectionMessage = ({
+  payload,
+}: {
+  payload: DatasetSelectionPayload;
+}) => {
+  const count = payload.datasets.length;
+
+  return (
+    <section
+      className="flex flex-col gap-2.5 rounded-xl bg-surface-hover/60 px-4 py-3"
+      aria-label={`You selected ${count} dataset${count !== 1 ? "s" : ""}`}
+    >
+      <p className="text-sm font-medium text-foreground">
+        You selected {count} dataset{count !== 1 ? "s" : ""}
+      </p>
+      <div className="flex flex-col gap-2">
+        {payload.datasets.map((d) => (
+          <DatasetCard
+            key={d.id}
+            dataset={{ ...d, isSelected: true, isLoaded: true, format: "csv", schema: null }}
+            onToggle={noop}
+          />
+        ))}
+      </div>
+    </section>
+  );
+};
+
 const UserMessage = (props: UserMessageProps) => {
   if (props.message?.id?.startsWith(USER_EDIT_PREFIX)) {
     const payload = parseCanvasEditPayload(props.message.content);
     if (payload) return <CanvasEditMessage payload={payload} />;
+  }
+  if (props.message?.id?.startsWith(DATASET_SELECTION_PREFIX)) {
+    const payload = parseDatasetSelectionPayload(props.message.content);
+    if (payload) return <DatasetSelectionMessage payload={payload} />;
   }
   return <DefaultUserMessage {...props} />;
 };
@@ -99,5 +184,6 @@ export {
   UserMessage,
   USER_EDIT_PREFIX,
   buildCanvasEditPayload,
+  buildDatasetSelectionPayload,
   getNodeContentText,
 };

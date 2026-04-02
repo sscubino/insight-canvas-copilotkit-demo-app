@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FileIcon } from "@/components/icons/file";
 import { TrashIcon } from "@/components/icons/trash";
-import { cn } from "@/lib/utils";
+import { cn, noop } from "@/lib/utils";
 import type { DatasetInfo } from "@/types/dataset";
+import { Spinner } from "@/components/ui/spinner";
 
 const formatMeta = (dataset: DatasetInfo): string => {
   const parts: string[] = [];
@@ -15,11 +16,13 @@ const formatMeta = (dataset: DatasetInfo): string => {
 
 const DatasetCardWrapper = ({
   isSelected,
+  isDisabled = false,
   handleClick,
   handleKeyDown,
   children,
 }: {
   isSelected: boolean;
+  isDisabled?: boolean;
   handleClick: () => void;
   handleKeyDown: (e: React.KeyboardEvent) => void;
   children: React.ReactNode;
@@ -27,9 +30,10 @@ const DatasetCardWrapper = ({
   <div
     role="option"
     aria-selected={isSelected}
+    aria-disabled={isDisabled}
     tabIndex={0}
-    onClick={handleClick}
-    onKeyDown={handleKeyDown}
+    onClick={isDisabled ? noop : handleClick}
+    onKeyDown={isDisabled ? noop : handleKeyDown}
     className={cn(
       "group flex cursor-pointer items-center gap-3 overflow-hidden rounded-lg border py-3 pl-3 pr-4 transition-colors",
       isSelected
@@ -81,14 +85,17 @@ const DatasetMeta = ({ dataset }: { dataset: DatasetInfo }) => (
 const DeleteButton = ({
   onDelete,
   datasetName,
+  isDisabled = false,
 }: {
   onDelete: (e: React.MouseEvent) => void;
   datasetName: string;
+  isDisabled?: boolean;
 }) => (
   <Button
     variant="destructive"
     size="sm-icon"
     onClick={onDelete}
+    disabled={isDisabled}
     aria-label={`Delete ${datasetName}`}
     className="opacity-0 transition-all focus-visible:opacity-100 group-hover:opacity-100 group-focus-visible:opacity-100"
   >
@@ -116,11 +123,13 @@ const DatasetCardActions = ({
   onToggle,
   onDelete,
   isSelected,
+  isLoading = false,
 }: {
   dataset: DatasetInfo;
   onToggle: (id: string) => void;
   onDelete?: (id: string) => void;
   isSelected: boolean;
+  isLoading?: boolean;
 }) => {
   const { id, name } = dataset;
 
@@ -133,13 +142,28 @@ const DatasetCardActions = ({
 
   return (
     <div className="flex items-center gap-2">
-      {onDelete && <DeleteButton onDelete={handleDelete} datasetName={name} />}
+      {onDelete && (
+        <DeleteButton
+          onDelete={handleDelete}
+          datasetName={name}
+          isDisabled={isLoading}
+        />
+      )}
       <div onClick={(e) => e.stopPropagation()}>
+        <div
+          className={cn(
+            "flex items-center justify-center size-6",
+            !isLoading && "hidden"
+          )}
+        >
+          <Spinner size="md" />
+        </div>
         <Checkbox
           checked={isSelected}
           onChange={handleChange}
           aria-label={`Select ${name}`}
           tabIndex={-1}
+          className={cn(isLoading && "hidden")}
         />
       </div>
     </div>
@@ -153,7 +177,10 @@ type DatasetCardProps = {
 };
 
 const DatasetCard = ({ dataset, onToggle, onDelete }: DatasetCardProps) => {
-  const { isSelected, id, source, emoji } = dataset;
+  const { isSelected, isLoaded, id, source, emoji } = dataset;
+
+  const isSelectedAndLoaded = isSelected && isLoaded;
+  const isLoading = isSelected && !isLoaded;
 
   const handleClick = () => onToggle(id);
 
@@ -166,17 +193,19 @@ const DatasetCard = ({ dataset, onToggle, onDelete }: DatasetCardProps) => {
 
   return (
     <DatasetCardWrapper
-      isSelected={isSelected}
+      isSelected={isSelectedAndLoaded}
+      isDisabled={isLoading}
       handleClick={handleClick}
       handleKeyDown={handleKeyDown}
     >
       <DatasetIcon source={source} emoji={emoji} />
-      <DatasetCardInfo dataset={dataset} isSelected={isSelected} />
+      <DatasetCardInfo dataset={dataset} isSelected={isSelectedAndLoaded} />
       <DatasetCardActions
         dataset={dataset}
         onToggle={onToggle}
         onDelete={onDelete}
-        isSelected={isSelected}
+        isSelected={isSelectedAndLoaded}
+        isLoading={isLoading}
       />
     </DatasetCardWrapper>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CopilotChat } from "@copilotkit/react-ui";
 import { useAgent } from "@copilotkit/react-core/v2";
 import { SYSTEM_PROMPT } from "@/constants/system-prompt";
@@ -10,10 +10,8 @@ import {
   SidebarContent,
   SidebarTitle,
 } from "@/components/ui/sidebar";
-import { DatasetDrawer } from "@/components/chat/datasets/dataset-drawer";
-import { NodeDetailDrawer } from "@/components/chat/node-detail/node-detail-drawer";
+import { ChatDrawers } from "@/components/chat/chat-drawers";
 import { useAppStore } from "@/state/store";
-import { useSelectedDatasets } from "@/hooks/use-datasets-state";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { PaperclipIcon } from "@/components/icons/paperclip";
@@ -28,31 +26,13 @@ import {
 
 const ChatPanel = () => {
   const { agent } = useAgent();
-  const deselectNode = useAppStore((s) => s.deselectNode);
-  const selectedDatasets = useSelectedDatasets();
   const isSessionInitialized = useAppStore((s) => s.isInitialized);
   const hydrationRecord = useAppStore((s) => s.hydrationRecord);
+  const deselectNode = useAppStore((s) => s.deselectNode);
+
   const [isDatasetDrawerOpen, setIsDatasetDrawerOpen] = useState(false);
 
   const isWorkspaceInitialized = isSessionInitialized && !hydrationRecord;
-
-  useEffect(() => {
-    const unsub = useAppStore.subscribe((state, prevState) => {
-      if (
-        state.selectedNodeId &&
-        state.selectedNodeId !== prevState.selectedNodeId
-      ) {
-        setIsDatasetDrawerOpen(false);
-      }
-    });
-    return unsub;
-  }, []);
-
-  useEffect(() => {
-    if (!isWorkspaceInitialized) return;
-    if (selectedDatasets.length !== 0) return;
-    setIsDatasetDrawerOpen(true);
-  }, [selectedDatasets, isWorkspaceInitialized]);
 
   const handleToggleDatasetDrawer = () => {
     if (!isDatasetDrawerOpen) deselectNode();
@@ -134,11 +114,12 @@ const ChatPanel = () => {
             <Spinner size="lg" />
           </div>
         )}
-        <DatasetDrawer
-          isOpen={isDatasetDrawerOpen}
-          onClose={() => setIsDatasetDrawerOpen(false)}
-        />
-        <NodeDetailDrawer />
+        {isWorkspaceInitialized && (
+          <ChatDrawers
+            isDatasetDrawerOpen={isDatasetDrawerOpen}
+            setIsOpen={setIsDatasetDrawerOpen}
+          />
+        )}
       </SidebarContent>
     </Sidebar>
   );

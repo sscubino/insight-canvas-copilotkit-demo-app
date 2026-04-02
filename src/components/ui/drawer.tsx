@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, noop } from "@/lib/utils";
 import type { ComponentPropsWithoutRef, PointerEvent, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -160,12 +160,17 @@ const DrawerDialog = ({
 
 type DrawerProps = {
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   children: ReactNode;
   className?: string;
 };
 
-const Drawer = ({ isOpen, onClose, children, className }: DrawerProps) => {
+const Drawer = ({
+  isOpen,
+  onClose = noop,
+  children,
+  className,
+}: DrawerProps) => {
   return (
     <div
       className={cn(

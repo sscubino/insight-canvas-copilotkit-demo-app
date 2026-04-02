@@ -6,42 +6,40 @@ import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/chat/datasets/dataset-card";
 import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import { useAppStore } from "@/state/store";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useAgent } from "@copilotkit/react-core/v2";
+import { buildDatasetSelectionPayload } from "@/components/chat/user-message";
+import { DATASET_SELECTION_PREFIX } from "@/constants/chat";
 
 type DatasetDrawerProps = {
   isOpen: boolean;
-  onClose: () => void;
   setIsOpen: (isOpen: boolean) => void;
 };
 
 const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
+  const { agent } = useAgent();
   const datasets = useAppStore((s) => s.datasets);
   const { addUserFile, toggleSelection, removeDataset } = useDatasetWorkflows();
 
+  const snapshotSelectedDatasetIdsRef = useRef<Set<string>>(new Set());
+
   const sampleDatasets = datasets.filter((d) => d.source === "sample");
   const userDatasets = datasets.filter((d) => d.source === "user");
-  const hasSelectedDatasets = datasets.some((d) => d.isSelected);
+  const selectedDatasets = datasets.filter((d) => d.isSelected);
+  const hasSelectedDatasets = selectedDatasets.length > 0;
   const areAllSelectedDatasetsLoaded = datasets.every(
     (d) => !d.isSelected || d.isLoaded
   );
 
   useEffect(() => {
-    if (hasSelectedDatasets) return;
-
-    setIsOpen(true);
-  }, [hasSelectedDatasets, setIsOpen]);
-
-  useEffect(() => {
-    const unsub = useAppStore.subscribe((state, prevState) => {
-      const { selectedNodeId } = state;
-      const { selectedNodeId: prevSelecetedNodeId } = prevState;
-      if (selectedNodeId && selectedNodeId !== prevSelecetedNodeId) {
-        setIsOpen(false);
-      }
-    });
-
-    return unsub;
-  }, [setIsOpen]);
+    if (!isOpen) return;
+    snapshotSelectedDatasetIdsRef.current = new Set(
+      useAppStore
+        .getState()
+        .datasets.filter((d) => d.isSelected)
+        .map((d) => d.id)
+    );
+  }, [isOpen]);
 
   const handleNewFile = async (file: File) => {
     try {
@@ -49,6 +47,30 @@ const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
     } catch (err) {
       console.error("Failed to add file:", err);
     }
+  };
+
+  const handleConfirm = () => {
+    if (!hasSelectedDatasets) return;
+
+    const initialSelectedDatasetsIds = snapshotSelectedDatasetIdsRef.current;
+    const currentSelectedDatasetsIds = new Set(
+      selectedDatasets.map((d) => d.id)
+    );
+
+    const selectionChanged =
+      !currentSelectedDatasetsIds.isSupersetOf(initialSelectedDatasetsIds) ||
+      !initialSelectedDatasetsIds.isSupersetOf(currentSelectedDatasetsIds);
+
+    if (selectionChanged) {
+      void agent.addMessage({
+        role: "user",
+        id: `${DATASET_SELECTION_PREFIX}${crypto.randomUUID()}`,
+        content: buildDatasetSelectionPayload(selectedDatasets),
+      });
+      void agent.runAgent();
+    }
+
+    setIsOpen(false);
   };
 
   return (
@@ -119,7 +141,7 @@ const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
           size="md"
           className="w-full duration-500"
           disabled={!hasSelectedDatasets || !areAllSelectedDatasetsLoaded}
-          onClick={() => setIsOpen(false)}
+          onClick={handleConfirm}
           aria-label="Confirm dataset selection"
         >
           Confirm Selection

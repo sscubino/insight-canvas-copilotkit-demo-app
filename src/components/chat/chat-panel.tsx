@@ -10,8 +10,7 @@ import {
   SidebarContent,
   SidebarTitle,
 } from "@/components/ui/sidebar";
-import { DatasetDrawer } from "@/components/chat/datasets/dataset-drawer";
-import { NodeDetailDrawer } from "@/components/chat/node-detail/node-detail-drawer";
+import { ChatDrawers } from "@/components/chat/chat-drawers";
 import { useAppStore } from "@/state/store";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -116,13 +115,11 @@ const ChatPanel = () => {
           </div>
         )}
         {isWorkspaceInitialized && (
-          <DatasetDrawer
-            isOpen={isDatasetDrawerOpen}
-            onClose={() => setIsDatasetDrawerOpen(false)}
+          <ChatDrawers
+            isDatasetDrawerOpen={isDatasetDrawerOpen}
             setIsOpen={setIsDatasetDrawerOpen}
           />
         )}
-        {isWorkspaceInitialized && <NodeDetailDrawer />}
       </SidebarContent>
     </Sidebar>
   );

@@ -8,47 +8,11 @@ type VegaChartProps = {
   className?: string;
 };
 
-const DEFAULT_CHART_WIDTH = 176;
-const DEFAULT_CHART_HEIGHT = 190;
-
 const asObject = (value: unknown): Record<string, unknown> | undefined => {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return undefined;
   }
   return value as Record<string, unknown>;
-};
-
-const withDefaultChartLayout = (spec: Record<string, unknown>) => {
-  const config = asObject(spec.config);
-  const axisX = asObject(config?.axisX);
-  const axisY = asObject(config?.axisY);
-  const barConfig = asObject(config?.bar);
-  const scaleConfig = asObject(config?.scale);
-
-  return {
-    ...spec,
-    width: spec.width ?? DEFAULT_CHART_WIDTH,
-    height: spec.height ?? DEFAULT_CHART_HEIGHT,
-    autosize: spec.autosize ?? { type: "fit", contains: "padding" },
-    config: {
-      ...config,
-      bar: {
-        ...barConfig,
-      },
-      scale: {
-        ...scaleConfig,
-        bandPaddingInner: scaleConfig?.bandPaddingInner ?? 0.35,
-      },
-      axisX: {
-        ...axisX,
-        labelAngle: axisX?.labelAngle ?? -35,
-      },
-      axisY: {
-        ...axisY,
-        titlePadding: axisY?.titlePadding ?? 8,
-      },
-    },
-  };
 };
 
 const hasRightLegend = (spec: Record<string, unknown>): boolean => {
@@ -98,12 +62,11 @@ const VegaChart = memo(({ spec, className }: VegaChartProps) => {
         const vegaEmbed = (await import("vega-embed")).default;
         if (cancelled || !container) return;
 
-        const normalizedSpec = withDefaultChartLayout(spec);
         setError(null);
 
         await vegaEmbed(
           container,
-          normalizedSpec as unknown as Parameters<typeof vegaEmbed>[1],
+          spec as unknown as Parameters<typeof vegaEmbed>[1],
           {
             actions: false,
             renderer: "svg",
@@ -142,7 +105,7 @@ const VegaChart = memo(({ spec, className }: VegaChartProps) => {
     <div
       ref={containerRef}
       className={cn(
-        "w-full overflow-hidden [&_.vega-embed]:p-0! [&>svg]:bg-transparent!",
+        "w-full overflow-hidden [&_.vega-embed]:p-0! [&>svg]:bg-transparent! [&>svg]:max-w-full [&>svg]:h-auto",
         isBarChartWithoutLegend(spec) && "pr-6",
         className
       )}

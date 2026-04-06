@@ -113,7 +113,16 @@ const buildDatasetSelectionPayload = (datasets: DatasetInfo[]): string =>
   JSON.stringify({
     type: "dataset-selection",
     datasets: datasets.map(
-      ({ id, name, fileName, tableName, source, emoji, rowCount, columnCount }) => ({
+      ({
+        id,
+        name,
+        fileName,
+        tableName,
+        source,
+        emoji,
+        rowCount,
+        columnCount,
+      }) => ({
         id,
         name,
         fileName,
@@ -149,7 +158,7 @@ const DatasetSelectionMessage = ({
 
   return (
     <section
-      className="flex flex-col gap-2.5 rounded-xl bg-surface-hover/60 px-4 py-3"
+      className="flex flex-col gap-2.5 rounded-xl bg-surface-50 px-4 py-3"
       aria-label={`You selected ${count} dataset${count !== 1 ? "s" : ""}`}
     >
       <p className="text-sm font-medium text-foreground">
@@ -159,7 +168,13 @@ const DatasetSelectionMessage = ({
         {payload.datasets.map((d) => (
           <DatasetCard
             key={d.id}
-            dataset={{ ...d, isSelected: true, isLoaded: true, format: "csv", schema: null }}
+            dataset={{
+              ...d,
+              isSelected: true,
+              isLoaded: true,
+              format: "csv",
+              schema: null,
+            }}
             onToggle={noop}
           />
         ))}

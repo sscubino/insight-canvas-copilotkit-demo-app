@@ -12,6 +12,7 @@ import {
   QueryRunningStatus,
   QueryFallbackStatus,
   QueryResultTable,
+  QueryErrorStatus,
   ChartGeneratingStatus,
   ChartCreatedStatus,
 } from "@/components/chat/data-tool-renders";
@@ -87,22 +88,32 @@ export const useCopilotDataTools = (schemas: DatasetSchema[]) => {
         "Execute a SQL query against the loaded datasets using DuckDB. Be sure to use DuckDB valid syntax only. Use the dataset schemas to write valid queries with correct table and column names. Returns columns and rows as JSON. Always query data before making claims about it.",
       parameters: runSqlQueryParameters,
       handler: async ({ sql }) => {
-        const result = await runQuery(sql);
-        return JSON.stringify(result);
+        try {
+          const result = await runQuery(sql);
+          return JSON.stringify(result);
+        } catch (err) {
+          const message =
+            err instanceof Error ? err.message : "Unknown query error";
+          return JSON.stringify({ error: message, sql });
+        }
       },
       render: (props) => {
         if (props.status !== ToolCallStatus.Complete) {
           return <QueryRunningStatus sql={props.args.sql} />;
         }
 
-        let queryResult: QueryResult;
+        let parsed: Record<string, unknown>;
         try {
-          queryResult = JSON.parse(props.result);
+          parsed = JSON.parse(props.result);
         } catch {
           return <QueryFallbackStatus />;
         }
 
-        return <QueryResultTable result={queryResult} />;
+        if (parsed.error) {
+          return <QueryErrorStatus error={String(parsed.error)} />;
+        }
+
+        return <QueryResultTable result={parsed as unknown as QueryResult} />;
       },
     },
     [runQuery]

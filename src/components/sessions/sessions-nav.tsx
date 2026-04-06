@@ -24,6 +24,8 @@ const SessionsNav = () => {
   const activeSessionId = useAppStore((s) => s.activeSessionId);
   const isInitialized = useAppStore((s) => s.isInitialized);
 
+  if (!sessions.length) return null;
+
   return (
     <SidebarNavSection
       aria-label="Sessions"
@@ -33,30 +35,26 @@ const SessionsNav = () => {
       )}
     >
       <SidebarNavSectionTitle>Sessions</SidebarNavSectionTitle>
-      {sessions.length === 0 ? (
-        <p className="px-3 text-xs font-medium text-dim">No sessions yet</p>
-      ) : (
-        sessions.map((session, index) => {
-          const dotClass =
-            SESSION_DOT_CLASSES[index % SESSION_DOT_CLASSES.length];
-          const isActive = session.id === activeSessionId;
+      {sessions.map((session, index) => {
+        const dotClass =
+          SESSION_DOT_CLASSES[index % SESSION_DOT_CLASSES.length];
+        const isActive = session.id === activeSessionId;
 
-          return (
-            <SidebarNavButton
-              key={session.id}
-              isActive={isActive}
-              aria-label={session.name}
-              onClick={() => {
-                if (activeSessionId === session.id) return;
-                void switchSession(session.id);
-              }}
-            >
-              <StatusDot className={cn(dotClass, "size-2")} />
-              <span>{session.name}</span>
-            </SidebarNavButton>
-          );
-        })
-      )}
+        return (
+          <SidebarNavButton
+            key={session.id}
+            isActive={isActive}
+            aria-label={session.name}
+            onClick={() => {
+              if (activeSessionId === session.id) return;
+              void switchSession(session.id);
+            }}
+          >
+            <StatusDot className={cn(dotClass, "size-2")} />
+            <span>{session.name}</span>
+          </SidebarNavButton>
+        );
+      })}
     </SidebarNavSection>
   );
 };

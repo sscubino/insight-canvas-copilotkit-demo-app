@@ -146,7 +146,7 @@ const SidebarContent = ({ children, className }: SidebarContentProps) => {
   return (
     <div
       className={cn(
-        "flex min-h-0 flex-1 flex-col transition-opacity duration-200",
+        "flex min-h-0 mb-4 flex-1 flex-col transition-opacity duration-200 overflow-auto scrollbar-custom",
         collapsed && "opacity-0 pointer-events-none",
         className
       )}

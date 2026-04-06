@@ -7,7 +7,7 @@ import { DatasetCard } from "@/components/chat/datasets/dataset-card";
 import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import { useAppStore } from "@/state/store";
 import { useEffect, useRef } from "react";
-import { useAgent } from "@copilotkit/react-core/v2";
+import { useAgent, useCopilotKit } from "@copilotkit/react-core/v2";
 import { buildDatasetSelectionPayload } from "@/components/chat/user-message";
 import { DATASET_SELECTION_PREFIX } from "@/constants/chat";
 
@@ -18,6 +18,7 @@ type DatasetDrawerProps = {
 
 const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
   const { agent } = useAgent();
+  const { copilotkit } = useCopilotKit();
   const datasets = useAppStore((s) => s.datasets);
   const { addUserFile, toggleSelection, removeDataset } = useDatasetWorkflows();
 
@@ -67,7 +68,7 @@ const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
         id: `${DATASET_SELECTION_PREFIX}${crypto.randomUUID()}`,
         content: buildDatasetSelectionPayload(selectedDatasets),
       });
-      void agent.runAgent();
+      void copilotkit.runAgent({ agent });
     }
 
     setIsOpen(false);

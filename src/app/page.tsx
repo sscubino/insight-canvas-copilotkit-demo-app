@@ -6,7 +6,8 @@ import { useCanvasAgentSharedState } from "@/hooks/use-canvas-agent-shared-state
 import { useChatSessionSync } from "@/hooks/use-chat-session-sync";
 import { useCopilotDataTools } from "@/hooks/use-copilot-data-tools";
 import { useCopilotSessionMemory } from "@/hooks/use-copilot-session-memory";
-import useCopilotStateRenderTools from "@/hooks/use-copilot-state-render-tools";
+import { useCopilotStateRenderTools } from "@/hooks/use-copilot-state-render-tools";
+import { useCopilotSuggestions } from "@/hooks/use-copilot-suggestions";
 import { useActiveSchemas } from "@/hooks/use-datasets-state";
 
 const CopilotCanvasSync = () => {
@@ -30,6 +31,11 @@ const CopilotSessionMemorySync = () => {
   return null;
 };
 
+const CopilotSuggestionsSync = () => {
+  useCopilotSuggestions();
+  return null;
+};
+
 const ChatSessionSync = () => {
   useChatSessionSync();
   return null;
@@ -42,6 +48,7 @@ const Home = () => {
       <CopilotDataToolsSync />
       <CopilotStateRenderToolsSync />
       <CopilotSessionMemorySync />
+      <CopilotSuggestionsSync />
       <ChatSessionSync />
       <div className="flex h-full space-x-2">
         <main className="relative flex-1 card-container">

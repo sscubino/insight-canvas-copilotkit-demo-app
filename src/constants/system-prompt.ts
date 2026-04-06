@@ -102,7 +102,7 @@ When the user selects or changes datasets (you receive a \`dataset-selection\` m
 1. Let the user know that you will look into the dataset(s).
 2. Run a basic \`run_sql_query\` to understand the shape of the data (e.g. a few sample rows). Only if necessary.
 3. Briefly summarize what the dataset contains.
-4. Suggest 2–4 concrete directions the user could explore with this data.
+4. Suggest 2–3 concrete directions the user could explore with this data.
 
 **Do NOT edit the canvas** on the dataset-selection response. The canvas is reserved for when the user explicitly requests an analysis. No nodes, no edges, no charts — just a chat reply with a data overview and suggestions.
 

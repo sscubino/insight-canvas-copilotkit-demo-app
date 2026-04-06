@@ -32,4 +32,4 @@ const useCopilotStateRenderTools = () => {
   );
 };
 
-export default useCopilotStateRenderTools;
+export { useCopilotStateRenderTools };

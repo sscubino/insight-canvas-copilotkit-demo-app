@@ -158,7 +158,7 @@ const DatasetSelectionMessage = ({
 
   return (
     <section
-      className="flex flex-col gap-2.5 rounded-xl bg-surface-50 px-4 py-3"
+      className="flex flex-col gap-2.5 rounded-xl bg-surface-50 px-4 py-3 mb-2"
       aria-label={`You selected ${count} dataset${count !== 1 ? "s" : ""}`}
     >
       <p className="text-sm font-medium text-foreground">

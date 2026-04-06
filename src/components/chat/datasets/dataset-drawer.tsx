@@ -1,21 +1,48 @@
 "use client";
 
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerFooter } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
 import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/chat/datasets/dataset-card";
 import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import { useAppStore } from "@/state/store";
+import { useEffect, useRef } from "react";
+import { useAgent, useCopilotKit } from "@copilotkit/react-core/v2";
+import { buildDatasetSelectionPayload } from "@/components/chat/user-message";
+import { DATASET_SELECTION_PREFIX } from "@/constants/chat";
 
 type DatasetDrawerProps = {
   isOpen: boolean;
-  onClose: () => void;
+  setIsOpen: (isOpen: boolean) => void;
 };
 
-const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
+const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
+  const { agent } = useAgent();
+  const { copilotkit } = useCopilotKit();
   const datasets = useAppStore((s) => s.datasets);
   const { addUserFile, toggleSelection, removeDataset } = useDatasetWorkflows();
 
-  const handleFileSelect = async (file: File) => {
+  const snapshotSelectedDatasetIdsRef = useRef<Set<string>>(new Set());
+
+  const sampleDatasets = datasets.filter((d) => d.source === "sample");
+  const userDatasets = datasets.filter((d) => d.source === "user");
+  const selectedDatasets = datasets.filter((d) => d.isSelected);
+  const hasSelectedDatasets = selectedDatasets.length > 0;
+  const areAllSelectedDatasetsLoaded = datasets.every(
+    (d) => !d.isSelected || d.isLoaded
+  );
+
+  useEffect(() => {
+    if (!isOpen) return;
+    snapshotSelectedDatasetIdsRef.current = new Set(
+      useAppStore
+        .getState()
+        .datasets.filter((d) => d.isSelected)
+        .map((d) => d.id)
+    );
+  }, [isOpen]);
+
+  const handleNewFile = async (file: File) => {
     try {
       await addUserFile(file);
     } catch (err) {
@@ -23,15 +50,32 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
     }
   };
 
-  const sampleDatasets = datasets.filter((d) => d.source === "sample");
-  const userDatasets = datasets.filter((d) => d.source === "user");
+  const handleConfirm = () => {
+    if (!hasSelectedDatasets) return;
+
+    const initialSelectedDatasetsIds = snapshotSelectedDatasetIdsRef.current;
+    const currentSelectedDatasetsIds = new Set(
+      selectedDatasets.map((d) => d.id)
+    );
+
+    const selectionChanged =
+      !currentSelectedDatasetsIds.isSupersetOf(initialSelectedDatasetsIds) ||
+      !initialSelectedDatasetsIds.isSupersetOf(currentSelectedDatasetsIds);
+
+    if (selectionChanged) {
+      void agent.addMessage({
+        role: "user",
+        id: `${DATASET_SELECTION_PREFIX}${crypto.randomUUID()}`,
+        content: buildDatasetSelectionPayload(selectedDatasets),
+      });
+      void copilotkit.runAgent({ agent });
+    }
+
+    setIsOpen(false);
+  };
 
   return (
-    <Drawer
-      isOpen={isOpen}
-      onClose={onClose}
-      className="max-h-[calc(100%-80px)]"
-    >
+    <Drawer isOpen={isOpen} className="max-h-[calc(100%-80px)]">
       <DrawerContent>
         <div className="flex w-full flex-col items-center gap-4">
           <p className="text-center text-sm font-medium text-foreground">
@@ -39,7 +83,7 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
           </p>
 
           <div className="flex w-full flex-col items-center gap-2">
-            <FileDropZone onFileSelect={handleFileSelect} />
+            <FileDropZone onFileSelect={handleNewFile} />
             <p className="text-center font-sans text-xs font-medium text-dim">
               Supported formats: CSV, JSON
             </p>
@@ -91,6 +135,19 @@ const DatasetDrawer = ({ isOpen, onClose }: DatasetDrawerProps) => {
           </div>
         </div>
       </DrawerContent>
+
+      <DrawerFooter>
+        <Button
+          variant="primary"
+          size="md"
+          className="w-full duration-500"
+          disabled={!hasSelectedDatasets || !areAllSelectedDatasetsLoaded}
+          onClick={handleConfirm}
+          aria-label="Confirm dataset selection"
+        >
+          Confirm Selection
+        </Button>
+      </DrawerFooter>
     </Drawer>
   );
 };

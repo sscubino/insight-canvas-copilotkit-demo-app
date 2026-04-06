@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useAgent } from "@copilotkit/react-core/v2";
+import { useAgent, useCopilotKit } from "@copilotkit/react-core/v2";
 import { useAppStore } from "@/state/store";
 import type { CanvasNodeData } from "@/types/canvas";
 import {
@@ -20,6 +20,7 @@ const useNodeDetail = () => {
   const removeNode = useAppStore((s) => s.removeNode);
   const updateNode = useAppStore((s) => s.updateNode);
   const { agent } = useAgent();
+  const { copilotkit } = useCopilotKit();
   const [hasPendingEdits, setHasPendingEdits] = useState(false);
   const snapshotTextRef = useRef<string | null>(null);
 
@@ -71,7 +72,7 @@ const useNodeDetail = () => {
         newText,
       }),
     });
-    void agent.runAgent();
+    void copilotkit.runAgent({ agent });
     setHasPendingEdits(false);
     deselectNode();
   };

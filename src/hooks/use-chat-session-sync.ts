@@ -17,12 +17,14 @@ import { useSelectedDatasets } from "@/hooks/use-datasets-state";
 import { useAppStore } from "@/state/store";
 import type { SessionSnapshotInput } from "@/types/session";
 import { getFirstUserPrompt } from "@/lib/copilotkit-chat";
-import { Message, useAgent } from "@copilotkit/react-core/v2";
+import { Message, useAgent, useSuggestions } from "@copilotkit/react-core/v2";
+import { ChartCanvasNode } from "@/types/canvas";
 
 type CopilotkitStatus = "uninitialized" | "initializing" | "running" | "ready";
 
 const useChatSessionSync = () => {
   const { agent } = useAgent();
+  const { clearSuggestions, reloadSuggestions } = useSuggestions();
   const selectedDatasets = useSelectedDatasets();
   const { setSelectedDatasetIds } = useDatasetWorkflows();
   const activeSessionId = useAppStore((s) => s.activeSessionId);
@@ -91,7 +93,19 @@ const useChatSessionSync = () => {
       agent.setMessages(hydratedMessages);
       getCanvasAgentBridge()?.syncCanvasToAgent(hydrationRecord.canvas);
       canvasHydrationGate.setBlocked(false);
+      const canvasNodes = useAppStore
+        .getState()
+        .nodes.filter((n) => n.data.variant === "chart");
+      console.log(
+        "canvas chart nodes:",
+        canvasNodes.map((n) => ({
+          title: n.data.title,
+          spec: (n as ChartCanvasNode).data.chartSpec,
+        }))
+      );
       consumeHydrationRecord();
+      clearSuggestions();
+      reloadSuggestions();
     }
   }, [
     agent,
@@ -99,6 +113,8 @@ const useChatSessionSync = () => {
     isCopilotkitReady,
     isInitialized,
     hydrationRecord,
+    clearSuggestions,
+    reloadSuggestions,
   ]);
 
   // Reset session
@@ -122,7 +138,15 @@ const useChatSessionSync = () => {
       selectedNodeId: null,
     });
     canvasHydrationGate.setBlocked(false);
-  }, [agent, resetVersion, isInitialized, activeSessionId, hydrationRecord]);
+    clearSuggestions();
+  }, [
+    agent,
+    resetVersion,
+    isInitialized,
+    activeSessionId,
+    hydrationRecord,
+    clearSuggestions,
+  ]);
 
   // Save active session snapshot (messages / dataset changes)
   useEffect(() => {

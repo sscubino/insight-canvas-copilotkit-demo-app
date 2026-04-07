@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { persistSessionMemorySummary } from "@/lib/workflows/session-memory-workflows";
+import { generateSessionMemorySummary } from "@/actions/generate-session-memory-summary";
+import { getSessionSummaryContext } from "@/lib/session-memory";
 import {
   saveActiveSessionSnapshot,
   setSessionMemorySummary,
@@ -16,8 +17,8 @@ import { serializeForStorage } from "@/lib/sessions";
 import { useSelectedDatasets } from "@/hooks/use-datasets-state";
 import { useAppStore } from "@/state/store";
 import type { SessionSnapshotInput } from "@/types/session";
-import { getFirstUserPrompt } from "@/lib/copilotkit-chat";
-import { Message, useAgent, useSuggestions } from "@copilotkit/react-core/v2";
+import { useAgent, useSuggestions } from "@copilotkit/react-core/v2";
+import type { Message } from "@copilotkit/react-core/v2";
 
 type CopilotkitStatus = "uninitialized" | "initializing" | "running" | "ready";
 
@@ -170,26 +171,35 @@ const useChatSessionSync = () => {
 
   // Persist session summary after each agent run
   useEffect(() => {
+    const NO_SUMMARY = "No summary available.";
+
     const sub = agent.subscribe({
-      onRunFinalized: ({ messages }) => {
+      onRunFinalized: async ({ messages }) => {
         const sessionId = activeSessionIdRef.current;
         if (!sessionId) return;
         if (hydrationRecordRef.current) return;
         if (messages.length <= previousSummaryMessagesLengthRef.current) return;
+        previousSummaryMessagesLengthRef.current = messages.length;
+
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage?.role !== "assistant") return;
+        if (lastMessage?.toolCalls && lastMessage.toolCalls.length > 0) return;
 
         const { nodes } = useAppStore.getState();
-        void persistSessionMemorySummary({
-          activeSessionId: sessionId,
-          firstUserPrompt: getFirstUserPrompt(messages),
+        const context = getSessionSummaryContext({
           messages,
           nodes,
-          selectedDatasetNames: selectedDatasetsRef.current.map((d) => d.name),
           previousSummary: previousSummaryRef.current,
-          setSessionMemorySummary,
-        }).then((nextSummary) => {
-          previousSummaryRef.current = nextSummary;
-          previousSummaryMessagesLengthRef.current = messages.length;
         });
+
+        const generated = await generateSessionMemorySummary(context).catch(
+          () => null
+        );
+
+        const summary = generated ?? previousSummaryRef.current ?? NO_SUMMARY;
+        await setSessionMemorySummary(sessionId, summary);
+
+        previousSummaryRef.current = summary;
       },
     });
 

@@ -9,7 +9,7 @@ import { clampText } from "@/lib/utils";
 const MAX_MEMORY_SESSIONS = 5;
 const MAX_SUMMARY_LENGTH = 280;
 
-const useCopilotSessionMemory = () => {
+const useCopilotCrossSessionMemory = () => {
   const sessions = useAppStore((s) => s.sessions);
   const activeSessionId = useAppStore((s) => s.activeSessionId);
   const [memoryText, setMemoryText] = useState("No previous sessions yet.");
@@ -37,31 +37,25 @@ const useCopilotSessionMemory = () => {
           Boolean(record)
         )
         .map((record) => {
-          const summary = clampText(
-            record.memorySummary || "",
-            MAX_SUMMARY_LENGTH
-          );
-          const selectedDatasetNames = record.selectedDatasetNames ?? [];
-          const selectedDatasetIds = record.selectedDatasetIds ?? [];
           const datasets =
-            selectedDatasetNames.length > 0
-              ? selectedDatasetNames.join(", ")
-              : selectedDatasetIds.length > 0
-                ? selectedDatasetIds.join(", ")
+            record.selectedDatasetNames?.length > 0
+              ? record.selectedDatasetNames.join(", ")
+              : record.selectedDatasetIds?.length > 0
+                ? record.selectedDatasetIds.join(", ")
                 : "none";
 
-          return [
-            `Session: ${record.name}`,
-            `Datasets: ${datasets}`,
-            `First prompt: ${clampText(record.firstPrompt, 120)}`,
-            `Summary: ${summary || "No summary available."}`,
-          ].join("\n");
+          const summary = clampText(
+            record.memorySummary || "No summary available.",
+            MAX_SUMMARY_LENGTH
+          );
+
+          return [`${record.name}`, `Datasets: ${datasets}`, summary].join(
+            "\n"
+          );
         });
 
       setMemoryText(
-        compact.length > 0
-          ? compact.join("\n\n---\n\n")
-          : "No previous sessions yet."
+        compact.length > 0 ? compact.join("\n\n") : "No previous sessions yet."
       );
     };
 
@@ -75,4 +69,4 @@ const useCopilotSessionMemory = () => {
   });
 };
 
-export { useCopilotSessionMemory };
+export { useCopilotCrossSessionMemory };

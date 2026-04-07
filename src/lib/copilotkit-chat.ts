@@ -1,3 +1,4 @@
+import { CUSTOM_USER_MESSAGES_PREFIXES } from "@/constants/chat";
 import { isRecord } from "@/lib/utils";
 import { Message } from "@copilotkit/react-core/v2";
 
@@ -15,7 +16,13 @@ export const getMessageContentText = (message: Message): string => {
 };
 
 export const getFirstUserPrompt = (messages: Message[]): string => {
-  const firstUserMessage = messages.find((message) => message.role === "user");
+  const firstUserMessage = messages.find(
+    (message) =>
+      message.role === "user" &&
+      !CUSTOM_USER_MESSAGES_PREFIXES.some((prefix) =>
+        message.id.startsWith(prefix)
+      )
+  );
   if (!firstUserMessage) return "";
   return getMessageContentText(firstUserMessage).trim();
 };

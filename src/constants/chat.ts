@@ -5,3 +5,8 @@ export const CANVAS_EDIT_MARKER = '"type":"canvas-edit"';
 export const DATASET_SELECTION_PREFIX = "dataset-selection-";
 
 export const DATASET_SELECTION_MARKER = '"type":"dataset-selection"';
+
+export const CUSTOM_USER_MESSAGES_PREFIXES = [
+  USER_EDIT_PREFIX,
+  DATASET_SELECTION_PREFIX,
+];

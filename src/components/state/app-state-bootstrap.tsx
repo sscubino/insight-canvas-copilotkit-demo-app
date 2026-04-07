@@ -10,7 +10,7 @@ import { restoreSessionState } from "@/lib/workflows/session-workflows";
 import { useAppStore } from "@/state/store";
 
 export const AppStateBootstrap = () => {
-  const { status: duckDBStatus, loadCSV, loadJSON } = useDuckDB();
+  const { status: duckDBStatus, loaders } = useDuckDB();
   const isDuckDBReady = duckDBStatus === "ready";
 
   const isInitialized = useAppStore((state) => state.isInitialized);
@@ -26,7 +26,7 @@ export const AppStateBootstrap = () => {
   useEffect(() => {
     if (isInitialized) return;
 
-    void restoreSessionState().catch(() => {
+    void restoreSessionState().finally(() => {
       setIsInitialized(true);
     });
   }, [isInitialized, setIsInitialized]);
@@ -34,7 +34,7 @@ export const AppStateBootstrap = () => {
   useEffect(() => {
     if (isDatasetsInitialized) return;
 
-    void initializeDatasets().catch(() => {
+    void initializeDatasets().finally(() => {
       setIsDatasetsInitialized(true);
     });
   }, [isDatasetsInitialized, setIsDatasetsInitialized]);
@@ -44,14 +44,13 @@ export const AppStateBootstrap = () => {
 
     const pending = useAppStore
       .getState()
-      .datasets.filter((d) => d.isSelected && !d.isLoaded);
+      .datasets.filter((dataset) => dataset.isSelected && !dataset.isLoaded);
     if (pending.length === 0) return;
 
-    const loaders = { loadCSV, loadJSON };
-    pending.forEach((d) => {
-      void ensureDatasetLoaded(d.id, loaders);
+    pending.forEach((dataset) => {
+      void ensureDatasetLoaded(dataset.id, loaders);
     });
-  }, [isDuckDBReady, isDatasetsInitialized, loadCSV, loadJSON]);
+  }, [isDuckDBReady, isDatasetsInitialized, loaders]);
 
   return null;
 };

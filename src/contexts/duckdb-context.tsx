@@ -122,8 +122,7 @@ const DuckDBProvider = ({ children }: { children: ReactNode }) => {
       connection: connRef.current,
       error,
       runQuery,
-      loadCSV,
-      loadJSON,
+      loaders: { loadCSV, loadJSON },
     }),
     [status, error, runQuery, loadCSV, loadJSON]
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useDuckDB } from "@/contexts/duckdb-context";
 import {
   getStoredDatasets,
@@ -15,13 +15,8 @@ import {
   markDatasetAsLoaded,
 } from "@/lib/datasets";
 import type { DatasetInfo } from "@/types/dataset";
-import type { DatasetSchema } from "@/types/duckdb";
+import type { DuckDBLoaders } from "@/types/duckdb";
 import { useAppStore } from "@/state/store";
-
-export type DuckDBLoaders = {
-  loadCSV: (tableName: string, content: string) => Promise<DatasetSchema>;
-  loadJSON: (tableName: string, content: string) => Promise<DatasetSchema>;
-};
 
 const loadingDatasetIds = new Set<string>();
 
@@ -50,9 +45,7 @@ export const ensureDatasetLoaded = async (
   try {
     const content = await getDatasetContent(dataset);
     const schema = await loadDatasetIntoDuckDB(dataset, content, loaders);
-    useAppStore
-      .getState()
-      .upsertDataset(markDatasetAsLoaded(dataset, schema));
+    useAppStore.getState().upsertDataset(markDatasetAsLoaded(dataset, schema));
   } catch (error) {
     console.error(`Failed to load dataset "${dataset.id}":`, error);
   } finally {
@@ -73,9 +66,8 @@ export const initializeDatasets = async () => {
 };
 
 export const useDatasetWorkflows = () => {
-  const { status: duckDBStatus, loadCSV, loadJSON } = useDuckDB();
+  const { status: duckDBStatus, loaders } = useDuckDB();
   const isDuckDBReady = duckDBStatus === "ready";
-  const loaders = useMemo(() => ({ loadCSV, loadJSON }), [loadCSV, loadJSON]);
 
   const addUserFile = useCallback(
     async (file: File) => {
@@ -122,6 +114,8 @@ export const useDatasetWorkflows = () => {
     (id: string) => {
       useAppStore.getState().toggleDatasetSelection(id);
 
+      if (!isDuckDBReady) return;
+
       const dataset = useAppStore
         .getState()
         .datasets.find((item) => item.id === id);
@@ -129,12 +123,15 @@ export const useDatasetWorkflows = () => {
         void ensureDatasetLoaded(dataset.id, loaders);
       }
     },
-    [loaders]
+    [isDuckDBReady, loaders]
   );
 
   const setSelectedDatasetIds = useCallback(
     (datasetIds: string[]) => {
       useAppStore.getState().setSelectedDatasetIds(datasetIds);
+
+      if (!isDuckDBReady) return;
+
       const selectedSet = new Set(datasetIds);
 
       const datasets = useAppStore.getState().datasets;
@@ -144,7 +141,7 @@ export const useDatasetWorkflows = () => {
         }
       });
     },
-    [loaders]
+    [isDuckDBReady, loaders]
   );
 
   return {

@@ -18,7 +18,6 @@ import { useAppStore } from "@/state/store";
 import type { SessionSnapshotInput } from "@/types/session";
 import { getFirstUserPrompt } from "@/lib/copilotkit-chat";
 import { Message, useAgent, useSuggestions } from "@copilotkit/react-core/v2";
-import { ChartCanvasNode } from "@/types/canvas";
 
 type CopilotkitStatus = "uninitialized" | "initializing" | "running" | "ready";
 
@@ -93,16 +92,6 @@ const useChatSessionSync = () => {
       agent.setMessages(hydratedMessages);
       getCanvasAgentBridge()?.syncCanvasToAgent(hydrationRecord.canvas);
       canvasHydrationGate.setBlocked(false);
-      const canvasNodes = useAppStore
-        .getState()
-        .nodes.filter((n) => n.data.variant === "chart");
-      console.log(
-        "canvas chart nodes:",
-        canvasNodes.map((n) => ({
-          title: n.data.title,
-          spec: (n as ChartCanvasNode).data.chartSpec,
-        }))
-      );
       consumeHydrationRecord();
       clearSuggestions();
       reloadSuggestions();

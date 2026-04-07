@@ -19,11 +19,13 @@ This creates a **bidirectional collaboration loop** where the human steers the d
 
 | Layer          | Technology                                                                                            |
 | -------------- | ----------------------------------------------------------------------------------------------------- |
-| Framework      | [Next.js 15](https://nextjs.org/) (App Router, Turbopack)                                             |
-| AI Integration | [CopilotKit](https://github.com/CopilotKit/CopilotKit) (AG-UI protocol, shared state, frontend tools) |
-| Canvas         | [React Flow](https://reactflow.dev/) (@xyflow/react)                                                  |
-| Data Engine    | [DuckDB WASM](https://duckdb.org/docs/api/wasm) (in-browser analytical SQL)                           |
-| LLM            | Anthropic Claude (via CopilotKit runtime)                                                             |
+| Framework      | [Next.js 15](https://nextjs.org/) (App Router, Turbopack) + React 19                                 |
+| AI Integration | [CopilotKit 1.54](https://github.com/CopilotKit/CopilotKit) (AG-UI protocol, shared state, frontend tools) |
+| Canvas         | [React Flow 12](https://reactflow.dev/) (@xyflow/react)                                               |
+| Data Engine    | [DuckDB WASM 1.29](https://duckdb.org/docs/api/wasm) (in-browser analytical SQL)                     |
+| Charts         | [Vega-Lite 6](https://vega.github.io/vega-lite/) via vega-embed                                      |
+| LLM            | Anthropic Claude (Sonnet 4.6 for analysis, Haiku 4.5 for session ops)                                |
+| State          | [Zustand 5](https://zustand.docs.pmnd.rs/) + IndexedDB (session persistence via idb-keyval)          |
 | Styling        | Tailwind CSS v4                                                                                       |
 | Language       | TypeScript                                                                                            |
 
@@ -33,20 +35,48 @@ This creates a **bidirectional collaboration loop** where the human steers the d
 
 Six node types form the building blocks of visual analysis:
 
-- **Chart** — Data visualizations generated from SQL queries
-- **Insight** — Data-driven observations with supporting evidence
+- **Chart** — Vega-Lite visualizations generated from SQL queries (created by the agent via the `generate_chart` tool)
+- **Insight** — Data-driven observations with supporting evidence and specific numbers
 - **Hypothesis** — Possible explanations, editable by user or agent
-- **Experiment** — Test plans to validate hypotheses, with success metrics
+- **Experiment** — Test plans to validate hypotheses, with expected outcomes
 - **Action Item** — Concrete operational tasks derived from the analysis
 - **Question** — Open investigation points that branch the reasoning tree
 
 ### In-Browser SQL with DuckDB WASM
 
-The entire data query layer runs client-side. DuckDB WASM loads CSV datasets into an in-browser analytical database, enabling the agent to run arbitrary SQL queries with sub-second latency — no backend API calls needed for data operations. Your data never leaves your device.
+The entire data query layer runs client-side. DuckDB WASM runs in a web worker and loads CSV datasets into an in-browser analytical database, enabling the agent to run arbitrary SQL queries with sub-second latency — no backend API calls needed for data operations. Your data never leaves your device.
 
-### Shared State (Bidirectional Sync)
+### Bidirectional Agent-UI Sync
 
-Canvas nodes are synchronized between the AI agent and the React frontend via CopilotKit's shared state system. When the agent creates a node, it appears on the canvas. When the user edits a node, the agent sees the change and can respond — enabling true co-creation.
+Canvas nodes are synchronized between the AI agent and the React frontend via CopilotKit's shared state system:
+
+- **User → Agent**: Edits to canvas nodes flow through Zustand → agent shared state → agent re-reasons
+- **Agent → UI**: Agent state changes pull into Zustand → React Flow renders updates
+
+The sync layer uses structural and positional fingerprinting to avoid ping-pong loops, with debounced position updates (700ms) and a hydration gate on initial load.
+
+### Agent-Callable Frontend Tools
+
+Two tools run **client-side in the browser**, callable by the agent:
+
+- `run_sql_query` — executes SQL against DuckDB WASM, returns columns/rows
+- `generate_chart` — creates a Chart node on the canvas from a Vega-Lite spec
+
+### Session Persistence
+
+Sessions are stored in IndexedDB and survive page reloads. Each session record includes canvas state, message history, dataset metadata, and AI-generated memory summaries for context continuity.
+
+### Sample Datasets
+
+Three built-in CSV datasets to explore immediately:
+
+| Dataset | Rows | Use case |
+| --- | --- | --- |
+| `saas-churn.csv` | 300 | Customer churn risk analysis |
+| `retail_complete.csv` | 250 | Retail sales & inventory |
+| `pipeline_q4.csv` | 200 | Sales pipeline / Q4 forecasting |
+
+You can also upload your own CSV or JSON datasets.
 
 ### Insight Copilot Chat Panel
 
@@ -80,6 +110,13 @@ Add your Anthropic API key to `.env.local`:
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
 ```
 
+Optional model overrides:
+
+```
+ANTHROPIC_FAST_MODEL=claude-haiku-4-5          # Used for session titles & memory summaries
+COPILOTKIT_BUILT_IN_AGENT_MODEL=anthropic/claude-sonnet-4-6  # Main analysis agent
+```
+
 ### Development
 
 ```bash
@@ -93,6 +130,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ```bash
 pnpm build
 pnpm start
+```
+
+### Other Commands
+
+```bash
+pnpm lint          # ESLint
+pnpm format        # Prettier (write)
+pnpm format:check  # Prettier (check only)
 ```
 
 ## License

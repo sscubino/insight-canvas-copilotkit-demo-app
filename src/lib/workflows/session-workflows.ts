@@ -22,7 +22,6 @@ export const restoreSessionState = async (): Promise<void> => {
   const setSessions = useAppStore.getState().setSessions;
   const setActiveSessionId = useAppStore.getState().setActiveSessionId;
   const setHydrationRecord = useAppStore.getState().setHydrationRecord;
-  const setIsInitialized = useAppStore.getState().setIsInitialized;
 
   const [storedIndex, storedActiveSessionId] = await Promise.all([
     getSessionIndex(),
@@ -31,20 +30,17 @@ export const restoreSessionState = async (): Promise<void> => {
   setSessions(storedIndex);
 
   if (!storedActiveSessionId) {
-    setIsInitialized(true);
     return;
   }
 
   const record = await getSessionRecord(storedActiveSessionId);
   if (!record) {
     await persistActiveSessionId(null);
-    setIsInitialized(true);
     return;
   }
 
   setActiveSessionId(record.id);
   setHydrationRecord(record);
-  setIsInitialized(true);
 };
 
 export const startNewSession = async () => {

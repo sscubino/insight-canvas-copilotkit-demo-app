@@ -19,12 +19,16 @@ export type QueryResult = {
 
 export type DuckDBStatus = "idle" | "initializing" | "ready" | "error";
 
+export type DuckDBLoaders = {
+  loadCSV: (tableName: string, content: string) => Promise<DatasetSchema>;
+  loadJSON: (tableName: string, content: string) => Promise<DatasetSchema>;
+};
+
 export type DuckDBContextValue = {
   status: DuckDBStatus;
   db: AsyncDuckDB | null;
   connection: AsyncDuckDBConnection | null;
   error: string | null;
   runQuery: (sql: string) => Promise<QueryResult>;
-  loadCSV: (tableName: string, csvContent: string) => Promise<DatasetSchema>;
-  loadJSON: (tableName: string, jsonContent: string) => Promise<DatasetSchema>;
+  loaders: DuckDBLoaders;
 };

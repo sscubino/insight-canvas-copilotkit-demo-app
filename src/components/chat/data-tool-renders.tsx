@@ -69,6 +69,10 @@ const QueryResultTable = ({ result }: { result: QueryResult }) => {
   );
 };
 
+const QueryErrorStatus = ({ error }: { error: string }) => (
+  <ActionStatus variant="error">Query failed: {error}</ActionStatus>
+);
+
 const ChartGeneratingStatus = ({ title }: { title?: string }) => (
   <ActionStatus variant="loading">
     {title ? `Generating chart: ${title}…` : "Generating chart…"}
@@ -85,6 +89,7 @@ export {
   QueryRunningStatus,
   QueryFallbackStatus,
   QueryResultTable,
+  QueryErrorStatus,
   ChartGeneratingStatus,
   ChartCreatedStatus,
 };

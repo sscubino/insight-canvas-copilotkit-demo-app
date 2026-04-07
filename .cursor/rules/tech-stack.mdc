@@ -1,9 +1,0 @@
----
-alwaysApply: true
----
-
-pnpm
-Next.js 15
-Tailwind
-CopilotKit
-ReactFlow (for canvas)

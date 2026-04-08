@@ -6,7 +6,7 @@ import { FileDropZone } from "@/components/chat/datasets/file-drop-zone";
 import { DatasetCard } from "@/components/chat/datasets/dataset-card";
 import { useDatasetWorkflows } from "@/lib/workflows/dataset-workflows";
 import { useAppStore } from "@/state/store";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAgent, useCopilotKit } from "@copilotkit/react-core/v2";
 import { buildDatasetSelectionPayload } from "@/components/chat/user-message";
 import { DATASET_SELECTION_PREFIX } from "@/constants/chat";
@@ -20,27 +20,39 @@ const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
   const { agent } = useAgent();
   const { copilotkit } = useCopilotKit();
   const datasets = useAppStore((s) => s.datasets);
-  const { addUserFile, toggleSelection, removeDataset } = useDatasetWorkflows();
+  const { addUserFile, preloadDataset, removeDataset, setSelectedDatasetIds } =
+    useDatasetWorkflows();
 
-  const snapshotSelectedDatasetIdsRef = useRef<Set<string>>(new Set());
-
-  const sampleDatasets = datasets.filter((d) => d.source === "sample");
-  const userDatasets = datasets.filter((d) => d.source === "user");
-  const selectedDatasets = datasets.filter((d) => d.isSelected);
-  const hasSelectedDatasets = selectedDatasets.length > 0;
-  const areAllSelectedDatasetsLoaded = datasets.every(
-    (d) => !d.isSelected || d.isLoaded
+  const [localSelectedIds, setLocalSelectedIds] = useState<Set<string>>(
+    new Set()
   );
+  const initialSelectedIdsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     if (!isOpen) return;
-    snapshotSelectedDatasetIdsRef.current = new Set(
+    const storeSelectedIds = new Set(
       useAppStore
         .getState()
         .datasets.filter((d) => d.isSelected)
         .map((d) => d.id)
     );
+    setLocalSelectedIds(storeSelectedIds);
+    initialSelectedIdsRef.current = storeSelectedIds;
   }, [isOpen]);
+
+  const storeHasSelectedDatasets = datasets.some((d) => d.isSelected);
+
+  const displayDatasets = datasets.map((dataset) => ({
+    ...dataset,
+    isSelected: localSelectedIds.has(dataset.id),
+  }));
+
+  const sampleDatasets = displayDatasets.filter((d) => d.source === "sample");
+  const userDatasets = displayDatasets.filter((d) => d.source === "user");
+  const hasLocalSelectedDatasets = localSelectedIds.size > 0;
+  const areAllSelectedDatasetsLoaded = [...localSelectedIds].every(
+    (id) => datasets.find((d) => d.id === id)?.isLoaded ?? false
+  );
 
   const handleNewFile = async (file: File) => {
     try {
@@ -50,19 +62,32 @@ const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
     }
   };
 
+  const handleToggle = (id: string) => {
+    setLocalSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+        preloadDataset(id);
+      }
+      return next;
+    });
+  };
+
   const handleConfirm = () => {
-    if (!hasSelectedDatasets) return;
+    if (!hasLocalSelectedDatasets) return;
 
-    const initialSelectedDatasetsIds = snapshotSelectedDatasetIdsRef.current;
-    const currentSelectedDatasetsIds = new Set(
-      selectedDatasets.map((d) => d.id)
-    );
-
+    const initialIds = initialSelectedIdsRef.current;
     const selectionChanged =
-      !currentSelectedDatasetsIds.isSupersetOf(initialSelectedDatasetsIds) ||
-      !initialSelectedDatasetsIds.isSupersetOf(currentSelectedDatasetsIds);
+      !localSelectedIds.isSupersetOf(initialIds) ||
+      !initialIds.isSupersetOf(localSelectedIds);
 
     if (selectionChanged) {
+      setSelectedDatasetIds([...localSelectedIds]);
+      const selectedDatasets = datasets.filter((d) =>
+        localSelectedIds.has(d.id)
+      );
       void agent.addMessage({
         role: "user",
         id: `${DATASET_SELECTION_PREFIX}${crypto.randomUUID()}`,
@@ -74,8 +99,17 @@ const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
     setIsOpen(false);
   };
 
+  const handleCancel = () => {
+    if (!storeHasSelectedDatasets) return;
+    setIsOpen(false);
+  };
+
   return (
-    <Drawer isOpen={isOpen} className="max-h-[calc(100%-80px)]">
+    <Drawer
+      isOpen={isOpen}
+      onClose={handleCancel}
+      className="max-h-[calc(100%-80px)]"
+    >
       <DrawerContent>
         <div className="flex w-full flex-col items-center gap-4">
           <p className="text-center text-sm font-medium text-foreground">
@@ -105,7 +139,7 @@ const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
                   <DatasetCard
                     key={dataset.id}
                     dataset={dataset}
-                    onToggle={toggleSelection}
+                    onToggle={handleToggle}
                     onDelete={(id) => {
                       void removeDataset(id);
                     }}
@@ -128,7 +162,7 @@ const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
                 <DatasetCard
                   key={dataset.id}
                   dataset={dataset}
-                  onToggle={toggleSelection}
+                  onToggle={handleToggle}
                 />
               ))}
             </div>
@@ -141,7 +175,7 @@ const DatasetDrawer = ({ isOpen, setIsOpen }: DatasetDrawerProps) => {
           variant="primary"
           size="md"
           className="w-full duration-500"
-          disabled={!hasSelectedDatasets || !areAllSelectedDatasetsLoaded}
+          disabled={!hasLocalSelectedDatasets || !areAllSelectedDatasetsLoaded}
           onClick={handleConfirm}
           aria-label="Confirm dataset selection"
         >

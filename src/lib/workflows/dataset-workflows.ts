@@ -110,16 +110,15 @@ export const useDatasetWorkflows = () => {
     useAppStore.getState().removeDatasetById(id);
   }, []);
 
-  const toggleSelection = useCallback(
+  const preloadDataset = useCallback(
     (id: string) => {
-      useAppStore.getState().toggleDatasetSelection(id);
-
       if (!isDuckDBReady) return;
 
       const dataset = useAppStore
         .getState()
         .datasets.find((item) => item.id === id);
-      if (dataset?.isSelected && !dataset.isLoaded) {
+
+      if (dataset && !dataset.isLoaded) {
         void ensureDatasetLoaded(dataset.id, loaders);
       }
     },
@@ -147,7 +146,7 @@ export const useDatasetWorkflows = () => {
   return {
     addUserFile,
     removeDataset,
-    toggleSelection,
+    preloadDataset,
     setSelectedDatasetIds,
   };
 };

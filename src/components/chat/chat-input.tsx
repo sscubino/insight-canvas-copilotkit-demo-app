@@ -231,6 +231,9 @@ const ChatInput = ({
           </button>
         </div>
       </div>
+      <div className="copilotKitPoweredBy">
+        {showPoweredBy && <p className="poweredBy">Powered by CopilotKit</p>}
+      </div>
     </div>
   );
 };

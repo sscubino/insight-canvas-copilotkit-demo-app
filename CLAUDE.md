@@ -35,6 +35,7 @@ The core pattern is **bidirectional state sync** between the CopilotKit agent an
 ### State Management
 
 **Zustand store** (`src/state/store.ts`) composed of three slices:
+
 - `WorkspaceSlice` — canvas nodes/edges (React Flow), selected node
 - `SessionsSlice` — session metadata, messages, persistence
 - `DatasetsSlice` — loaded datasets, selected dataset IDs
@@ -44,6 +45,7 @@ The core pattern is **bidirectional state sync** between the CopilotKit agent an
 ### Frontend Tools (Agent-Callable)
 
 Registered via `useFrontendTool` in hooks — these run **client-side in the browser**:
+
 - `run_sql_query` — executes SQL against DuckDB WASM, returns columns/rows
 - `generate_chart` — creates a chart node on canvas with a Vega-Lite spec
 

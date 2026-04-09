@@ -17,17 +17,17 @@ This creates a **bidirectional collaboration loop** where the human steers the d
 
 ## Tech Stack
 
-| Layer          | Technology                                                                                            |
-| -------------- | ----------------------------------------------------------------------------------------------------- |
-| Framework      | [Next.js 15](https://nextjs.org/) (App Router, Turbopack) + React 19                                 |
+| Layer          | Technology                                                                                                 |
+| -------------- | ---------------------------------------------------------------------------------------------------------- |
+| Framework      | [Next.js 15](https://nextjs.org/) (App Router, Turbopack) + React 19                                       |
 | AI Integration | [CopilotKit 1.54](https://github.com/CopilotKit/CopilotKit) (AG-UI protocol, shared state, frontend tools) |
-| Canvas         | [React Flow 12](https://reactflow.dev/) (@xyflow/react)                                               |
-| Data Engine    | [DuckDB WASM 1.29](https://duckdb.org/docs/api/wasm) (in-browser analytical SQL)                     |
-| Charts         | [Vega-Lite 6](https://vega.github.io/vega-lite/) via vega-embed                                      |
-| LLM            | Anthropic Claude (Sonnet 4.6 for analysis, Haiku 4.5 for session ops)                                |
-| State          | [Zustand 5](https://zustand.docs.pmnd.rs/) + IndexedDB (session persistence via idb-keyval)          |
-| Styling        | Tailwind CSS v4                                                                                       |
-| Language       | TypeScript                                                                                            |
+| Canvas         | [React Flow 12](https://reactflow.dev/) (@xyflow/react)                                                    |
+| Data Engine    | [DuckDB WASM 1.29](https://duckdb.org/docs/api/wasm) (in-browser analytical SQL)                           |
+| Charts         | [Vega-Lite 6](https://vega.github.io/vega-lite/) via vega-embed                                            |
+| LLM            | Anthropic Claude (Sonnet 4.6 for analysis, Haiku 4.5 for session ops)                                      |
+| State          | [Zustand 5](https://zustand.docs.pmnd.rs/) + IndexedDB (session persistence via idb-keyval)                |
+| Styling        | Tailwind CSS v4                                                                                            |
+| Language       | TypeScript                                                                                                 |
 
 ## Features
 
@@ -70,11 +70,11 @@ Sessions are stored in IndexedDB and survive page reloads. Each session record i
 
 Three built-in CSV datasets to explore immediately:
 
-| Dataset | Rows | Use case |
-| --- | --- | --- |
-| `saas-churn.csv` | 300 | Customer churn risk analysis |
-| `retail_complete.csv` | 250 | Retail sales & inventory |
-| `pipeline_q4.csv` | 200 | Sales pipeline / Q4 forecasting |
+| Dataset               | Rows | Use case                        |
+| --------------------- | ---- | ------------------------------- |
+| `saas-churn.csv`      | 300  | Customer churn risk analysis    |
+| `retail_complete.csv` | 250  | Retail sales & inventory        |
+| `pipeline_q4.csv`     | 200  | Sales pipeline / Q4 forecasting |
 
 You can also upload your own CSV or JSON datasets.
 

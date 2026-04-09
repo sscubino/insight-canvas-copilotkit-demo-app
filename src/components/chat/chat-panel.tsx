@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { CopilotChat } from "@copilotkit/react-ui";
+import type { InputProps } from "@copilotkit/react-ui";
 import { useAgent } from "@copilotkit/react-core/v2";
 import { SYSTEM_PROMPT } from "@/constants/system-prompt";
 import {
@@ -11,10 +12,9 @@ import {
   SidebarTitle,
 } from "@/components/ui/sidebar";
 import { ChatDrawers } from "@/components/chat/chat-drawers";
+import { ChatInput } from "@/components/chat/chat-input";
 import { useAppStore } from "@/state/store";
-import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { PaperclipIcon } from "@/components/icons/paperclip";
 import { UserMessage } from "@/components/chat/user-message";
 import { cn } from "@/lib/utils";
 import { generateSessionTitle } from "@/actions/generate-session-title";
@@ -38,6 +38,17 @@ const ChatPanel = () => {
     if (!isDatasetDrawerOpen) deselectNode();
     setIsDatasetDrawerOpen((prev) => !prev);
   };
+
+  const toggleRef = useRef<() => void>(() => {});
+  toggleRef.current = handleToggleDatasetDrawer;
+
+  const CustomInput = useMemo(() => {
+    const Component = (props: InputProps) => (
+      <ChatInput {...props} onToggleDrawer={() => toggleRef.current()} />
+    );
+    Component.displayName = "CustomInput";
+    return Component;
+  }, []);
 
   const handleFirstPromptSessionCreate = async (prompt: string) => {
     const {
@@ -81,17 +92,7 @@ const ChatPanel = () => {
       aria-label="Chat panel"
     >
       <SidebarHeader>
-        <div className="flex items-center gap-2">
-          <SidebarTitle>Insight Copilot</SidebarTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleToggleDatasetDrawer}
-            aria-label="Open datasets"
-          >
-            <PaperclipIcon width={16} height={16} />
-          </Button>
-        </div>
+        <SidebarTitle>Insight Copilot</SidebarTitle>
       </SidebarHeader>
 
       <SidebarContent className="relative overflow-hidden">
@@ -99,6 +100,7 @@ const ChatPanel = () => {
           instructions={SYSTEM_PROMPT}
           onSubmitMessage={handleFirstPromptSessionCreate}
           UserMessage={UserMessage}
+          Input={CustomInput}
           labels={{
             title: "Insight Canvas",
             initial: "Hi! \uD83D\uDC4B How can the agent help you with?",
